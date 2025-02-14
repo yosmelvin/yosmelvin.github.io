@@ -1,0 +1,79 @@
+.overlay{
+	position: relative;
+  	z-index: 1;
+}
+.overlay:after{
+	background:rgba(0, 0, 0, 0.6);
+	content: "";
+	width: 100%;
+	height: auto;
+	position: absolute;
+	z-index: -1; 
+ 	top: 0;
+	right: 0;
+	left: 0;
+	bottom: 0;
+}
+
+.img-member
+{
+	height: 239px; 
+	width: 239px;
+}
+
+.logos
+{
+	height: 50px;
+	-webkit-filter: grayscale(100%); filter: grayscale(100%);
+}
+
+.bottom{
+	padding-top: 25px;
+	padding-bottom: 25px;
+	background:#eee;
+}
+.bottom-text p{
+    font-weight: 700;
+	font-size: 12px;
+	line-height: initial;
+}
+
+.logo-ymt-img{
+	width:50px;
+	height:50px;
+}
+
+.img-portofolio
+{
+	width:360px;
+	height:200px;
+}
+
+.tags { float: left; }
+
+.tags a:link, .tags a:visited { background-color: #0cb3e7; color: #ffffff; display: inline-block; margin-bottom: 3px; padding: 2px 6px; text-shadow: 0 1px 1px #0061BA; -moz-border-radius: 3px;/*Firefox*/ -webkit-border-radius: 3px;/*Safari, Chrome*/ border-radius: 3px; }
+
+.tags a:hover { text-decoration:none; background-color: #337ab7; box-shadow: 0 0 1px transparent; }
+
+
+/* stats */
+.stats .icon {
+	font-size: 32px;
+	margin: 0 0 20px 0;
+}
+
+.stats strong.number {
+	font-size: 38px;
+}
+
+.stats span.text {
+	font-weight: 700;
+	font-size: 24px;
+}
+
+
+.map
+{
+	width:100% !important;
+	height:300px !important;
+}

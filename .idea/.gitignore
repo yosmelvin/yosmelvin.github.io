@@ -1,0 +1,89 @@
+# Ignore Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environments
+venv/
+.env/
+*.env
+
+# Ignore PyCharm project files
+.idea/
+*.iml
+
+# Ignore logs and databases
+*.log
+db.sqlite3
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore compiled C extensions
+*.so
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore pytest cache
+.pytest_cache/
+
+# Ignore mypy cache
+.mypy_cache/
+
+# Ignore coverage reports
+.coverage
+htmlcov/
+
+# Ignore build files
+dist/
+build/
+*.egg-info/
+
+# Ignore pip and package-related files
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Ignore JetBrains IDE specific files
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/mongoSettings.xml
+.idea/replstate.xml
+.idea/sonarlint/
+.idea/httpRequests
+.idea/caches/build_file_checksums.ser
+
+# Ignore CMake build directories
+cmake-build-*/
+
+# Ignore IntelliJ output directories
+out/
+
+# Ignore crashlytics plugin files
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+# Keep only necessary PyCharm settings
+!.idea/codeStyles
+!.idea/runConfigurations
+/misc.xml
+/modules.xml
+/inspectionProfiles/profiles_settings.xml
+/vcs.xml
+/workspace.xml
