@@ -537,6 +537,7 @@
                 </div>
                 <div class="filter-group">
                     <button type="button" class="filter-chip active" data-filter="all" aria-pressed="true"><i class="fa fa-th" aria-hidden="true"></i><span data-i18n="f_all">All</span><span class="filter-count"></span></button>
+                    <button type="button" class="filter-chip" data-filter="ai" aria-pressed="false"><i class="fa fa-magic" aria-hidden="true"></i><span data-i18n="f_ai">AI</span><span class="filter-count"></span></button>
                     <button type="button" class="filter-chip" data-filter="web" aria-pressed="false"><i class="fa fa-globe" aria-hidden="true"></i><span data-i18n="f_web">Web</span><span class="filter-count"></span></button>
                     <button type="button" class="filter-chip" data-filter="mobile" aria-pressed="false"><i class="fa fa-mobile" aria-hidden="true"></i><span data-i18n="f_mobile">Mobile</span><span class="filter-count"></span></button>
                     <button type="button" class="filter-chip" data-filter="fintech" aria-pressed="false"><i class="fa fa-line-chart" aria-hidden="true"></i><span data-i18n="f_fintech">Fintech</span><span class="filter-count"></span></button>
@@ -642,7 +643,7 @@
                         <p class="text-muted" data-i18n="pf_osppay_d">Payment gateway platform</p>
                     </div>
                 </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="fintech">
+                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="ai">
                     <a href="#projectModal" class="portfolio-link" data-toggle="modal" data-target="#projectModal" data-project="7">
                         <div class="portfolio-hover">
                             <div class="portfolio-hover-content">
@@ -934,6 +935,7 @@
                         <h3 class="estimator-title" data-i18n="est_title">Quick project estimator</h3>
                         <p class="estimator-sub" data-i18n="est_sub">Answer 3 quick questions — we'll prefill your inquiry.</p>
                         <div class="est-dots" id="estDots" aria-hidden="true"><span class="on"></span><span></span><span></span></div>
+                        <p class="est-step-label" id="estStepLabel"></p>
                         <div class="est-step" data-step="0">
                             <p class="est-q" data-i18n="est_q1">What are you building?</p>
                             <div class="est-opts" data-group="type">
@@ -1061,6 +1063,7 @@
                 <address>
                   <p><span class="fa fa-terminal" aria-hidden="true"></span>&nbsp<strong>YMTSOLUTION</strong></p>
                   <p data-i18n-html="bottom_email"><span class="fa fa-envelope" aria-hidden="true"></span>&nbsp<a href="mailto:ymtsolution@gmail.com">ymtsolution@gmail.com</a></p>
+                  <button type="button" class="copy-email" id="copyEmailBtn" data-i18n-aria="copy_email" aria-label="Copy email" title="Copy email"><i class="fa fa-copy" aria-hidden="true"></i> <span data-i18n="copy_email">Copy email</span></button>
                 </address>
                 <p>
                   <a href="https://line.me/ti/p/%40mhc8196k" target="_blank" rel="noopener">

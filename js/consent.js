@@ -56,9 +56,15 @@
         }
     }
 
+    function syncCta() {
+        // hide the mobile sticky CTA while the cookie banner is up (they overlap)
+        document.body.classList.toggle('cookie-visible', !!(banner && !banner.hidden));
+    }
+
     function onAccept() {
         try { localStorage.setItem(CONSENT_KEY, 'accepted'); } catch (e) {}
         banner.hidden = true;
+        syncCta();
         if (loaded) return;
         loaded = true;
         var idle = window.requestIdleCallback || function(fn) { setTimeout(fn, 1500); };
@@ -68,10 +74,12 @@
     function onDecline() {
         try { localStorage.setItem(CONSENT_KEY, 'declined'); } catch (e) {}
         banner.hidden = true;
+        syncCta();
     }
 
     function showBanner() {
         if (banner) banner.hidden = false;
+        syncCta();
     }
 
     if (acceptBtn) acceptBtn.addEventListener('click', onAccept);
@@ -89,6 +97,7 @@
         onAccept();
     } else if (banner) {
         banner.hidden = false;
+        syncCta();
     }
 
     // ── PWA install prompt ────────────────────────────────────────────

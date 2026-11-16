@@ -116,11 +116,26 @@
         // Project filter chips — with per-category counts
         var $items = document.querySelectorAll('.portfolio-item');
         var filterStatus = document.createElement('div');
-        filterStatus.className = 'sr-only';
+        filterStatus.className = 'pf-count';
         filterStatus.setAttribute('role', 'status');
         filterStatus.setAttribute('aria-live', 'polite');
         var filterBar = document.querySelector('.filter-bar');
-        if (filterBar) filterBar.parentNode.insertBefore(filterStatus, filterBar.nextSibling);
+        var emptyState = document.createElement('div');
+        emptyState.className = 'pf-empty';
+        emptyState.hidden = true;
+        var i18n0 = window.YMTI18n;
+        emptyState.innerHTML = '<i class="fa fa-search" aria-hidden="true"></i><p></p><button type="button" class="pf-reset"></button>';
+        function syncEmptyLang() {
+            var t = function(k){ return (i18n0 && i18n0.t) ? i18n0.t(k) : k; };
+            emptyState.querySelector('p').textContent = t('pf_empty');
+            emptyState.querySelector('.pf-reset').textContent = t('pf_reset');
+        }
+        syncEmptyLang();
+        document.addEventListener('ymt:langchange', syncEmptyLang);
+        if (filterBar) {
+            filterBar.parentNode.insertBefore(filterStatus, filterBar.nextSibling);
+            filterBar.parentNode.insertBefore(emptyState, filterStatus.nextSibling);
+        }
         function filterLabel(f, n) {
             var i18n = window.YMTI18n;
             var cat = i18n && i18n.t ? i18n.t('f_' + f) : f;
@@ -168,6 +183,18 @@
                 }
             });
             if (filterStatus) filterStatus.textContent = filterLabel(activeFilter, shown);
+            if (emptyState) emptyState.hidden = shown !== 0;
+        }
+
+        // empty-state reset button
+        if (emptyState) {
+            emptyState.querySelector('.pf-reset').addEventListener('click', function() {
+                var si = document.getElementById('portfolioSearch');
+                if (si) { si.value = ''; si.dispatchEvent(new Event('input', { bubbles: true })); }
+                var allChip = document.querySelector('.filter-chip[data-filter="all"]');
+                if (allChip && !allChip.classList.contains('active')) allChip.click();
+                else applyFilters();
+            });
         }
 
         document.querySelectorAll('.filter-chip').forEach(function(chip, i) {
@@ -216,10 +243,13 @@
                 if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
                 e.preventDefault();
                 var pf = document.getElementById('portfolio');
-                if (pf) pf.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                setTimeout(function() { searchInput.focus(); }, 500);
+                var inView = pf && pf.getBoundingClientRect().top < window.innerHeight && pf.getBoundingClientRect().bottom > 0;
+                if (!inView && pf) pf.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(function() { searchInput.focus(); }, inView ? 50 : 500);
             });
+            syncClear();
         }
+        applyFilters();
 
         // Skills → portfolio cross-link: click a tech card to filter projects by it
         document.querySelectorAll('.skill-card').forEach(function(card) {
@@ -243,7 +273,17 @@
             }
             card.addEventListener('click', go);
             card.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); return; }
+                // arrow keys move between skill cards inside the same grid
+                if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                    var grid = card.closest('.skills-grid');
+                    if (!grid) return;
+                    var cards = Array.prototype.slice.call(grid.querySelectorAll('.skill-card'));
+                    var i = cards.indexOf(card);
+                    var step = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1 : -1;
+                    var next = cards[(i + step + cards.length) % cards.length];
+                    if (next) { e.preventDefault(); next.focus(); }
+                }
             });
         });
 
@@ -325,6 +365,28 @@
             });
         });
 
+        // Footer copy-email button
+        var copyBtn = document.getElementById('copyEmailBtn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function() {
+                var email = 'ymtsolution@gmail.com';
+                var done = function() {
+                    copyBtn.classList.add('copied');
+                    var label = copyBtn.querySelector('span');
+                    var i18n = window.YMTI18n;
+                    var prev = label ? label.textContent : '';
+                    if (label && i18n) label.textContent = i18n.t('copied');
+                    setTimeout(function() {
+                        copyBtn.classList.remove('copied');
+                        if (label) label.textContent = prev;
+                    }, 1600);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(email).then(done).catch(done);
+                } else { done(); }
+            });
+        }
+
         // Sticky mobile CTA — hide while the contact section is on screen
         var stickyCta = document.getElementById('stickyCta');
         var contactSec = document.getElementById('contact');
@@ -345,10 +407,14 @@
             var i18n = window.YMTI18n;
 
             var dots = document.getElementById('estDots');
+            var stepLabel = document.getElementById('estStepLabel');
 
             function showStep(n) {
                 step = n;
                 steps.forEach(function(s, i) { s.hidden = i !== n; });
+                if (stepLabel && i18n) {
+                    stepLabel.textContent = i18n.t('est_step').replace('{n}', n + 1).replace('{total}', steps.length);
+                }
                 if (dots) {
                     dots.querySelectorAll('span').forEach(function(d, i) {
                         d.classList.toggle('on', i === n);
@@ -378,6 +444,8 @@
                 if (e.target.closest('#estReset')) {
                     answers = {}; step = 0;
                     est.querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); });
+                    var oldDone = est.querySelector('.est-done');
+                    if (oldDone) oldDone.remove();
                     showStep(0);
                     return;
                 }
@@ -396,15 +464,25 @@
                         var opt = subj.querySelector('option[value="' + answers.type + '"]');
                         if (opt) subj.value = answers.type;
                     }
-                    var done = document.createElement('p');
-                    done.className = 'est-done';
+                    var done = est.querySelector('.est-done');
+                    if (!done) {
+                        done = document.createElement('p');
+                        done.className = 'est-done';
+                        est.querySelector('.est-actions').after(done);
+                    }
                     done.setAttribute('data-i18n', 'est_done');
                     done.textContent = i18n ? i18n.t('est_done') : 'Estimate ready';
-                    est.querySelector('.est-actions').after(done);
                     setTimeout(function() {
                         document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 300);
                 }
+            });
+
+            // keep labels in sync when the visitor switches language mid-quiz
+            document.addEventListener('ymt:langchange', function() {
+                showStep(step);
+                var done = est.querySelector('.est-done');
+                if (done && i18n) done.textContent = i18n.t('est_done');
             });
 
             showStep(0);

@@ -26,10 +26,12 @@
         var $img = $('#pmImg');
         $img.removeClass('img-broken');
         $img.attr({ src: p.img, alt: p.alt || p.title, decoding: 'async' });
-        // srcset for compressed JPG projects (small + full)
-        if (/\.jpe?g$/i.test(p.img)) {
-            var base = p.img.replace(/\.jpe?g$/i, '');
-            $img.attr('srcset', base + '-sm.jpg 480w, ' + p.img + ' 1000w');
+        // srcset for compressed projects (small + full variants)
+        if (/\.(jpe?g|webp)$/i.test(p.img)) {
+            var ext = p.img.match(/\.(jpe?g|webp)$/i)[0];
+            var base = p.img.slice(0, -ext.length);
+            var smExt = /\.jpe?g$/i.test(ext) ? '-sm.jpg' : '-sm.webp';
+            $img.attr('srcset', base + smExt + ' 480w, ' + p.img + ' 1000w');
             $img.attr('sizes', '(max-width: 860px) 100vw, 810px');
         } else {
             $img.removeAttr('srcset').removeAttr('sizes');

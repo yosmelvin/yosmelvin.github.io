@@ -11,30 +11,38 @@ Live at: https://yosmelvin.github.io
 - **Bilingual** — English / Bahasa Indonesia toggle (persisted in `localStorage`,
   `?lang=en|id` deep links, `hreflang` + `x-default` tags, fully translated
   `js/i18n.js` dictionary)
-- **Portfolio showcase** — 8 projects rendered from a single reusable modal
-  (`js/projects.js` data-driven). Deep links (`#project-0`…`#project-7`),
-  prev/next navigation, share (X / LinkedIn) + copy-link buttons, tech-stack
-  chips, live/VIP badges, "start a similar project" WhatsApp CTA, optional
+- **Portfolio showcase** — 9 projects rendered from a single reusable modal
+  (`js/projects.js` data-driven). Deep links (`#project-0`…`#project-8`),
+  prev/next navigation (buttons + ←/→ keys), share (X / LinkedIn / WhatsApp /
+  native Web Share) + copy-link buttons, tech-stack chips, live/VIP badges,
+  "start a similar project" CTA that prefills the contact form, optional
   screenshot gallery + lightbox
 - **Portfolio search + filter** — live text search across titles/tech and
-  segmented category filter (Web, Mobile, Fintech, Trading) with counts and
-  `aria-pressed`; projects are data-driven (`js/projects.js` → `YMTProjects`)
+  segmented category filter (All, AI, Web, Mobile, Fintech, Trading) with
+  per-chip counts, a visible result count, an empty-state reset, `/` shortcut
+  to focus search, and `aria-live` announcements; skills cards cross-filter
+  the portfolio and support arrow-key navigation
 - **Sections** — Services, engagement models (Project-Based / Dedicated Team /
   Monthly Retainer, each deep-linking a prefilled WhatsApp message), How We
   Work process (Discover → Design → Develop → Test → Deploy & Support), Tech
   Stack, Portfolio, Stats counters, About timeline, Team, FAQ (with JSON-LD
   FAQPage schema), Contact, footer with tech tag cloud
 - **Contact** — Formspree form with honeypot spam field + client validation,
-  WhatsApp deep links + floating WhatsApp button, LINE badge, lazy-loaded
-  Google Maps embed
+  UTM/referrer attribution, WhatsApp deep links + floating WhatsApp button,
+  LINE badge, lazy-loaded Google Maps embed, and a 3-question project
+  estimator that prefills the inquiry
 - **Theme** — dark / light / auto modes; auto follows `prefers-color-scheme`
   and forces dark 18:00–06:00 local; manual choice persisted and always wins
 - **Command palette** — `Ctrl/Cmd+K` or `?` to jump to sections/projects
-  (searches titles + tech)
-- **PWA** — `manifest.json` with app shortcuts, icons (incl. maskable),
-  network-first service worker (`sw.js`, cache `ymt-v4`), install prompt
+  (searches titles + tech), keyboard-shortcut cheatsheet, focus trap
+- **PWA** — `manifest.json` with app shortcuts + `share_target` (shared text
+  prefills the contact form), icons (incl. maskable), network-first service
+  worker (`sw.js`, cache `ymt-v5`), install prompt, iOS install hint
+- **Mobile UX** — sticky "Start a project" CTA under 640px (auto-hides at the
+  contact section and while the cookie banner is visible)
 - **Blog scaffold** — `posts/` listing page + `_template.html` article
-  (Article JSON-LD included), `rss.xml` feed
+  (Article + BreadcrumbList JSON-LD, auto reading time, EN/ID chrome toggle),
+  `rss.xml` feed
 - **Privacy page** — standalone bilingual `privacy.html` covering cookies,
   forms, live chat and analytics; linked from footer + cookie banner
 - **SEO** — `sitemap.xml`, `robots.txt`, canonical, OG/Twitter cards, RSS

@@ -37,6 +37,11 @@
     };
 
     var KEY = 'ymt-lang';
+    // ?lang=en|id deep link overrides the stored preference
+    try {
+        var q = new URLSearchParams(location.search).get('lang');
+        if (q === 'en' || q === 'id') { localStorage.setItem(KEY, q); }
+    } catch (e) {}
     var lang = (localStorage.getItem(KEY) === 'id') ? 'id' : 'en';
     var docEl = document.documentElement;
 

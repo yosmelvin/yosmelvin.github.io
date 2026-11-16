@@ -1,5 +1,5 @@
 /* Portfolio project data — consumed by js/project-modal.js.
-   Text content lives in js/i18n.js under the m1_* … m8_* keys. */
+   Text content lives in js/i18n.js under the m1_* … m9_* keys. */
 window.YMTProjects = [
     {
         title: 'Binusmaya',
