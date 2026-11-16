@@ -4,5 +4,9 @@ Company: YMT Solution
 Location: Jakarta Barat, Indonesia
 
 /* SITE */
-Built with: HTML5, CSS3, JavaScript, Bootstrap
+Built with: HTML5, CSS3, JavaScript (jQuery 3.7.1, Bootstrap 3)
+Fonts: Self-hosted Sora + Inter (WOFF2, subset by unicode-range)
+Backend services: Formspree (contact form), Tawk.to (consent-gated chat), Google Maps (lazy-loaded, referrer-restricted key)
+PWA: manifest.json + service worker (network-first navigation, cache-first assets)
+Analytics: optional, consent-gated (GoatCounter / Plausible hooks in js/consent.js)
 Contact: ymtsolution@gmail.com

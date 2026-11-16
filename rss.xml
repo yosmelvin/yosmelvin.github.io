@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>YMT Solution Blog</title>
+        <link>https://yosmelvin.github.io/posts/</link>
+        <description>Articles and engineering insights from the YMT Solution team.</description>
+        <language>en</language>
+        <atom:link href="https://yosmelvin.github.io/rss.xml" rel="self" type="application/rss+xml"/>
+        <!-- Add one <item> per published post:
+        <item>
+            <title>Post title</title>
+            <link>https://yosmelvin.github.io/posts/post-slug.html</link>
+            <guid>https://yosmelvin.github.io/posts/post-slug.html</guid>
+            <pubDate>Wed, 12 Feb 2026 00:00:00 +0700</pubDate>
+            <description>Teaser text</description>
+        </item> -->
+    </channel>
+</rss>

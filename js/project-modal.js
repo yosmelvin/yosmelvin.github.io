@@ -24,7 +24,7 @@
         var $hero = $('.pm-hero');
         $hero.toggleClass('pm-hero-logo', !!p.logo);
         var $img = $('#pmImg');
-        $img.attr({ src: p.img, alt: p.alt || p.title });
+        $img.attr({ src: p.img, alt: p.alt || p.title, decoding: 'async' });
         // srcset for compressed JPG projects (small + full)
         if (/\.jpe?g$/i.test(p.img)) {
             var base = p.img.replace(/\.jpe?g$/i, '');
@@ -83,6 +83,21 @@
             $tech.prop('hidden', true);
         }
 
+        // gallery thumbnails + lightbox (only when extra images provided)
+        var gallery = p.gallery || [];
+        var $gal = $('#pmGallery').empty();
+        if (gallery.length) {
+            gallery.forEach(function(src, gi) {
+                $('<button type="button" class="pm-thumb" role="listitem"></button>')
+                    .append($('<img loading="lazy" decoding="async">').attr({ src: src, alt: p.alt || p.title }))
+                    .on('click', function() { openLightbox(gi); })
+                    .appendTo($gal);
+            });
+            $gal.prop('hidden', false);
+        } else {
+            $gal.prop('hidden', true);
+        }
+
         // share links — deep link to this project
         var shareUrl = location.origin + location.pathname + '#project-' + i;
         var shareText = encodeURIComponent(p.title + ' | YMT Solution');
@@ -91,6 +106,15 @@
         $('#pmShareLi').attr('href', 'https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrlEnc);
         $('#pmShareWa').attr('href', 'https://wa.me/?text=' + shareText + '%20' + shareUrlEnc);
         $('#pmShareCopy').data('url', shareUrl);
+        // native share sheet when available (mobile)
+        var $native = $('#pmShareNative');
+        if (navigator.share) {
+            $native.prop('hidden', false).off('click').on('click', function() {
+                navigator.share({ title: p.title + ' | YMT Solution', text: p.title, url: shareUrl }).catch(function() {});
+            });
+        } else {
+            $native.prop('hidden', true);
+        }
         $('#pmShare').prop('hidden', false);
 
         // nav button labels
@@ -109,6 +133,60 @@
     function go(delta) {
         render((current + delta + projects.length) % projects.length, true);
     }
+
+    /* ---------- lightbox ---------- */
+    var lbIndex = 0, lbGallery = [];
+    var $lb = $('#pmLightbox');
+
+    function openLightbox(i) {
+        lbGallery = projects[current].gallery || [];
+        lbIndex = i;
+        showLb();
+        $lb.prop('hidden', false);
+        document.body.style.overflow = 'hidden';
+    }
+
+    function showLb() {
+        $('#pmLbImg').attr({ src: lbGallery[lbIndex], decoding: 'async' });
+        $('#pmLbCounter').text((lbIndex + 1) + ' / ' + lbGallery.length);
+        $('#pmLbPrev').prop('disabled', lbGallery.length < 2);
+        $('#pmLbNext').prop('disabled', lbGallery.length < 2);
+    }
+
+    function lbGo(d) {
+        lbIndex = (lbIndex + d + lbGallery.length) % lbGallery.length;
+        showLb();
+    }
+
+    function closeLightbox() {
+        $lb.prop('hidden', true);
+        document.body.style.overflow = '';
+    }
+
+    $('#pmLbClose').on('click', closeLightbox);
+    $('#pmLbPrev').on('click', function() { lbGo(-1); });
+    $('#pmLbNext').on('click', function() { lbGo(1); });
+    $lb.on('click', function(e) { if (e.target === this) closeLightbox(); });
+
+    /* ---------- "start a similar project" ---------- */
+    $('#pmSimilar').on('click', function() {
+        var p = projects[current];
+        $modal.modal('hide');
+        setTimeout(function() {
+            var $form = $('#contactForm');
+            var $subject = $('#subject');
+            var $msg = $('#message');
+            if ($subject.length) {
+                var match = p.cat && $subject.find('option[value="' + p.cat + '"]').length ? p.cat : 'other';
+                $subject.val(match);
+            }
+            if ($msg.length && !$msg.val()) {
+                $msg.val('I\'m interested in a project similar to "' + p.title + '". ');
+            }
+            $('html, body').stop().animate({ scrollTop: $('#contact').offset().top - 60 }, 800, 'easeInOutExpo');
+            setTimeout(function() { $msg.trigger('focus'); }, 850);
+        }, 350);
+    });
 
     $modal.on('show.bs.modal', function(e) {
         lastTrigger = e.relatedTarget || null;
@@ -141,8 +219,14 @@
     $('#pmPrev').on('click', function(e) { e.preventDefault(); go(-1); });
     $('#pmNext').on('click', function(e) { e.preventDefault(); go(1); });
 
-    // keyboard navigation while modal is open
+    // keyboard navigation while modal/lightbox is open
     $(document).on('keydown', function(e) {
+        if (!$lb.prop('hidden')) {
+            if (e.key === 'Escape') closeLightbox();
+            else if (e.key === 'ArrowLeft') lbGo(-1);
+            else if (e.key === 'ArrowRight') lbGo(1);
+            return;
+        }
         if (!$modal.hasClass('in')) return;
         if (e.keyCode === 37) go(-1);        // left arrow
         else if (e.keyCode === 39) go(1);    // right arrow

@@ -3,6 +3,7 @@
 window.YMTProjects = [
     {
         title: 'Binusmaya',
+        cat: 'web',
         img: 'img/portfolio/BM5-1.jpg',
         alt: 'Binusmaya',
         keys: { intro: 'm1_intro', body: 'm1_body' },
@@ -13,6 +14,7 @@ window.YMTProjects = [
     },
     {
         title: 'Inklo',
+        cat: 'web',
         img: 'img/portfolio/inklo-3.jpg',
         alt: 'Inklo',
         keys: { intro: 'm2_intro', body: 'm2_body' },
@@ -23,6 +25,7 @@ window.YMTProjects = [
     },
     {
         title: 'Ayo Sekolah Ayo Kuliah',
+        cat: 'mobile',
         img: 'img/portfolio/asakbackend-1.jpg',
         alt: 'ASAK',
         keys: { intro: 'm3_intro', body: 'm3_body' },
@@ -32,6 +35,7 @@ window.YMTProjects = [
     },
     {
         title: 'TOME',
+        cat: 'mobile',
         img: 'img/portfolio/tome-1.jpg',
         alt: 'Tolong Menolong',
         keys: { intro: 'm4_intro', body: 'm4_body' },
@@ -41,6 +45,7 @@ window.YMTProjects = [
     },
     {
         title: 'iLogo',
+        cat: 'web',
         img: 'img/portfolio/ilogo-1.jpg',
         alt: 'iLogo',
         keys: { intro: 'm5_intro', body: 'm5_body' },
@@ -50,6 +55,7 @@ window.YMTProjects = [
     },
     {
         title: 'Library System',
+        cat: 'web',
         img: 'img/portfolio/LibrarySystem-1.jpg',
         alt: 'Library System',
         keys: { intro: 'm6_intro', body: 'm6_body' },
@@ -59,18 +65,19 @@ window.YMTProjects = [
     },
     {
         title: 'Saham AI',
-        img: 'img/portfolio/sahamai-logo.png',
+        cat: 'ai',
+        img: 'img/portfolio/sahamai-1.jpg',
         alt: 'Saham AI',
         keys: { intro: 'm7_intro', body: 'm7_body' },
         meta: { date: 'm7_date', client: 'm7_client', cat: 'm7_cat' },
         link: 'https://sahamai.web.id/',
         badges: ['live'],
-        tech: ['Python','AI / ML','JavaScript'],
-        logo: true
+        tech: ['Python','AI / ML','JavaScript']
     },
     {
         title: 'Robo Trading Hub',
-        img: 'img/portfolio/robo-trading-hub.png',
+        cat: 'web',
+        img: 'img/portfolio/robo-trading-hub.webp',
         alt: 'Robo Trading Hub',
         keys: { intro: 'm8_intro', body: 'm8_body' },
         meta: { date: 'm8_date', client: 'm8_client', cat: 'm8_cat' },

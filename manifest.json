@@ -1,7 +1,7 @@
 {
     "name": "YMT Solution — Software House",
     "short_name": "YMT Solution",
-    "description": "Professional software house: web development, mobile apps, AI services & digital marketing.",
+    "description": "AI-first software house: custom AI, LLM assistants, automation, web & mobile development.",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
@@ -25,6 +25,39 @@
             "sizes": "512x512",
             "type": "image/png",
             "purpose": "maskable"
+        }
+    ],
+    "share_target": {
+        "action": "/#contact",
+        "method": "GET",
+        "params": {
+            "title": "share_title",
+            "text": "share_text",
+            "url": "share_url"
+        }
+    },
+    "shortcuts": [
+        {
+            "name": "Portfolio",
+            "short_name": "Portfolio",
+            "url": "/#portfolio",
+            "icons": [
+                {
+                    "src": "img/pwa/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
+        },
+        {
+            "name": "Contact",
+            "short_name": "Contact",
+            "url": "/#contact",
+            "icons": [
+                {
+                    "src": "img/pwa/icon-192.png",
+                    "sizes": "192x192"
+                }
+            ]
         }
     ]
 }

@@ -61,6 +61,12 @@
         document.addEventListener('DOMContentLoaded', mountCopyEmail);
         document.addEventListener('ymt:langchange', mountCopyEmail);
 
+        // Broken-image fallback: hide gracefully instead of showing alt text/border
+        document.querySelectorAll('img').forEach(function(img) {
+            if (img.complete && img.naturalWidth === 0) img.classList.add('img-broken');
+            img.addEventListener('error', function() { img.classList.add('img-broken'); });
+        });
+
         // Close mobile navbar after clicking a nav link
         document.querySelectorAll('.navbar-nav a.page-scroll').forEach(function(a) {
             a.addEventListener('click', function() {
@@ -70,6 +76,21 @@
                 }
             });
         });
+
+        // Mirror scrollspy .active onto aria-current for assistive tech
+        var navList = document.querySelector('.navbar-nav');
+        if (navList && 'MutationObserver' in window) {
+            var navObserver = new MutationObserver(function() {
+                navList.querySelectorAll('li').forEach(function(li) {
+                    var a = li.querySelector('a.page-scroll');
+                    if (a) {
+                        if (li.classList.contains('active')) a.setAttribute('aria-current', 'true');
+                        else a.removeAttribute('aria-current');
+                    }
+                });
+            });
+            navObserver.observe(navList, { attributes: true, attributeFilter: ['class'], subtree: true });
+        }
 
         // Announce language changes to screen readers
         var liveRegion = document.createElement('div');
@@ -94,35 +115,135 @@
 
         // Project filter chips — with per-category counts
         var $items = document.querySelectorAll('.portfolio-item');
+        var filterStatus = document.createElement('div');
+        filterStatus.className = 'sr-only';
+        filterStatus.setAttribute('role', 'status');
+        filterStatus.setAttribute('aria-live', 'polite');
+        var filterBar = document.querySelector('.filter-bar');
+        if (filterBar) filterBar.parentNode.insertBefore(filterStatus, filterBar.nextSibling);
+        function filterLabel(f, n) {
+            var i18n = window.YMTI18n;
+            var cat = i18n && i18n.t ? i18n.t('f_' + f) : f;
+            var tpl = i18n && i18n.t ? i18n.t('pf_count') : null;
+            if (tpl) return tpl.replace('{n}', n).replace('{cat}', cat || f);
+            return n + ' ' + (cat || f);
+        }
         var counts = {};
         $items.forEach(function(item) {
             var c = item.getAttribute('data-cat');
             counts[c] = (counts[c] || 0) + 1;
         });
         counts.all = $items.length;
+        var activeFilter = 'all';
+        var projects = window.YMTProjects || [];
+
+        function itemMatchesSearch(item, q) {
+            if (!q) return true;
+            var link = item.querySelector('[data-project]');
+            var idx = link ? parseInt(link.getAttribute('data-project'), 10) : -1;
+            var p = idx >= 0 ? projects[idx] : null;
+            var hay = (item.textContent || '') + ' ' + (p ? (p.title + ' ' + (p.tech || []).join(' ') + ' ' + (p.cat || '')) : '');
+            return hay.toLowerCase().indexOf(q) !== -1;
+        }
+
+        function applyFilters() {
+            var q = (document.getElementById('portfolioSearch') || {}).value || '';
+            q = q.trim().toLowerCase();
+            var shown = 0;
+            $items.forEach(function(item) {
+                var show = (activeFilter === 'all' || item.getAttribute('data-cat') === activeFilter) && itemMatchesSearch(item, q);
+                if (show) shown++;
+                if (show) {
+                    item.classList.remove('filter-out');
+                    item.style.display = '';
+                    item.classList.remove('reveal');
+                    void item.offsetWidth;
+                    item.classList.add('reveal', 'in');
+                } else {
+                    item.classList.add('filter-out');
+                    clearTimeout(item._ft);
+                    item._ft = setTimeout(function() {
+                        if (item.classList.contains('filter-out')) item.style.display = 'none';
+                    }, 280);
+                }
+            });
+            if (filterStatus) filterStatus.textContent = filterLabel(activeFilter, shown);
+        }
+
         document.querySelectorAll('.filter-chip').forEach(function(chip, i) {
             var badge = chip.querySelector('.filter-count');
             if (badge) badge.textContent = counts[chip.getAttribute('data-filter')] || 0;
             chip.style.animationDelay = (i * 60) + 'ms';
             chip.addEventListener('click', function() {
                 var f = chip.getAttribute('data-filter');
-                document.querySelectorAll('.filter-chip').forEach(function(c) { c.classList.toggle('active', c === chip); });
-                $items.forEach(function(item) {
-                    var show = f === 'all' || item.getAttribute('data-cat') === f;
-                    if (show) {
-                        item.classList.remove('filter-out');
-                        item.style.display = '';
-                        item.classList.remove('reveal');
-                        void item.offsetWidth;
-                        item.classList.add('reveal', 'in');
-                    } else {
-                        item.classList.add('filter-out');
-                        clearTimeout(item._ft);
-                        item._ft = setTimeout(function() {
-                            if (item.classList.contains('filter-out')) item.style.display = 'none';
-                        }, 280);
-                    }
+                activeFilter = f;
+                document.querySelectorAll('.filter-chip').forEach(function(c) {
+                    var on = c === chip;
+                    c.classList.toggle('active', on);
+                    c.setAttribute('aria-pressed', on ? 'true' : 'false');
                 });
+                applyFilters();
+            });
+        });
+
+        var searchInput = document.getElementById('portfolioSearch');
+        var searchClear = document.getElementById('searchClear');
+        if (searchInput) {
+            var searchTimer = null;
+            function syncClear() {
+                if (searchClear) searchClear.hidden = !searchInput.value;
+            }
+            searchInput.addEventListener('input', function() {
+                syncClear();
+                clearTimeout(searchTimer);
+                searchTimer = setTimeout(applyFilters, 160);
+            });
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') { searchInput.value = ''; syncClear(); applyFilters(); }
+            });
+            if (searchClear) {
+                searchClear.addEventListener('click', function() {
+                    searchInput.value = '';
+                    syncClear();
+                    applyFilters();
+                    searchInput.focus();
+                });
+            }
+            // "/" focuses search from anywhere (unless typing in a field)
+            document.addEventListener('keydown', function(e) {
+                if (e.key !== '/' || e.ctrlKey || e.metaKey || e.altKey) return;
+                var tag = (e.target.tagName || '').toLowerCase();
+                if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+                e.preventDefault();
+                var pf = document.getElementById('portfolio');
+                if (pf) pf.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(function() { searchInput.focus(); }, 500);
+            });
+        }
+
+        // Skills → portfolio cross-link: click a tech card to filter projects by it
+        document.querySelectorAll('.skill-card').forEach(function(card) {
+            var labelEl = card.querySelector('span');
+            var label = labelEl ? labelEl.textContent.trim() : '';
+            if (!label) return;
+            card.setAttribute('role', 'button');
+            card.setAttribute('tabindex', '0');
+            var i18n = window.YMTI18n;
+            var tip = i18n && i18n.t ? i18n.t('skills_view_projects').replace('{tech}', label) : 'View projects using ' + label;
+            card.title = tip;
+            card.setAttribute('aria-label', tip);
+            function go() {
+                if (!searchInput) return;
+                var allChip = document.querySelector('.filter-chip[data-filter="all"]');
+                if (allChip && !allChip.classList.contains('active')) allChip.click();
+                searchInput.value = label;
+                searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                var pf = document.getElementById('portfolio');
+                if (pf) pf.scrollIntoView({ behavior: 'smooth' });
+            }
+            card.addEventListener('click', go);
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); }
             });
         });
 
@@ -161,11 +282,17 @@
         if ('IntersectionObserver' in window) {
             var revealEls = document.querySelectorAll(
                 '#services .row.text-center > div, ' +
+                '#services .engage-card, ' +
+                '#process .process-step, ' +
                 '#skills .skill-card, ' +
                 '#portfolio .portfolio-item, ' +
                 '#stats .col-md-3, ' +
                 '#about .timeline > li, ' +
                 '#team .team-member, ' +
+                '#faq .faq-item, ' +
+                '.clients .row > div, ' +
+                '.bottom .row > div, ' +
+                '#contact .estimator, ' +
                 '#contact form'
             );
             var observer = new IntersectionObserver(function(entries) {
@@ -181,6 +308,106 @@
                 el.style.transitionDelay = (i % 4) * 90 + 'ms';
                 observer.observe(el);
             });
+        }
+
+        // Engagement model CTAs — prefill the contact message for context
+        document.querySelectorAll('.engage-cta').forEach(function(link) {
+            link.addEventListener('click', function() {
+                var model = link.getAttribute('data-engage');
+                var msg = document.getElementById('message');
+                var i18n = window.YMTI18n;
+                if (msg && i18n && !msg.value.trim()) {
+                    msg.value = i18n.t('engage_msg_' + model) || '';
+                }
+                setTimeout(function() {
+                    if (msg) { msg.focus({ preventScroll: true }); }
+                }, 1100);
+            });
+        });
+
+        // Sticky mobile CTA — hide while the contact section is on screen
+        var stickyCta = document.getElementById('stickyCta');
+        var contactSec = document.getElementById('contact');
+        if (stickyCta && contactSec && 'IntersectionObserver' in window) {
+            new IntersectionObserver(function(entries) {
+                stickyCta.classList.toggle('gone', entries[0].isIntersecting);
+            }, { threshold: 0.15 }).observe(contactSec);
+        }
+
+        // Project estimator quiz — 3 steps, then prefills the contact form
+        var est = document.getElementById('estimator');
+        if (est) {
+            var answers = {};
+            var step = 0;
+            var steps = est.querySelectorAll('.est-step');
+            var nextBtn = document.getElementById('estNext');
+            var resetBtn = document.getElementById('estReset');
+            var i18n = window.YMTI18n;
+
+            var dots = document.getElementById('estDots');
+
+            function showStep(n) {
+                step = n;
+                steps.forEach(function(s, i) { s.hidden = i !== n; });
+                if (dots) {
+                    dots.querySelectorAll('span').forEach(function(d, i) {
+                        d.classList.toggle('on', i === n);
+                    });
+                }
+                nextBtn.textContent = n === steps.length - 1
+                    ? (i18n ? i18n.t('est_apply') : 'Use this estimate')
+                    : (i18n ? i18n.t('est_next') : 'Next →');
+                nextBtn.disabled = !answers[steps[n].querySelector('.est-opts').getAttribute('data-group')];
+            }
+
+            function optLabel(group, value) {
+                var opt = est.querySelector('.est-opts[data-group="' + group + '"] .est-opt[data-value="' + value + '"]');
+                return opt ? opt.textContent.trim() : value;
+            }
+
+            est.addEventListener('click', function(e) {
+                var opt = e.target.closest('.est-opt');
+                if (opt) {
+                    var group = opt.closest('.est-opts').getAttribute('data-group');
+                    answers[group] = opt.getAttribute('data-value');
+                    opt.closest('.est-opts').querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); });
+                    opt.classList.add('sel');
+                    nextBtn.disabled = false;
+                    return;
+                }
+                if (e.target.closest('#estReset')) {
+                    answers = {}; step = 0;
+                    est.querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); });
+                    showStep(0);
+                    return;
+                }
+                if (e.target.closest('#estNext')) {
+                    if (step < steps.length - 1) { showStep(step + 1); return; }
+                    // final step — build the estimate message
+                    var msg = document.getElementById('message');
+                    var subj = document.getElementById('subject');
+                    var tpl = i18n ? i18n.t('est_msg') : '';
+                    var body = tpl
+                        .replace('{type}', optLabel('type', answers.type))
+                        .replace('{timeline}', optLabel('timeline', answers.timeline))
+                        .replace('{team}', optLabel('team', answers.team));
+                    if (msg && !msg.value.trim()) msg.value = body;
+                    if (subj && answers.type) {
+                        var opt = subj.querySelector('option[value="' + answers.type + '"]');
+                        if (opt) subj.value = answers.type;
+                    }
+                    var done = document.createElement('p');
+                    done.className = 'est-done';
+                    done.setAttribute('data-i18n', 'est_done');
+                    done.textContent = i18n ? i18n.t('est_done') : 'Estimate ready';
+                    est.querySelector('.est-actions').after(done);
+                    setTimeout(function() {
+                        document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 300);
+                }
+            });
+
+            showStep(0);
         }
     })(jQuery);
     

@@ -2,7 +2,55 @@
 // Submits via Formspree (static-site friendly).
 var FORMSPREE_ENDPOINT = 'https://formspree.io/f/mppdpodr';
 
+// Capture UTM params + referrer once per session for attribution.
+function ymtAttribution() {
+    try {
+        var cached = sessionStorage.getItem('ymt_attr');
+        if (cached) return JSON.parse(cached);
+        var q = new URLSearchParams(location.search);
+        var attr = {
+            utm_source: q.get('utm_source') || '',
+            utm_medium: q.get('utm_medium') || '',
+            utm_campaign: q.get('utm_campaign') || '',
+            referrer: document.referrer ? new URL(document.referrer).hostname : ''
+        };
+        sessionStorage.setItem('ymt_attr', JSON.stringify(attr));
+        return attr;
+    } catch (e) { return {}; }
+}
+
+var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
+
+// PWA share_target: prefill the form when the app is opened via system share.
+(function () {
+    try {
+        var q = new URLSearchParams(location.search);
+        var shared = q.get('share_text') || q.get('share_title') || '';
+        var sharedUrl = q.get('share_url') || '';
+        if (!shared && !sharedUrl) return;
+        var parts = [];
+        if (shared) parts.push(shared);
+        if (sharedUrl) parts.push(sharedUrl);
+        sessionStorage.setItem('ymt_share_prefill', parts.join('\n'));
+        if (location.hash !== '#contact') history.replaceState(null, '', '/#contact');
+    } catch (e) {}
+})();
+
 $(function() {
+
+    // Apply share_target prefill once the form exists.
+    try {
+        var prefill = sessionStorage.getItem('ymt_share_prefill');
+        if (prefill) {
+            sessionStorage.removeItem('ymt_share_prefill');
+            var msg = document.getElementById('message');
+            if (msg && !msg.value) {
+                msg.value = 'Shared content:\n' + prefill;
+                var subj = document.getElementById('subject');
+                if (subj && subj.options.length) subj.selectedIndex = Math.min(1, subj.options.length - 1);
+            }
+        }
+    } catch (e) {}
 
     function showMessage(type, html) {
         $('#success').html("<div class='alert alert-" + type + "'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>" + html + "</div>");
@@ -40,11 +88,17 @@ $(function() {
             fetch(FORMSPREE_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: name, email: email, phone: phone, subject: subject, message: message,
-                    _subject: 'New project inquiry — ' + name,
-                    _replyto: email
-                })
+                body: JSON.stringify((function() {
+                    var payload = {
+                        name: name, email: email, phone: phone, subject: subject, message: message,
+                        _subject: 'New project inquiry — ' + name,
+                        _replyto: email
+                    };
+                    ['utm_source', 'utm_medium', 'utm_campaign', 'referrer'].forEach(function(k) {
+                        if (YMT_ATTR[k]) payload[k] = YMT_ATTR[k];
+                    });
+                    return payload;
+                })())
             }).then(function(res) {
                 if (!res.ok) throw new Error('bad response');
                 showMessage('success', "<strong>Thank you " + firstName + "!</strong> Your message has been sent — we'll get back to you soon.");

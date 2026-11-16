@@ -102,6 +102,12 @@
 
     // apply immediately (before paint)
     apply();
+
+    // Save-Data: strip heavy animations for users on constrained connections
+    try {
+        var conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        if (conn && conn.saveData) document.documentElement.classList.add('save-data');
+    } catch (e) {}
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

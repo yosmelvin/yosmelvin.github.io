@@ -6,10 +6,13 @@
     var overlay = document.getElementById('paletteOverlay');
     var input = document.getElementById('paletteInput');
     var list = document.getElementById('paletteList');
+    var status = document.getElementById('paletteStatus');
+    var cheatsheet = document.getElementById('paletteCheatsheet');
     if (!overlay || !input || !list) return;
 
     var SECTIONS = [
         { id: 'services', icon: 'fa-cogs', key: 'nav_services' },
+        { id: 'process', icon: 'fa-tasks', key: 'process_title' },
         { id: 'skills', icon: 'fa-th-large', key: 'nav_skills' },
         { id: 'portfolio', icon: 'fa-briefcase', key: 'nav_portfolio' },
         { id: 'about', icon: 'fa-info-circle', key: 'nav_about' },
@@ -30,7 +33,8 @@
             return { type: 'section', id: s.id, icon: s.icon, label: t(s.key), keywords: s.id };
         });
         (window.YMTProjects || []).forEach(function(p, i) {
-            items.push({ type: 'project', index: i, icon: 'fa-folder-open', label: p.title, keywords: p.title });
+            var kw = p.title + ' ' + (p.tech || []).join(' ') + ' ' + (p.cat || '');
+            items.push({ type: 'project', index: i, icon: 'fa-folder-open', label: p.title, keywords: kw });
         });
     }
 
@@ -42,10 +46,22 @@
         });
     }
 
+    function announce(f) {
+        if (!status) return;
+        var n = f.length;
+        var msg = n === 0 ? (t('palette_empty') || 'No results')
+            : n === 1 ? (t('palette_one') || '1 result')
+            : n + ' ' + (t('palette_results') || 'results');
+        status.textContent = msg;
+    }
+
     function render() {
         var f = filtered();
+        if (cheatsheet) cheatsheet.hidden = input.value.trim() !== '';
         active = 0;
         list.innerHTML = '';
+        announce(f);
+        input.setAttribute('aria-activedescendant', '');
         if (!f.length) {
             var empty = document.createElement('div');
             empty.className = 'palette-empty';
@@ -57,19 +73,26 @@
             var b = document.createElement('button');
             b.type = 'button';
             b.className = 'palette-item' + (i === 0 ? ' active' : '');
+            b.id = 'palette-opt-' + i;
             b.setAttribute('role', 'option');
+            b.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
             b.innerHTML = '<i class="fa ' + it.icon + '" aria-hidden="true"></i><span></span>';
             b.querySelector('span').textContent = it.label;
             b.addEventListener('click', function() { choose(it); });
             b.addEventListener('mousemove', function() { setActive(i, f); });
             list.appendChild(b);
         });
+        if (f.length) input.setAttribute('aria-activedescendant', 'palette-opt-0');
     }
 
     function setActive(i, f) {
         active = i;
         var els = list.querySelectorAll('.palette-item');
-        els.forEach(function(el, j) { el.classList.toggle('active', j === i); });
+        els.forEach(function(el, j) {
+            el.classList.toggle('active', j === i);
+            el.setAttribute('aria-selected', j === i ? 'true' : 'false');
+        });
+        if (els[i]) input.setAttribute('aria-activedescendant', els[i].id);
     }
 
     function choose(it) {
@@ -88,7 +111,10 @@
         }
     }
 
+    var lastFocus = null;
+
     function open() {
+        lastFocus = document.activeElement;
         buildItems();
         input.value = '';
         render();
@@ -102,13 +128,28 @@
         overlay.classList.remove('open');
         overlay.hidden = true;
         document.body.style.overflow = '';
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
     }
 
     document.addEventListener('keydown', function(e) {
         var isK = (e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K');
-        if (isK) { e.preventDefault(); overlay.classList.contains('open') ? close() : open(); return; }
+        var tag = (e.target.tagName || '').toLowerCase();
+        var typing = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+        var isHelp = e.key === '?' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey;
+        if (isK || isHelp) { e.preventDefault(); overlay.classList.contains('open') ? close() : open(); return; }
         if (!overlay.classList.contains('open')) return;
         if (e.key === 'Escape') { close(); return; }
+        if (e.key === 'Tab') {
+            // focus trap: cycle between input and result buttons
+            var focusables = [input].concat(Array.prototype.slice.call(list.querySelectorAll('.palette-item')));
+            if (!focusables.length) return;
+            var idx = focusables.indexOf(document.activeElement);
+            e.preventDefault();
+            var next = e.shiftKey ? (idx <= 0 ? focusables.length - 1 : idx - 1)
+                                  : (idx === focusables.length - 1 ? 0 : idx + 1);
+            focusables[next].focus();
+            return;
+        }
         var f = filtered();
         if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(active + 1, f.length - 1), f); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(active - 1, 0), f); }

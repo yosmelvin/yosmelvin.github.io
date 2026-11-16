@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>404 — Page Not Found | YMT Solution</title>
     <meta name="robots" content="noindex">
-    <link href="https://fonts.googleapis.com/css?family=Sora:400,700|Inter:400,600" rel="stylesheet">
+    <link href="fonts/fonts.css" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at top,#0b1220 0%,#0f172a 55%,#020617 100%);font-family:'Inter',sans-serif;color:#e2e8f0;text-align:center;padding:20px}
@@ -17,6 +17,14 @@
         .links{margin-top:28px}
         .links a{padding:8px 18px;font-size:.85rem;background:rgba(255,255,255,.06);border:1px solid rgba(148,163,184,.25);color:#cbd5e1;margin:0 6px}
         .links a:hover{border-color:#22d3ee;color:#22d3ee;box-shadow:none}
+
+    /* Print: clean document output */
+    @media print {
+      .lang-toggle, .theme-toggle, .print-hide, nav, .cookie-consent, .btn { display: none !important; }
+      body { background: #fff !important; color: #111 !important; }
+      a { color: #111 !important; text-decoration: none; }
+      .card, .post, .policy-section { box-shadow: none !important; border: 1px solid #ddd !important; break-inside: avoid; }
+    }
     </style>
 </head>
 <body>
