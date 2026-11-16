@@ -52,7 +52,10 @@
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
             el.textContent = t(el.getAttribute('data-i18n'));
         });
-        document.title = t('blog_title') + ' — YMT Solution';
+        // only retitle the listing page — article pages keep their own <title>
+        if (!document.querySelector('article')) {
+            document.title = t('blog_title') + ' — YMT Solution';
+        }
         document.querySelectorAll('.lang-btn').forEach(function (b) {
             b.classList.toggle('active', b.getAttribute('data-lang') === lang);
         });
@@ -67,6 +70,23 @@
         if (el) el.textContent = mins + ' ' + t('min_read');
     }
 
+    // reading-progress bar on article pages
+    function progressBar() {
+        if (!document.querySelector('article') || document.getElementById('readProgress')) return;
+        var bar = document.createElement('div');
+        bar.id = 'readProgress';
+        bar.setAttribute('aria-hidden', 'true');
+        bar.style.cssText = 'position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;background:linear-gradient(90deg,#22d3ee,#6366f1)';
+        document.body.appendChild(bar);
+        function upd() {
+            var h = document.documentElement;
+            var max = h.scrollHeight - h.clientHeight;
+            bar.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
+        }
+        window.addEventListener('scroll', upd, { passive: true });
+        upd();
+    }
+
     document.addEventListener('click', function (e) {
         var b = e.target.closest('.lang-btn');
         if (!b) return;
@@ -78,4 +98,5 @@
 
     apply();
     readingTime();
+    progressBar();
 })();

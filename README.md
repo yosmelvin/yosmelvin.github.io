@@ -12,11 +12,12 @@ Live at: https://yosmelvin.github.io
   `?lang=en|id` deep links, `hreflang` + `x-default` tags, fully translated
   `js/i18n.js` dictionary)
 - **Portfolio showcase** — 9 projects rendered from a single reusable modal
-  (`js/projects.js` data-driven). Deep links (`#project-0`…`#project-8`),
-  prev/next navigation (buttons + ←/→ keys), share (X / LinkedIn / WhatsApp /
-  native Web Share) + copy-link buttons, tech-stack chips, live/VIP badges,
+  (`js/projects.js` data-driven). Deep links (`#project-0`…`#project-8`,
+  `?project=N`, hashchange-synced), prev/next + jump-dot navigation
+  (buttons + ←/→ keys), share (X / LinkedIn / WhatsApp / native Web Share /
+  copy-link / copy-brief) buttons, tech-stack chips, live/VIP badges,
   "start a similar project" CTA that prefills the contact form, optional
-  screenshot gallery + lightbox
+  screenshot gallery + lightbox, recently-viewed quick-jump chips
 - **Portfolio search + filter** — live text search across titles/tech and
   segmented category filter (All, AI, Web, Mobile, Fintech, Trading) with
   per-chip counts, a visible result count, an empty-state reset, `/` shortcut
@@ -30,14 +31,14 @@ Live at: https://yosmelvin.github.io
 - **Contact** — Formspree form with honeypot spam field + client validation,
   UTM/referrer attribution, WhatsApp deep links + floating WhatsApp button,
   LINE badge, lazy-loaded Google Maps embed, and a 3-question project
-  estimator that prefills the inquiry
+  estimator that prefills the inquiry and shows an indicative budget range
 - **Theme** — dark / light / auto modes; auto follows `prefers-color-scheme`
   and forces dark 18:00–06:00 local; manual choice persisted and always wins
 - **Command palette** — `Ctrl/Cmd+K` or `?` to jump to sections/projects
   (searches titles + tech), keyboard-shortcut cheatsheet, focus trap
 - **PWA** — `manifest.json` with app shortcuts + `share_target` (shared text
   prefills the contact form), icons (incl. maskable), network-first service
-  worker (`sw.js`, cache `ymt-v5`), install prompt, iOS install hint
+  worker (`sw.js`, cache `ymt-v6`), install prompt, iOS install hint
 - **Mobile UX** — sticky "Start a project" CTA under 640px (auto-hides at the
   contact section and while the cookie banner is visible)
 - **Blog scaffold** — `posts/` listing page + `_template.html` article

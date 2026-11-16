@@ -8,11 +8,51 @@
             $('html, body').stop().animate({scrollTop: 0}, 600, 'easeInOutExpo');
         });
 
-        // Deep-link support: open a project modal via URL hash, e.g. #project-3
+        // Deep-link support: open a project modal via URL hash (#project-3)
+        // or query param (?project=3)
         var pmHash = window.location.hash.match(/^#project-(\d+)$/);
-        if (pmHash) {
-            $('#projectModal').modal('show');
+        var pmQuery = new URLSearchParams(location.search).get('project');
+        var pmIdx = pmHash ? parseInt(pmHash[1], 10)
+            : (pmQuery !== null && !isNaN(parseInt(pmQuery, 10)) ? parseInt(pmQuery, 10) : -1);
+        if (pmIdx >= 0 && pmIdx < (window.YMTProjects || []).length) {
+            if (window.YMTModal && YMTModal.open) { YMTModal.open(pmIdx); }
+            else { $('#projectModal').modal('show'); }
         }
+
+        // Recently viewed projects — last 3, shown as quick-jump chips
+        var RECENT_KEY = 'ymt_recent';
+        var recentWrap = document.getElementById('recentProjects');
+        var recentChips = document.getElementById('recentChips');
+        var projects = window.YMTProjects || [];
+        function getRecent() {
+            try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); } catch (e) { return []; }
+        }
+        function renderRecent() {
+            if (!recentWrap || !recentChips) return;
+            var list = getRecent().filter(function(i) { return projects[i]; }).slice(0, 3);
+            recentChips.innerHTML = '';
+            list.forEach(function(i) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'recent-chip';
+                b.innerHTML = '<i class="fa fa-folder-open" aria-hidden="true"></i><span></span>';
+                b.querySelector('span').textContent = projects[i].title;
+                b.addEventListener('click', function() {
+                    if (window.YMTModal && YMTModal.open) YMTModal.open(i);
+                });
+                recentChips.appendChild(b);
+            });
+            recentWrap.hidden = list.length === 0;
+        }
+        document.addEventListener('ymt:projectview', function(e) {
+            var i = e.detail;
+            var list = getRecent().filter(function(x) { return x !== i; });
+            list.unshift(i);
+            try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 3))); } catch (err) {}
+            renderRecent();
+        });
+        document.addEventListener('ymt:langchange', renderRecent);
+        renderRecent();
 
         // Scroll progress bar
         var progress = document.createElement('div');
@@ -25,16 +65,30 @@
             progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
         }, { passive: true });
 
-        // Copy email button
+        // Copy email button — icon injected next to the footer email address
         var emailBtn = document.createElement('button');
         emailBtn.type = 'button';
         emailBtn.className = 'copy-email';
         emailBtn.title = 'ymtsolution@gmail.com';
-        emailBtn.setAttribute('aria-label', 'Copy email address');
         emailBtn.innerHTML = '<i class="fa fa-copy" aria-hidden="true"></i>';
+        function copyEmailLabel() {
+            var i18n = window.YMTI18n;
+            emailBtn.setAttribute('aria-label', i18n && i18n.t ? i18n.t('copy_email_aria') : 'Copy email address');
+        }
+        copyEmailLabel();
+        document.addEventListener('ymt:langchange', copyEmailLabel);
         emailBtn.addEventListener('click', function() {
             var email = 'ymtsolution@gmail.com';
-            function done() {
+            function fallbackCopy() {
+                var ta = document.createElement('textarea');
+                ta.value = email; document.body.appendChild(ta); ta.select();
+                var ok = false;
+                try { ok = document.execCommand('copy'); } catch (e) {}
+                document.body.removeChild(ta);
+                return ok;
+            }
+            function done(ok) {
+                if (!ok) return; // don't claim success when the copy failed
                 emailBtn.classList.add('copied');
                 emailBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
                 setTimeout(function() {
@@ -43,12 +97,9 @@
                 }, 1600);
             }
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(email).then(done).catch(done);
+                navigator.clipboard.writeText(email).then(function() { done(true); }, function() { done(fallbackCopy()); });
             } else {
-                var ta = document.createElement('textarea');
-                ta.value = email; document.body.appendChild(ta); ta.select();
-                try { document.execCommand('copy'); } catch (e) {}
-                document.body.removeChild(ta); done();
+                done(fallbackCopy());
             }
         });
         function mountCopyEmail() {
@@ -365,28 +416,6 @@
             });
         });
 
-        // Footer copy-email button
-        var copyBtn = document.getElementById('copyEmailBtn');
-        if (copyBtn) {
-            copyBtn.addEventListener('click', function() {
-                var email = 'ymtsolution@gmail.com';
-                var done = function() {
-                    copyBtn.classList.add('copied');
-                    var label = copyBtn.querySelector('span');
-                    var i18n = window.YMTI18n;
-                    var prev = label ? label.textContent : '';
-                    if (label && i18n) label.textContent = i18n.t('copied');
-                    setTimeout(function() {
-                        copyBtn.classList.remove('copied');
-                        if (label) label.textContent = prev;
-                    }, 1600);
-                };
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(email).then(done).catch(done);
-                } else { done(); }
-            });
-        }
-
         // Sticky mobile CTA — hide while the contact section is on screen
         var stickyCta = document.getElementById('stickyCta');
         var contactSec = document.getElementById('contact');
@@ -446,6 +475,9 @@
                     est.querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); });
                     var oldDone = est.querySelector('.est-done');
                     if (oldDone) oldDone.remove();
+                    var oldBudget = est.querySelector('.est-budget');
+                    if (oldBudget) oldBudget.remove();
+                    budgetEl = null;
                     showStep(0);
                     return;
                 }
@@ -472,17 +504,40 @@
                     }
                     done.setAttribute('data-i18n', 'est_done');
                     done.textContent = i18n ? i18n.t('est_done') : 'Estimate ready';
+                    renderBudget();
                     setTimeout(function() {
                         document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 300);
                 }
             });
 
+            // Indicative budget tier — static ranges (IDR millions), scaled by timeline
+            var BUDGET_BASE = { web: [20, 80], mobile: [30, 120], ai: [60, 300], cloud: [40, 150], security: [50, 250] };
+            var BUDGET_MULT = { rush: 1.35, month: 1, quarter: 0.9, flex: 0.8 };
+            var budgetEl = null;
+            function renderBudget() {
+                if (!budgetEl) {
+                    budgetEl = document.createElement('p');
+                    budgetEl.className = 'est-budget';
+                    var d = est.querySelector('.est-done');
+                    if (d) d.after(budgetEl); else est.querySelector('.est-actions').after(budgetEl);
+                }
+                var base = BUDGET_BASE[answers.type], mult = BUDGET_MULT[answers.timeline] || 1;
+                if (!base || !i18n) { budgetEl.hidden = true; return; }
+                var lo = Math.max(10, Math.round(base[0] * mult / 5) * 5);
+                var hi = Math.round(base[1] * mult / 5) * 5;
+                var isId = (document.documentElement.lang === 'id');
+                var range = 'IDR ' + lo + '–' + hi + (isId ? ' jt' : 'M');
+                budgetEl.textContent = i18n.t('est_budget').replace('{range}', range);
+                budgetEl.hidden = false;
+            }
+
             // keep labels in sync when the visitor switches language mid-quiz
             document.addEventListener('ymt:langchange', function() {
                 showStep(step);
                 var done = est.querySelector('.est-done');
                 if (done && i18n) done.textContent = i18n.t('est_done');
+                if (budgetEl && !budgetEl.hidden) renderBudget();
             });
 
             showStep(0);

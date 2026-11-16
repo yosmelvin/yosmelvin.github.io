@@ -36,8 +36,12 @@
     function apply() {
         var eff = effective();
         document.documentElement.setAttribute('data-theme', eff);
-        var meta = document.querySelector('meta[name="theme-color"]');
-        if (meta) meta.setAttribute('content', eff === 'dark' ? '#0a0f1e' : '#0b1220');
+        // set content on ALL theme-color metas — the media-query pair can't
+        // express a manual override of the OS preference
+        var color = eff === 'dark' ? '#0a0f1e' : '#f6f7fb';
+        document.querySelectorAll('meta[name="theme-color"]').forEach(function(m) {
+            m.setAttribute('content', color);
+        });
         return eff;
     }
 

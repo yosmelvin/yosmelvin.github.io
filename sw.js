@@ -1,8 +1,12 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v5'; // bump on each release to refresh caches
+var CACHE = 'ymt-v6'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
+    '/privacy.html',
+    '/posts/',
+    '/posts/posts.js',
+    '/rss.xml',
     '/css/style.css',
     '/css/agency.min.css',
     '/fonts/fonts.css',
@@ -16,6 +20,9 @@ var PRECACHE = [
     '/js/contact_me.js',
     '/manifest.json',
     '/img/header-bg.jpg',
+    '/img/portfolio/sahamai-1-sm.jpg',
+    '/img/portfolio/osppay-1-sm.jpg',
+    '/img/portfolio/robo-trading-hub-sm.webp',
     '/img/pwa/icon-192.png',
     '/img/pwa/icon-512.png',
     '/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa0ZL7W0Q5n-wU.woff2',

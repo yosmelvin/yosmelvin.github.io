@@ -544,6 +544,10 @@
                     <button type="button" class="filter-chip" data-filter="trading" aria-pressed="false"><i class="fa fa-area-chart" aria-hidden="true"></i><span data-i18n="f_trading">Trading</span><span class="filter-count"></span></button>
                 </div>
             </div>
+            <div class="recent-projects" id="recentProjects" hidden>
+                <span class="recent-label" data-i18n="pf_recent">Recently viewed</span>
+                <div class="recent-chips" id="recentChips"></div>
+            </div>
             <div class="row">
                 <div class="col-md-4 col-sm-6 portfolio-item" data-cat="web">
                     <a href="#projectModal" class="portfolio-link" data-toggle="modal" data-target="#projectModal" data-project="0">
@@ -637,6 +641,7 @@
                             </div>
                         </div>
                         <img loading="lazy" decoding="async" src="img/portfolio/osppay-1-sm.jpg" srcset="img/portfolio/osppay-1-sm.jpg 480w, img/portfolio/osppay-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ospay Indonesia">
+                        <span class="card-new">NEW</span>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Ospay Indonesia</h4>
@@ -651,6 +656,7 @@
                             </div>
                         </div>
                         <img loading="lazy" decoding="async" src="img/portfolio/sahamai-1-sm.jpg" srcset="img/portfolio/sahamai-1-sm.jpg 480w, img/portfolio/sahamai-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Saham AI">
+                        <span class="card-new">NEW</span>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Saham AI</h4>
@@ -1063,7 +1069,6 @@
                 <address>
                   <p><span class="fa fa-terminal" aria-hidden="true"></span>&nbsp<strong>YMTSOLUTION</strong></p>
                   <p data-i18n-html="bottom_email"><span class="fa fa-envelope" aria-hidden="true"></span>&nbsp<a href="mailto:ymtsolution@gmail.com">ymtsolution@gmail.com</a></p>
-                  <button type="button" class="copy-email" id="copyEmailBtn" data-i18n-aria="copy_email" aria-label="Copy email" title="Copy email"><i class="fa fa-copy" aria-hidden="true"></i> <span data-i18n="copy_email">Copy email</span></button>
                 </address>
                 <p>
                   <a href="https://line.me/ti/p/%40mhc8196k" target="_blank" rel="noopener">
@@ -1183,7 +1188,9 @@
                         <a id="pmShareLi" href="#" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fa fa-linkedin"></i></a>
                         <a id="pmShareWa" href="#" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WA</a>
                         <button type="button" class="pm-share-copy" id="pmShareCopy" aria-label="Copy project link"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" class="pm-share-copy pm-brief" id="pmBriefCopy" data-i18n-aria="pm_brief" aria-label="Copy project brief"><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
                     </div>
+                    <div class="pm-dots" id="pmDots" role="tablist" aria-label="Projects"></div>
                 </div>
 
             </div>

@@ -87,7 +87,7 @@ window.YMTProjects = [
     },
     {
         title: 'Robo Trading Hub',
-        cat: 'web',
+        cat: 'trading',
         img: 'img/portfolio/robo-trading-hub.webp',
         alt: 'Robo Trading Hub',
         keys: { intro: 'm8_intro', body: 'm8_body' },

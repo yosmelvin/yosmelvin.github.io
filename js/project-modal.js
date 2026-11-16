@@ -7,6 +7,8 @@
     var current = 0;
     var $modal = $('#projectModal');
     var lastTrigger = null;
+    var openIndex = null; // explicit index for programmatic opens (palette) — beats stale hash
+    var baseTitle = document.title;
 
     function t(key) {
         return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(key) : key;
@@ -20,6 +22,14 @@
         var p = projects[i];
         if (!p) return;
         current = i;
+
+        // keep the URL hash in sync while the modal is open (refresh/back share
+        // the same project); the opening entry is pushed in show.bs.modal
+        if ($modal.hasClass('in')) {
+            try { history.replaceState(null, '', '#project-' + i); } catch (e) {}
+        }
+        document.title = p.title + ' — YMT Solution';
+        document.dispatchEvent(new CustomEvent('ymt:projectview', { detail: i }));
 
         var $hero = $('.pm-hero');
         $hero.toggleClass('pm-hero-logo', !!p.logo);
@@ -120,6 +130,16 @@
         }
         $('#pmShare').prop('hidden', false);
 
+        // project jump dots
+        var $dots = $('#pmDots').empty();
+        projects.forEach(function(_, di) {
+            $('<button type="button" class="pm-dot' + (di === i ? ' active' : '') + '"></button>')
+                .attr('aria-label', t('pm_dot_aria').replace('{n}', di + 1))
+                .attr('aria-current', di === i ? 'true' : 'false')
+                .on('click', function() { render(di, true); })
+                .appendTo($dots);
+        });
+
         // nav button labels
         $('#pmPrev').attr('aria-label', t('pm_prev_aria'));
         $('#pmNext').attr('aria-label', t('pm_next_aria'));
@@ -184,7 +204,8 @@
                 $subject.val(match);
             }
             if ($msg.length && !$msg.val()) {
-                $msg.val('I\'m interested in a project similar to "' + p.title + '". ');
+                var tpl = t('pm_similar_msg');
+                $msg.val((tpl !== 'pm_similar_msg' ? tpl : "I'm interested in a project similar to \"{title}\". ").replace('{title}', p.title));
             }
             $('html, body').stop().animate({ scrollTop: $('#contact').offset().top - 60 }, 800, 'easeInOutExpo');
             setTimeout(function() { $msg.trigger('focus'); }, 850);
@@ -194,28 +215,89 @@
     $modal.on('show.bs.modal', function(e) {
         lastTrigger = e.relatedTarget || null;
         var idx = $(e.relatedTarget).data('project');
+        if (idx == null && openIndex != null) idx = openIndex;
+        openIndex = null;
         if (idx == null) {
             var m = window.location.hash.match(/^#project-(\d+)$/);
             idx = m ? parseInt(m[1], 10) : current;
         }
+        // push a history entry so the browser Back button closes the modal
+        var targetHash = '#project-' + idx;
+        if (window.location.hash !== targetHash) {
+            try { history.pushState(null, '', targetHash); } catch (e) {}
+        }
         render(idx, false);
     });
 
-    // copy project link
+    // deep-link / back-forward sync: hash changes open, navigate or close the modal
+    $(window).on('hashchange', function() {
+        var m = window.location.hash.match(/^#project-(\d+)$/);
+        if (m) {
+            var idx = parseInt(m[1], 10);
+            if (idx < 0 || idx >= projects.length) return;
+            if (!$modal.hasClass('in')) {
+                openIndex = null;
+                render(idx, false);
+                $modal.modal('show');
+            } else if (idx !== current) {
+                render(idx, true);
+            }
+        } else if ($modal.hasClass('in')) {
+            $modal.modal('hide');
+        }
+    });
+
+    // copy project link — only show success when the copy actually worked
     $('#pmShareCopy').on('click', function() {
         var url = $(this).data('url');
-        function done() {
-            var $b = $(this);
+        var $b = $(this);
+        function fallbackCopy() {
+            var ta = document.createElement('textarea');
+            ta.value = url; document.body.appendChild(ta); ta.select();
+            var ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+            return ok;
+        }
+        function done(ok) {
+            if (!ok) return;
             $b.find('i').attr('class', 'fa fa-check');
             setTimeout(function() { $b.find('i').attr('class', 'fa fa-link'); }, 1500);
         }
         if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).then(done.bind(this)).catch(done.bind(this));
+            navigator.clipboard.writeText(url).then(function() { done(true); }, function() { done(fallbackCopy()); });
         } else {
+            done(fallbackCopy());
+        }
+    });
+
+    // copy a plain-text project brief (title + intro + tech + link)
+    $('#pmBriefCopy').on('click', function() {
+        var p = projects[current];
+        if (!p) return;
+        var brief = p.title + '\n' + t(p.keys.intro) + '\n\n' + t('pm_tech') + ': ' + (p.tech || []).join(', ') +
+            (p.link ? '\n' + p.link : '') + '\n\n— YMT Solution · ' + location.origin + location.pathname;
+        var $b = $(this);
+        function fallbackCopy() {
             var ta = document.createElement('textarea');
-            ta.value = url; document.body.appendChild(ta); ta.select();
-            try { document.execCommand('copy'); } catch (e) {}
-            document.body.removeChild(ta); done.call(this);
+            ta.value = brief; document.body.appendChild(ta); ta.select();
+            var ok = false;
+            try { ok = document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta);
+            return ok;
+        }
+        function done(ok) {
+            if (!ok) return;
+            var i18n = window.YMTI18n;
+            var prev = $b.find('i').attr('class');
+            $b.find('i').attr('class', 'fa fa-check');
+            $b.attr('aria-label', i18n && i18n.t ? i18n.t('pm_brief_done') : 'Brief copied!');
+            setTimeout(function() { $b.find('i').attr('class', prev); }, 1600);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(brief).then(function() { done(true); }, function() { done(fallbackCopy()); });
+        } else {
+            done(fallbackCopy());
         }
     });
 
@@ -242,6 +324,10 @@
 
     // return focus to the card that opened the modal
     $modal.on('hidden.bs.modal', function() {
+        document.title = baseTitle;
+        if (location.hash.match(/^#project-\d+$/)) {
+            try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+        }
         if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
         lastTrigger = null;
     });
@@ -257,5 +343,5 @@
     });
 
     // expose for deep-linking / debugging
-    window.YMTModal = { open: function(i) { render(i, false); $modal.modal('show'); } };
+    window.YMTModal = { open: function(i) { openIndex = i; render(i, false); $modal.modal('show'); } };
 })(jQuery);

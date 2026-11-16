@@ -71,15 +71,23 @@ $(function() {
             var message = $("textarea#message").val();
             var firstName = name.split(' ')[0];
 
+            var lang = (function() {
+                try { return localStorage.getItem('ymt-lang') === 'id' ? 'id' : 'en'; } catch (e) { return 'en'; }
+            })();
+            var i18nT = function(k, fb) {
+                return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(k) : fb;
+            };
+
             // Honeypot: bots fill hidden fields — pretend success, send nothing.
             if ($('input#hp_website').val()) {
-                showMessage('success', "<strong>Thank you " + firstName + "!</strong> Your message has been sent — we'll get back to you soon.");
+                var hpFirst = firstName || '';
+                showMessage('success', "<strong>" + i18nT('cf_thanks', 'Thank you') + " " + hpFirst + "!</strong> " + i18nT('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
                 $('#contactForm').trigger("reset");
                 return;
             }
 
             if (FORMSPREE_ENDPOINT.indexOf('REPLACE_WITH_FORM_ID') !== -1) {
-                showMessage('danger', "<strong>Form is not configured yet.</strong> Please email us directly instead.");
+                showMessage('danger', "<strong>" + i18nT('cf_not_configured', 'Form is not configured yet.') + "</strong>");
                 return;
             }
 
@@ -91,7 +99,7 @@ $(function() {
                 body: JSON.stringify((function() {
                     var payload = {
                         name: name, email: email, phone: phone, subject: subject, message: message,
-                        _subject: 'New project inquiry — ' + name,
+                        _subject: 'New project inquiry [' + lang + '] — ' + name,
                         _replyto: email
                     };
                     ['utm_source', 'utm_medium', 'utm_campaign', 'referrer'].forEach(function(k) {
@@ -101,10 +109,10 @@ $(function() {
                 })())
             }).then(function(res) {
                 if (!res.ok) throw new Error('bad response');
-                showMessage('success', "<strong>Thank you " + firstName + "!</strong> Your message has been sent — we'll get back to you soon.");
+                showMessage('success', "<strong>" + i18nT('cf_thanks', 'Thank you') + " " + firstName + "!</strong> " + i18nT('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
                 $('#contactForm').trigger("reset");
             }).catch(function() {
-                showMessage('danger', "<strong>Sorry " + firstName + ",</strong> your message could not be sent. Please try again later or email us directly.");
+                showMessage('danger', "<strong>" + i18nT('cf_sorry', 'Sorry') + " " + firstName + ",</strong> " + i18nT('cf_err_send', 'your message could not be sent. Please try again later or email us directly.'));
             }).finally(function() {
                 $btn.prop('disabled', false).text($btn.data('label') || 'Send Message');
             });
