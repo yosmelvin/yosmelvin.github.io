@@ -1,0 +1,8 @@
+/* TEAM */
+Developer: Yos Melvin
+Company: YMT Solution
+Location: Jakarta Barat, Indonesia
+
+/* SITE */
+Built with: HTML5, CSS3, JavaScript, Bootstrap
+Contact: ymtsolution@gmail.com

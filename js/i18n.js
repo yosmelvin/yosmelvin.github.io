@@ -8,6 +8,8 @@
     var I18N = {
         en: {
             nav_services: 'Services',
+            nav_skills: 'Skills',
+            nav_faq: 'FAQ',
             nav_portfolio: 'Portfolio',
             nav_about: 'About',
             nav_team: 'Team',
@@ -16,6 +18,7 @@
             hero_lead: 'Welcome to Our Software House!',
             hero_heading: "Let's build solutions with IT",
             hero_btn: 'Tell Me More',
+            booking_badge: 'Now booking new projects',
             scroll_aria: 'Scroll to services',
 
             services_title: 'Services',
@@ -64,7 +67,7 @@
             tl4_sub: 'Phase Two: Expansion',
             tl4_body: 'We earned the trust of major companies!',
             tl5_sub: 'Embracing the AI Era',
-            tl5_body: 'We have fully adapted to the AI era, enabling us to handle high-scale projects with massive traffic and generate millions of dollars each day.',
+            tl5_body: 'We have fully adapted to the AI era, enabling us to handle high-scale projects with massive traffic and generate millions of dollars in GMV each day.',
             tl6_cta: 'Be Part<br>Of Our<br>Story!',
 
             team_title: 'Meet Our Team',
@@ -79,15 +82,60 @@
             ph_phone: 'Your Phone *',
             ph_message: 'Your Message *',
             contact_send: 'Send Message',
+            contact_whatsapp: 'Chat on WhatsApp',
+
+            skip_link: 'Skip to content',
+            cookie_text: 'We use cookies and a live-chat service to improve your experience.',
+            cookie_accept: 'Accept',
+            cookie_decline: 'Decline',
+
+            skills_title: 'Our Tech Stack',
+            skills_sub: 'Technologies we use to build reliable, scalable products.',
+            skg_lang: 'Languages',
+            skg_fw: 'Frameworks',
+            skg_cloud: 'Cloud & DevOps',
+            skg_data: 'Data & Messaging',
+            skg_obs: 'Observability & AI',
+
+            copy_email: 'Copy email',
+            copied: 'Copied!',
+            share_label: 'Share this project',
+            pm_tech: 'Tech Stack',
+            pm_visit: 'Visit Website',
+            f_all: 'All',
+            f_web: 'Web',
+            f_mobile: 'Mobile',
+            f_fintech: 'Fintech',
+            f_trading: 'Trading',
+
+            faq_title: 'Frequently Asked Questions',
+            faq_sub: 'Quick answers about working with us.',
+            faq1_q: 'What services does YMT Solution offer?',
+            faq1_a: 'We offer web development, mobile applications, AI services, digital marketing, and UI/UX design — from MVPs to enterprise-scale systems.',
+            faq2_q: 'How long does a typical project take?',
+            faq2_a: 'Timelines depend on scope. A landing page may take 1–2 weeks, while a full platform typically takes 2–4 months. We provide a detailed timeline after discovery.',
+            faq3_q: 'Do you work with clients outside Indonesia?',
+            faq3_a: 'Yes — we collaborate remotely with clients worldwide using agile workflows, video calls, and shared project management tools.',
+            faq4_q: 'What is your tech stack?',
+            faq4_a: 'Python, Java, Node.js and Go on the backend; Django, Laravel and React up front; deployed on AWS with Docker, Terraform and CI/CD; Kafka/SQS messaging; PostgreSQL/MySQL/Redis data; monitored with Grafana, New Relic and Datadog.',
+            faq5_q: 'Do you provide maintenance after launch?',
+            faq5_a: 'Yes. We offer support and maintenance packages covering updates, monitoring, bug fixes, and feature enhancements.',
 
             bottom_contact: 'Contact',
             bottom_addr: '<span class="glyphicon glyphicon-business" aria-hidden="true"></span>Jl. Kebon Jeruk Raya Villa Kebon Jeruk Office F1, RT.3/RW.3<br>Jakarta Barat<br>Daerah Khusus Ibukota Jakarta<br>11530',
-            bottom_phone: '<span class="glyphicon glyphicon-phone" aria-hidden="true"></span> +628974142883',
-            bottom_email: '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;<a href="mailto:#ymtsolution@gmail.com">ymtsolution@gmail.com</a>',
+            bottom_phone: '<span class="glyphicon glyphicon-phone" aria-hidden="true"></span> <a href="tel:+628974142883">+628974142883</a>',
+            bottom_whatsapp: 'WhatsApp',
+            bottom_email: '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;<a href="mailto:ymtsolution@gmail.com">ymtsolution@gmail.com</a>',
 
-            footer_copy: 'Copyright &copy; YMT Solution 2026',
+            footer_copy: 'Copyright © YMT Solution 2026',
             footer_privacy: 'Privacy Policy',
             footer_terms: 'Terms of Use',
+            footer_cookies: 'Cookie Settings',
+            palette_ph: 'Type to search…',
+            palette_nav: 'navigate',
+            palette_open: 'open',
+            palette_close: 'close',
+            palette_empty: 'No results',
 
             modal_close: '<i class="fa fa-times"></i> Close Project',
 
@@ -110,7 +158,6 @@
 
             m5_intro: 'iLogo website.',
             m5_body: 'The company profile site for iLogo, built with the Yii Framework.',
-            m5_visit: 'You can visit the website at <a href="https://ilogo.co.id">ilogo.co.id</a>.',
 
             m6_intro: 'Library System website.',
             m6_body: 'This large-scale project has three main systems: the public website, the admin backend, and the onsite website. It integrates book readers and card readers connected to the website.',
@@ -131,6 +178,9 @@
 
             pm_visit: 'Visit Website',
             pm_vvip: 'VVIP Exclusive',
+            badge_vvip: 'VVIP Exclusive',
+            badge_live: 'Live',
+            badge_nda: 'NDA',
             pm_prev_aria: 'Previous project',
             pm_next_aria: 'Next project',
             pm_close_aria: 'Close project'
@@ -138,6 +188,8 @@
 
         id: {
             nav_services: 'Layanan',
+            nav_skills: 'Keahlian',
+            nav_faq: 'FAQ',
             nav_portfolio: 'Portofolio',
             nav_about: 'Tentang',
             nav_team: 'Tim',
@@ -146,6 +198,7 @@
             hero_lead: 'Selamat Datang di Software House Kami!',
             hero_heading: 'Mari wujudkan solusi bersama IT',
             hero_btn: 'Selengkapnya',
+            booking_badge: 'Sedang menerima proyek baru',
             scroll_aria: 'Gulir ke layanan',
 
             services_title: 'Layanan',
@@ -164,6 +217,8 @@
             svc_ios_d: 'Kami mengembangkan aplikasi iOS.',
             svc_ai: 'Layanan AI',
             svc_ai_d: 'Solusi berbasis AI: asisten cerdas, otomatisasi, analitik data & integrasi pintar.',
+            svc_devops: 'Cloud & DevOps',
+            svc_devops_d: 'Infrastruktur AWS, Docker, Terraform, pipeline CI/CD & observabilitas.',
 
             portfolio_title: 'Portofolio',
             portfolio_sub: 'Beberapa proyek yang telah kami rancang dan bangun.',
@@ -194,7 +249,7 @@
             tl4_sub: 'Fase Dua: Ekspansi',
             tl4_body: 'Kami memenangkan kepercayaan perusahaan-perusahaan besar!',
             tl5_sub: 'Meraih Era AI',
-            tl5_body: 'Kami telah sepenuhnya beradaptasi dengan era AI, sehingga mampu menangani proyek berskala besar dengan traffic masif dan menghasilkan jutaan dolar setiap hari.',
+            tl5_body: 'Kami telah sepenuhnya beradaptasi dengan era AI, sehingga mampu menangani proyek berskala besar dengan traffic masif dan menghasilkan GMV jutaan dolar setiap hari.',
             tl6_cta: 'Jadilah Bagian<br>Dari Kisah<br>Kami!',
 
             team_title: 'Kenalan dengan Tim Kami',
@@ -209,15 +264,60 @@
             ph_phone: 'Telepon Anda *',
             ph_message: 'Pesan Anda *',
             contact_send: 'Kirim Pesan',
+            contact_whatsapp: 'Chat via WhatsApp',
+
+            skip_link: 'Langsung ke konten',
+            cookie_text: 'Kami menggunakan cookie dan layanan live-chat untuk meningkatkan pengalaman Anda.',
+            cookie_accept: 'Terima',
+            cookie_decline: 'Tolak',
+
+            skills_title: 'Tech Stack Kami',
+            skills_sub: 'Teknologi yang kami gunakan untuk membangun produk yang andal dan skalabel.',
+            skg_lang: 'Bahasa Pemrograman',
+            skg_fw: 'Framework',
+            skg_cloud: 'Cloud & DevOps',
+            skg_data: 'Data & Messaging',
+            skg_obs: 'Observabilitas & AI',
+
+            copy_email: 'Salin email',
+            copied: 'Tersalin!',
+            share_label: 'Bagikan proyek ini',
+            pm_tech: 'Tech Stack',
+            pm_visit: 'Kunjungi Website',
+            f_all: 'Semua',
+            f_web: 'Web',
+            f_mobile: 'Mobile',
+            f_fintech: 'Fintech',
+            f_trading: 'Trading',
+
+            faq_title: 'Pertanyaan yang Sering Diajukan',
+            faq_sub: 'Jawaban cepat seputar bekerja sama dengan kami.',
+            faq1_q: 'Layanan apa saja yang ditawarkan YMT Solution?',
+            faq1_a: 'Kami menyediakan pengembangan web, aplikasi mobile, layanan AI, digital marketing, dan desain UI/UX — dari MVP hingga sistem skala enterprise.',
+            faq2_q: 'Berapa lama waktu pengerjaan proyek?',
+            faq2_a: 'Tergantung lingkupnya. Landing page bisa memakan waktu 1–2 minggu, sementara platform penuh biasanya 2–4 bulan. Kami memberikan timeline detail setelah tahap discovery.',
+            faq3_q: 'Apakah bekerja dengan klien di luar Indonesia?',
+            faq3_a: 'Ya — kami berkolaborasi secara remote dengan klien di seluruh dunia menggunakan alur kerja agile, video call, dan tools project management.',
+            faq4_q: 'Apa tech stack yang digunakan?',
+            faq4_a: 'Python, Java, Node.js, dan Go di backend; Django, Laravel, dan React di frontend; dideploy di AWS dengan Docker, Terraform, dan CI/CD; messaging Kafka/SQS; database PostgreSQL/MySQL/Redis; dimonitor dengan Grafana, New Relic, dan Datadog.',
+            faq5_q: 'Apakah ada maintenance setelah peluncuran?',
+            faq5_a: 'Ya. Kami menyediakan paket dukungan dan maintenance meliputi update, monitoring, perbaikan bug, dan penambahan fitur.',
 
             bottom_contact: 'Kontak',
             bottom_addr: '<span class="glyphicon glyphicon-business" aria-hidden="true"></span>Jl. Kebon Jeruk Raya Villa Kebon Jeruk Office F1, RT.3/RW.3<br>Jakarta Barat<br>Daerah Khusus Ibukota Jakarta<br>11530',
-            bottom_phone: '<span class="glyphicon glyphicon-phone" aria-hidden="true"></span> +628974142883',
-            bottom_email: '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;<a href="mailto:#ymtsolution@gmail.com">ymtsolution@gmail.com</a>',
+            bottom_phone: '<span class="glyphicon glyphicon-phone" aria-hidden="true"></span> <a href="tel:+628974142883">+628974142883</a>',
+            bottom_whatsapp: 'WhatsApp',
+            bottom_email: '<span class="glyphicon glyphicon-envelope" aria-hidden="true"></span>&nbsp;<a href="mailto:ymtsolution@gmail.com">ymtsolution@gmail.com</a>',
 
-            footer_copy: 'Hak Cipta &copy; YMT Solution 2026',
+            footer_copy: 'Hak Cipta © YMT Solution 2026',
             footer_privacy: 'Kebijakan Privasi',
             footer_terms: 'Ketentuan Penggunaan',
+            footer_cookies: 'Pengaturan Cookie',
+            palette_ph: 'Ketik untuk mencari…',
+            palette_nav: 'navigasi',
+            palette_open: 'buka',
+            palette_close: 'tutup',
+            palette_empty: 'Tidak ada hasil',
 
             modal_close: '<i class="fa fa-times"></i> Tutup Proyek',
 
@@ -240,7 +340,6 @@
 
             m5_intro: 'Website iLogo.',
             m5_body: 'Company profile untuk iLogo, dibangun dengan Yii Framework.',
-            m5_visit: 'Anda dapat mengunjungi website di <a href="https://ilogo.co.id">ilogo.co.id</a>.',
 
             m6_intro: 'Website Sistem Perpustakaan.',
             m6_body: 'Proyek berskala besar ini terdiri dari tiga sistem utama: website publik, backend admin, dan website onsite. Proyek ini mengintegrasikan book reader dan card reader yang terhubung dengan website.',
@@ -261,6 +360,9 @@
 
             pm_visit: 'Kunjungi Website',
             pm_vvip: 'Eksklusif VVIP',
+            badge_vvip: 'Eksklusif VVIP',
+            badge_live: 'Live',
+            badge_nda: 'NDA',
             pm_prev_aria: 'Proyek sebelumnya',
             pm_next_aria: 'Proyek berikutnya',
             pm_close_aria: 'Tutup proyek'

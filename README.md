@@ -1,68 +1,80 @@
-Here’s a simple template for a README.md for your portfolio page. You can adjust the content to reflect your actual project and experiences.
+# YMT Solution — Portfolio
 
-Portfolio
+Official portfolio website for **YMT Solution**, a software house based in Jakarta, Indonesia.
+Single-page static site built with HTML5, CSS3, and vanilla JavaScript (Bootstrap 3 theme).
 
-Welcome to my personal portfolio page! This website showcases my work, projects, and skills as I explore and build in various fields of technology, finance, and entrepreneurship.
+## Features
 
-🚀 Features
-	•	Projects: A collection of projects I’ve worked on in fields like software development, financial technology, and blockchain.
-	•	About Me: Learn more about my background, goals, and aspirations.
-	•	Skills: A list of technical skills, tools, and frameworks I’m proficient in, including but not limited to Django, Python, Golang, and MySQL.
-	•	Blog: Insights, thoughts, and articles on topics such as entrepreneurship, finance, technology, and personal growth.
-	•	Contact: Get in touch with me through my contact form or social links.
+- **Bilingual** — English / Bahasa Indonesia toggle (persisted in localStorage)
+- **Portfolio showcase** — 8 projects with a single reusable modal (`js/projects.js` data-driven), deep links (`#project-0`…`#project-7`), prev/next navigation, share buttons, tech-stack chips
+- **Project filter** — filter chips by category (Web, Mobile, Fintech, Trading)
+- **Services & AI Services** section
+- **Tech stack grid**, **stats counters** (animated), **timeline**, **team**, **FAQ accordion**
+- **Contact form** via Formspree — set your form ID in `js/contact_me.js` (`FORMSPREE_ENDPOINT`)
+- **Dark/light theme toggle**, cookie consent banner (gates Tawk.to chat), scroll progress bar
+- **SEO** — sitemap.xml, robots.txt, Open Graph, Twitter Card, canonical, JSON-LD structured data
+- **PWA** — `manifest.json`, icons, minimal service worker (`sw.js`)
+- **Accessibility** — skip link, labels, aria attributes, `prefers-reduced-motion` support
+- Custom 404 page, `humans.txt`, `.well-known/security.txt`
 
-🔧 Technologies Used
-	•	Frontend: HTML, CSS, JavaScript (React or any other framework you used)
-	•	Backend: Python (Django), Golang, Node.js (or any tech stack you use)
-	•	Database: MySQL, Redis (or whatever databases you’re working with)
-	•	Hosting: GitHub Pages, Heroku, AWS (or your hosting platform)
+## Tech Stack
 
-📂 Project Structure
+- Frontend: HTML5, CSS3, JavaScript (jQuery 1.12 + Bootstrap 3.3 theme, Font Awesome 4)
+- Fonts: Sora + Inter (Google Fonts)
+- Backend services: Formspree (contact), Google Maps embed, Tawk.to chat (consent-gated)
+- Hosting: GitHub Pages (static)
 
-/portfolio
-│
-├── /css
-├── /img
-├── /js
-├── /less
-└── README.md
+## Project Structure
 
-📌 Getting Started
+```
+/
+├── index.html          # Main page (all sections)
+├── 404.html            # Custom 404 page
+├── css/style.css       # Custom theme overrides
+├── css/agency.min.css  # Base Bootstrap theme
+├── js/
+│   ├── i18n.js         # EN/ID translations
+│   ├── projects.js     # Portfolio project data
+│   ├── project-modal.js# Dynamic project modal
+│   ├── contact_me.js   # Contact form (Formspree)
+│   └── ...
+├── img/                # Assets (portfolio, team, about, pwa icons)
+├── manifest.json       # PWA manifest
+├── sw.js               # Service worker
+├── sitemap.xml         # SEO sitemap
+├── robots.txt
+├── _headers            # Security headers (Netlify/CF Pages only)
+└── humans.txt
+```
 
-To view the portfolio locally:
-	1.	Clone the repository:
+## Getting Started
 
+```bash
 git clone https://github.com/yosmelvin/yosmelvin.github.io
+cd yosmelvin.github.io
+python3 -m http.server 8000
+# open http://localhost:8000
+```
 
+No build step required — it's a plain static site.
 
-	2.	Navigate into the project directory:
+## Configuration
 
-cd portfolio
+| What | Where |
+|---|---|
+| Formspree form ID | `js/contact_me.js` → `FORMSPREE_ENDPOINT` |
+| Google Maps API key | `index.html` (inline script) — **restrict by HTTP referrer in Google Cloud Console** |
+| Tawk.to widget ID | `index.html` (bottom script) |
+| Translations | `js/i18n.js` |
+| Project data | `js/projects.js` |
 
+## Contact
 
-	3.	Install dependencies (for example, if using React or any JavaScript framework):
+- Email: ymtsolution@gmail.com
+- LinkedIn: https://www.linkedin.com/in/yosmelvin
+- GitHub: https://github.com/yosmelvin
+- Twitter: @yosmelvin_
 
-npm install
+## License
 
-
-	4.	Run the app:
-
-npm start
-
-This will start the development server and open the page in your browser.
-
-🧑‍💻 Contributing
-
-Feel free to fork the repository and submit pull requests. Contributions are welcome!
-
-📧 Contact
-	•	Email: ymtanoto@gmail.com
-	•	LinkedIn: https://www.linkedin.com/in/yosmelvin
-	•	GitHub: https://github.com/yosmelvin
-	•	Twitter: @yosmelvin_
-
-License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-You can expand on any section depending on your specific projects, achievements, or skills! Let me know if you need help personalizing it further.
+MIT License — see the LICENSE file for details.

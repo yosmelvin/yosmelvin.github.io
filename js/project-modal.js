@@ -6,6 +6,7 @@
     var projects = window.YMTProjects || [];
     var current = 0;
     var $modal = $('#projectModal');
+    var lastTrigger = null;
 
     function t(key) {
         return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(key) : key;
@@ -22,7 +23,16 @@
 
         var $hero = $('.pm-hero');
         $hero.toggleClass('pm-hero-logo', !!p.logo);
-        $('#pmImg').attr({ src: p.img, alt: p.alt || p.title });
+        var $img = $('#pmImg');
+        $img.attr({ src: p.img, alt: p.alt || p.title });
+        // srcset for compressed JPG projects (small + full)
+        if (/\.jpe?g$/i.test(p.img)) {
+            var base = p.img.replace(/\.jpe?g$/i, '');
+            $img.attr('srcset', base + '-sm.jpg 480w, ' + p.img + ' 1000w');
+            $img.attr('sizes', '(max-width: 860px) 100vw, 810px');
+        } else {
+            $img.removeAttr('srcset').removeAttr('sizes');
+        }
         $('#pmTitle').text(p.title);
         $('#pmIntro').text(t(p.keys.intro));
         $('#pmText').html(t(p.keys.body));
@@ -46,12 +56,13 @@
         }
         $meta.toggle($meta.children().length > 0);
 
-        // VVIP badge
-        if (p.exclusive) {
-            $('#pmBadge').text(t('pm_vvip')).prop('hidden', false);
-        } else {
-            $('#pmBadge').prop('hidden', true);
-        }
+        // unified badges (vvip / live / nda)
+        var badgeTypes = p.badges || (p.exclusive ? ['vvip'] : []);
+        var $badges = $('#pmBadges').empty();
+        badgeTypes.forEach(function(b) {
+            $('<span class="pm-badge-static pm-badge-' + b + '"></span>').text(t('badge_' + b)).appendTo($badges);
+        });
+        $badges.prop('hidden', badgeTypes.length === 0);
 
         // visit button
         if (p.link) {
@@ -59,6 +70,28 @@
         } else {
             $('#pmVisit').prop('hidden', true);
         }
+
+        // tech stack chips
+        var $tech = $('#pmTech').empty();
+        if (p.tech && p.tech.length) {
+            $('<span class="pm-tech-label"></span>').text(t('pm_tech')).appendTo($tech);
+            p.tech.forEach(function(tk) {
+                $('<span class="pm-chip pm-chip-tech"></span>').text(tk).appendTo($tech);
+            });
+            $tech.prop('hidden', false);
+        } else {
+            $tech.prop('hidden', true);
+        }
+
+        // share links — deep link to this project
+        var shareUrl = location.origin + location.pathname + '#project-' + i;
+        var shareText = encodeURIComponent(p.title + ' | YMT Solution');
+        var shareUrlEnc = encodeURIComponent(shareUrl);
+        $('#pmShareX').attr('href', 'https://twitter.com/intent/tweet?url=' + shareUrlEnc + '&text=' + shareText);
+        $('#pmShareLi').attr('href', 'https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrlEnc);
+        $('#pmShareWa').attr('href', 'https://wa.me/?text=' + shareText + '%20' + shareUrlEnc);
+        $('#pmShareCopy').data('url', shareUrl);
+        $('#pmShare').prop('hidden', false);
 
         // nav button labels
         $('#pmPrev').attr('aria-label', t('pm_prev_aria'));
@@ -78,12 +111,31 @@
     }
 
     $modal.on('show.bs.modal', function(e) {
+        lastTrigger = e.relatedTarget || null;
         var idx = $(e.relatedTarget).data('project');
         if (idx == null) {
             var m = window.location.hash.match(/^#project-(\d+)$/);
             idx = m ? parseInt(m[1], 10) : current;
         }
         render(idx, false);
+    });
+
+    // copy project link
+    $('#pmShareCopy').on('click', function() {
+        var url = $(this).data('url');
+        function done() {
+            var $b = $(this);
+            $b.find('i').attr('class', 'fa fa-check');
+            setTimeout(function() { $b.find('i').attr('class', 'fa fa-link'); }, 1500);
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url).then(done.bind(this)).catch(done.bind(this));
+        } else {
+            var ta = document.createElement('textarea');
+            ta.value = url; document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (e) {}
+            document.body.removeChild(ta); done.call(this);
+        }
     });
 
     $('#pmPrev').on('click', function(e) { e.preventDefault(); go(-1); });
@@ -99,6 +151,22 @@
     // re-render with new language if modal is open
     $(document).on('ymt:langchange', function() {
         if ($modal.hasClass('in')) render(current, false);
+    });
+
+    // return focus to the card that opened the modal
+    $modal.on('hidden.bs.modal', function() {
+        if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
+        lastTrigger = null;
+    });
+
+    // simple focus trap: keep Tab cycling inside the modal
+    $modal.on('keydown', function(e) {
+        if (e.key !== 'Tab') return;
+        var focusables = $modal.find('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])').filter(':visible');
+        if (!focusables.length) return;
+        var first = focusables.first()[0], last = focusables.last()[0];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
 
     // expose for deep-linking / debugging
