@@ -19,6 +19,7 @@ $(function() {
             var name = $("input#name").val();
             var email = $("input#email").val();
             var phone = $("input#phone").val();
+            var subject = $("select#subject").val();
             var message = $("textarea#message").val();
             var firstName = name.split(' ')[0];
 
@@ -34,13 +35,13 @@ $(function() {
                 return;
             }
 
-            $btn.prop('disabled', true).text('Sending…');
+            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Sending…');
 
             fetch(FORMSPREE_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    name: name, email: email, phone: phone, message: message,
+                    name: name, email: email, phone: phone, subject: subject, message: message,
                     _subject: 'New project inquiry — ' + name,
                     _replyto: email
                 })

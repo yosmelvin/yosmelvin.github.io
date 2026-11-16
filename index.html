@@ -103,7 +103,9 @@
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                     <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand page-scroll" href="#page-top">YMT Solution</a>
+                <a class="navbar-brand page-scroll" href="#page-top" aria-label="YMT Solution — back to top">
+                    <span class="brand-mark" aria-hidden="true">YMT</span><span class="brand-word">Solution</span>
+                </a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -255,23 +257,31 @@
                 <div class="col-lg-10 col-lg-offset-1">
                     <h3 class="skills-group" data-i18n="skg_lang">Languages</h3>
                     <div class="skills-grid">
-                        <div class="skill-card"><i class="fa fa-code" aria-hidden="true"></i><span>Python</span></div>
-                        <div class="skill-card"><i class="fa fa-code" aria-hidden="true"></i><span>Java</span></div>
-                        <div class="skill-card"><i class="fa fa-js" aria-hidden="true"></i><span>Node.js</span></div>
+                        <div class="skill-card"><i class="fa fa-terminal" aria-hidden="true"></i><span>Python</span></div>
+                        <div class="skill-card"><i class="fa fa-coffee" aria-hidden="true"></i><span>Java</span></div>
+                        <div class="skill-card"><i class="fa fa-server" aria-hidden="true"></i><span>Node.js</span></div>
                         <div class="skill-card"><i class="fa fa-cogs" aria-hidden="true"></i><span>Go</span></div>
+                        <div class="skill-card"><i class="fa fa-html5" aria-hidden="true"></i><span>HTML5</span></div>
+                        <div class="skill-card"><i class="fa fa-css3" aria-hidden="true"></i><span>CSS3</span></div>
+                        <div class="skill-card"><i class="fa fa-code" aria-hidden="true"></i><span>JavaScript</span></div>
                     </div>
                     <h3 class="skills-group" data-i18n="skg_fw">Frameworks</h3>
                     <div class="skills-grid">
                         <div class="skill-card"><i class="fa fa-gears" aria-hidden="true"></i><span>Django</span></div>
                         <div class="skill-card"><i class="fa fa-code" aria-hidden="true"></i><span>PHP / Laravel</span></div>
                         <div class="skill-card"><i class="fa fa-cube" aria-hidden="true"></i><span>React</span></div>
+                        <div class="skill-card"><i class="fa fa-fire" aria-hidden="true"></i><span>Svelte</span></div>
+                        <div class="skill-card"><i class="fa fa-rocket" aria-hidden="true"></i><span>FastAPI</span></div>
                     </div>
                     <h3 class="skills-group" data-i18n="skg_cloud">Cloud &amp; DevOps</h3>
                     <div class="skills-grid">
                         <div class="skill-card"><i class="fa fa-cloud" aria-hidden="true"></i><span>AWS</span></div>
+                        <div class="skill-card"><i class="fa fa-google" aria-hidden="true"></i><span>GCP</span></div>
                         <div class="skill-card"><i class="fa fa-cube" aria-hidden="true"></i><span>Docker</span></div>
                         <div class="skill-card"><i class="fa fa-wrench" aria-hidden="true"></i><span>Terraform</span></div>
                         <div class="skill-card"><i class="fa fa-refresh" aria-hidden="true"></i><span>CI/CD</span></div>
+                        <div class="skill-card"><i class="fa fa-bullseye" aria-hidden="true"></i><span>Nginx</span></div>
+                        <div class="skill-card"><i class="fa fa-pencil" aria-hidden="true"></i><span>Apache</span></div>
                     </div>
                     <h3 class="skills-group" data-i18n="skg_data">Data &amp; Messaging</h3>
                     <div class="skills-grid">
@@ -280,6 +290,13 @@
                         <div class="skill-card"><i class="fa fa-bolt" aria-hidden="true"></i><span>Redis</span></div>
                         <div class="skill-card"><i class="fa fa-rss" aria-hidden="true"></i><span>Kafka</span></div>
                         <div class="skill-card"><i class="fa fa-inbox" aria-hidden="true"></i><span>SQS</span></div>
+                        <div class="skill-card"><i class="fa fa-leaf" aria-hidden="true"></i><span>MongoDB</span></div>
+                    </div>
+                    <h3 class="skills-group" data-i18n="skg_api">APIs &amp; Communication</h3>
+                    <div class="skills-grid">
+                        <div class="skill-card"><i class="fa fa-exchange" aria-hidden="true"></i><span>REST API</span></div>
+                        <div class="skill-card"><i class="fa fa-comments" aria-hidden="true"></i><span>WebSocket</span></div>
+                        <div class="skill-card"><i class="fa fa-cubes" aria-hidden="true"></i><span>Protocol Buffers</span></div>
                     </div>
                     <h3 class="skills-group" data-i18n="skg_obs">Observability &amp; AI</h3>
                     <div class="skills-grid">
@@ -610,25 +627,26 @@
     <!-- Clients Aside -->
     <aside class="clients">
         <div class="container">
+            <p class="clients-label" data-i18n="clients_label">Trusted by industry leaders</p>
             <div class="row">
                 <div class="col-md-3 col-sm-6">
-                    <a target="_blank" rel="noopener" href="https://www.inklo.id">
-                        <img loading="lazy" decoding="async" src="img/logos/inklo.png" class="img-responsive img-centered logos" alt="inklo">
+                    <a target="_blank" rel="noopener" href="https://www.inklo.id" class="logo-tile">
+                        <img loading="lazy" decoding="async" src="img/logos/inklo.png" class="img-centered logos" alt="inklo">
                     </a>
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <a target="_blank" rel="noopener" href="https://www.endorsepin.com">
-                        <img loading="lazy" decoding="async" src="img/logos/endorsepin.png" class="img-responsive img-centered logos" alt="endorsepin">
+                    <a target="_blank" rel="noopener" href="https://www.endorsepin.com" class="logo-tile">
+                        <img loading="lazy" decoding="async" src="img/logos/endorsepin.png" class="img-centered logos" alt="endorsepin">
                     </a>
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <a target="_blank" rel="noopener" href="https://www.gigsit.id">
-                        <img loading="lazy" decoding="async" src="img/logos/gigsit.png" class="img-responsive img-centered logos" alt="gigsit">
+                    <a target="_blank" rel="noopener" href="https://www.gigsit.id" class="logo-tile">
+                        <img loading="lazy" decoding="async" src="img/logos/gigsit.png" class="img-centered logos" alt="gigsit">
                     </a>
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <a target="_blank" rel="noopener" href="https://www.iLogo.co.id">
-                        <img loading="lazy" decoding="async" src="img/logos/iLogo.png" class="img-responsive img-centered logos" alt="iLogo">
+                    <a target="_blank" rel="noopener" href="https://www.iLogo.co.id" class="logo-tile">
+                        <img loading="lazy" decoding="async" src="img/logos/iLogo.png" class="img-centered logos" alt="iLogo">
                     </a>
                 </div>
             </div>
@@ -681,30 +699,54 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-10 col-lg-offset-1">
+                    <div class="contact-card">
                     <form name="sentMessage" id="contactForm" novalidate>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="sr-only" for="name">Name</label>
-                                    <input type="text" class="form-control" placeholder="Your Name *" id="name" name="name" autocomplete="name" required data-i18n-ph="ph_name" data-validation-required-message="Please enter your name.">
+                                    <label for="name" data-i18n="lbl_name">Name</label>
+                                    <div class="field-wrap">
+                                        <i class="fa fa-user field-icon" aria-hidden="true"></i>
+                                        <input type="text" class="form-control" placeholder="Your Name *" id="name" name="name" autocomplete="name" required data-i18n-ph="ph_name" data-validation-required-message="Please enter your name.">
+                                    </div>
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="sr-only" for="email">Email Address</label>
-                                    <input type="email" class="form-control" placeholder="Your Email *" id="email" name="email" autocomplete="email" inputmode="email" required data-i18n-ph="ph_email" data-validation-required-message="Please enter your email address.">
+                                    <label for="email" data-i18n="lbl_email">Email Address</label>
+                                    <div class="field-wrap">
+                                        <i class="fa fa-envelope field-icon" aria-hidden="true"></i>
+                                        <input type="email" class="form-control" placeholder="Your Email *" id="email" name="email" autocomplete="email" inputmode="email" required data-i18n-ph="ph_email" data-validation-required-message="Please enter your email address.">
+                                    </div>
                                     <p class="help-block text-danger"></p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="sr-only" for="phone">Phone Number</label>
-                                    <input type="tel" class="form-control" placeholder="Your Phone *" id="phone" name="phone" autocomplete="tel" inputmode="tel" required data-i18n-ph="ph_phone" data-validation-required-message="Please enter your phone number.">
+                                    <label for="phone" data-i18n="lbl_phone">Phone Number</label>
+                                    <div class="field-wrap">
+                                        <i class="fa fa-phone field-icon" aria-hidden="true"></i>
+                                        <input type="tel" class="form-control" placeholder="Your Phone *" id="phone" name="phone" autocomplete="tel" inputmode="tel" required data-i18n-ph="ph_phone" data-validation-required-message="Please enter your phone number.">
+                                    </div>
                                     <p class="help-block text-danger"></p>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject" data-i18n="lbl_subject">What do you need?</label>
+                                    <div class="field-wrap">
+                                        <i class="fa fa-th-large field-icon" aria-hidden="true"></i>
+                                        <select class="form-control" id="subject" name="subject">
+                                            <option value="" data-i18n="subj_placeholder">Select a project type…</option>
+                                            <option value="web" data-i18n="subj_web">Website / Web App</option>
+                                            <option value="mobile" data-i18n="subj_mobile">Mobile App</option>
+                                            <option value="ai" data-i18n="subj_ai">AI / ML Solution</option>
+                                            <option value="cloud" data-i18n="subj_cloud">Cloud / DevOps</option>
+                                            <option value="other" data-i18n="subj_other">Other / Not sure</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="sr-only" for="message">Message</label>
-                                    <textarea class="form-control" placeholder="Your Message *" id="message" name="message" required data-i18n-ph="ph_message" data-validation-required-message="Please enter a message."></textarea>
+                                    <label for="message" data-i18n="lbl_message">Message</label>
+                                    <textarea class="form-control" placeholder="Your Message *" id="message" name="message" rows="8" required data-i18n-ph="ph_message" data-validation-required-message="Please enter a message."></textarea>
                                     <p class="help-block text-danger"></p>
                                 </div>
                             </div>
@@ -716,17 +758,20 @@
                                 <input type="text" id="hp_website" name="hp_website" tabindex="-1" autocomplete="off">
                             </div>
 
-                            <div class="col-lg-12 text-center">
-                                <!-- data-callback="correctCaptcha" -->
-                                <!-- <div class="g-recaptcha" data-sitekey="6LdvHRYUAAAAAF4V4BbYild-jyfs_TRgXgi3LVHu"></div> -->
+                            <div class="col-lg-12">
                                 <div id="success" aria-live="polite"></div>
-                                <button type="submit" class="btn btn-xl" data-i18n="contact_send">Send Message</button>
-                                <a class="btn btn-xl btn-whatsapp" href="https://wa.me/628974142883?text=Hello%20YMT%20Solution%2C%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener">
-                                    <i class="fa fa-comment" aria-hidden="true"></i> <span data-i18n="contact_whatsapp">Chat on WhatsApp</span>
-                                </a>
+                                <div class="form-actions">
+                                    <button type="submit" class="btn btn-xl btn-submit" data-i18n="contact_send">Send Message</button>
+                                    <div class="form-divider"><span data-i18n="contact_or">or</span></div>
+                                    <a class="btn btn-xl btn-whatsapp" href="https://wa.me/628974142883?text=Hello%20YMT%20Solution%2C%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener">
+                                        <i class="fa fa-comment" aria-hidden="true"></i> <span data-i18n="contact_whatsapp">Chat on WhatsApp</span>
+                                    </a>
+                                </div>
+                                <p class="form-note"><i class="fa fa-clock-o" aria-hidden="true"></i> <span data-i18n="contact_response">We typically reply within 24 hours.</span></p>
                             </div>
                         </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -754,7 +799,6 @@
                     <img loading="lazy" decoding="async" height="36" border="0" alt="Add Friend" src="https://biz.line.naver.jp/line_business/img/btn/addfriends_en.png">
                   </a>
                 </p>
-                <img loading="lazy" decoding="async" class="logo-ymt-img" src="img/logos/LogoYMT.png">
             </div>
 
             <div class="col-lg-4 col-md-4 col-xs-6">
@@ -774,7 +818,16 @@
                 <a href="#skills">DJANGO</a>
                 <a href="#skills">LARAVEL</a>
                 <a href="#skills">REACT</a>
+                <a href="#skills">JAVASCRIPT</a>
+                <a href="#skills">HTML5</a>
+                <a href="#skills">CSS3</a>
                 <a href="#skills">AWS</a>
+                <a href="#skills">GCP</a>
+                <a href="#skills">FASTAPI</a>
+                <a href="#skills">SVELTE</a>
+                <a href="#skills">MONGODB</a>
+                <a href="#skills">NGINX</a>
+                <a href="#skills">APACHE</a>
                 <a href="#skills">DOCKER</a>
                 <a href="#skills">TERRAFORM</a>
                 <a href="#skills">CI/CD</a>
@@ -971,6 +1024,13 @@
 
     <!-- Back to Top -->
     <a href="#page-top" class="scroll-top page-scroll" title="Back to top"><i class="fa fa-angle-up fa-2x"></i></a>
+
+    <!-- Floating WhatsApp chat -->
+    <a href="https://wa.me/628974142883?text=Hello%20YMT%20Solution%2C%20I%27d%20like%20to%20discuss%20a%20project." class="wa-float" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+        <i class="fa fa-comment" aria-hidden="true"></i>
+        <span class="wa-float-ring" aria-hidden="true"></span>
+        <span class="sr-only" data-i18n="contact_whatsapp">Chat on WhatsApp</span>
+    </a>
 
     <!-- Command palette (Ctrl+K / Cmd+K) -->
     <div class="palette-overlay" id="paletteOverlay" hidden>
