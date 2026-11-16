@@ -49,6 +49,7 @@
             pf_tome_d: 'TOME website',
             pf_ilogo_d: 'iLogo website',
             pf_lib_d: 'Library System website',
+            pf_osppay_d: 'Super app — e-wallet, PPOB & payments',
             pf_saham_d: 'AI stock screener',
             pf_robo_d: 'Automated trading platform',
 
@@ -250,6 +251,13 @@
             m7_client: 'Client: Sahamai',
             m7_cat: 'Category: Web App / Fintech',
 
+
+            m9_intro: 'Indonesian super app for digital payments — e-wallet, bill payments (PPOB) and payment gateway.',
+            m9_body: 'Ospay Indonesia is a financial technology super app that brings everyday payments into one platform: a Kotlin Android e-wallet (Jetpack Compose) for QR payments and top-ups, PPOB bill payments for electricity, pulsa, BPJS and more, and a payment gateway for merchants to accept online transactions — all routed through a Python Django backend integrated with multiple payment service providers. The roadmap extends to cross-currency transfers, turning Ospay into a regional remittance hub. Infrastructure runs on VPS with Docker containers, Terraform-managed provisioning, CI/CD pipelines, Nginx reverse proxy, and MySQL for transactional data — built for high availability and secure handling of financial flows.',
+            m9_date: 'Date: 2026',
+            m9_client: 'Client: Ospay Indonesia',
+            m9_cat: 'Category: Super App / E-Wallet / Fintech',
+
             m8_intro: 'Automated trading dashboard & order management.',
             m8_body: 'Robo Trading Hub is an automated trading platform featuring a live market snapshot, real-time order-book stream, trading signal board, pre-market analysis, and order queue management.',
             m8_exclusive: '<span class="label label-primary">Exclusive Project</span> This is a private project available only to our VVIP clients.',
@@ -309,6 +317,7 @@
             pf_tome_d: 'Website TOME',
             pf_ilogo_d: 'Website iLogo',
             pf_lib_d: 'Website Sistem Perpustakaan',
+            pf_osppay_d: 'Super app — e-wallet, PPOB & pembayaran',
             pf_saham_d: 'Screener saham berbasis AI',
             pf_robo_d: 'Platform trading otomatis',
 
@@ -509,6 +518,13 @@
             m7_date: 'Tanggal: 2026',
             m7_client: 'Klien: Sahamai',
             m7_cat: 'Kategori: Aplikasi Web / Fintech',
+
+
+            m9_intro: 'Super app pembayaran digital Indonesia — e-wallet, pembayaran tagihan (PPOB), dan payment gateway.',
+            m9_body: 'Ospay Indonesia adalah super app financial technology yang menghadirkan pembayaran sehari-hari dalam satu platform: e-wallet Android berbasis Kotlin (Jetpack Compose) untuk pembayaran QR dan top-up, pembayaran tagihan PPOB untuk listrik, pulsa, BPJS, dan lainnya, serta payment gateway bagi merchant untuk menerima transaksi online — semuanya dirutekan melalui backend Python Django yang terintegrasi dengan berbagai payment service provider. Roadmap-nya mencakup transfer antar-mata-uang, menjadikan Ospay sebagai hub remitansi regional. Infrastruktur berjalan di VPS dengan container Docker, provisioning berbasis Terraform, pipeline CI/CD, reverse proxy Nginx, dan MySQL untuk data transaksional — dibangun untuk high availability dan penanganan arus keuangan yang aman.',
+            m9_date: 'Tanggal: 2026',
+            m9_client: 'Klien: Ospay Indonesia',
+            m9_cat: 'Kategori: Super App / E-Wallet / Fintech',
 
             m8_intro: 'Dashboard trading otomatis & manajemen order.',
             m8_body: 'Robo Trading Hub adalah platform trading otomatis dengan market snapshot langsung, order-book stream real-time, papan sinyal trading, analisis pra-pasar, dan manajemen antrian order.',

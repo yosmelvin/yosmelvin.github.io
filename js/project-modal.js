@@ -24,6 +24,7 @@
         var $hero = $('.pm-hero');
         $hero.toggleClass('pm-hero-logo', !!p.logo);
         var $img = $('#pmImg');
+        $img.removeClass('img-broken');
         $img.attr({ src: p.img, alt: p.alt || p.title, decoding: 'async' });
         // srcset for compressed JPG projects (small + full)
         if (/\.jpe?g$/i.test(p.img)) {

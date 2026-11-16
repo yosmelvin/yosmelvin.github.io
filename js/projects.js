@@ -64,6 +64,17 @@ window.YMTProjects = [
         tech: ['PHP','MySQL','JavaScript'],
     },
     {
+        title: 'Ospay Indonesia',
+        cat: 'fintech',
+        img: 'img/portfolio/osppay-1.jpg',
+        alt: 'Ospay Indonesia',
+        keys: { intro: 'm9_intro', body: 'm9_body' },
+        meta: { date: 'm9_date', client: 'm9_client', cat: 'm9_cat' },
+        link: null,
+        badges: ['live'],
+        tech: ['Kotlin','Jetpack Compose','Android','Nuxt.js','Vue.js','TypeScript','Python','Django','REST API','Docker','Terraform','CI/CD','VPS','Nginx','Payment Gateway','MySQL'],
+    },
+    {
         title: 'Saham AI',
         cat: 'ai',
         img: 'img/portfolio/sahamai-1.jpg',
