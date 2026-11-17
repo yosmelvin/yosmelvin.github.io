@@ -202,6 +202,9 @@
             footer_privacy: 'Privacy Policy',
             footer_terms: 'Terms of Use',
             palette_ph: 'Type to search…',
+            palette_title: 'Quick navigation',
+            palette_results_aria: 'Quick navigation results',
+            cookie_aria: 'Cookie consent',
             palette_nav: 'navigate',
             palette_open: 'open',
             palette_close: 'close',
@@ -230,6 +233,8 @@
             est_reset: 'Reset',
             est_done: 'Estimate ready — review & send below',
             est_budget: 'Indicative range: {range} — final quote after discovery call',
+            est_copy: 'Copy estimate',
+            est_copied: 'Copied!',
             est_step: 'Step {n} of {total}',
             est_msg: 'Hi! Project estimate:\n- Type: {type}\n- Timeline: {timeline}\n- Team: {team}',
             palette_results: 'results',
@@ -287,7 +292,14 @@
             badge_nda: 'NDA',
             pm_prev_aria: 'Previous project',
             pm_next_aria: 'Next project',
-            pm_close_aria: 'Close project'
+            pm_close_aria: 'Close project',
+            pm_copy_link: 'Copy project link',
+            pm_dots_nav: 'Project navigation',
+            pm_share_native: 'Share',
+            pm_lb_close: 'Close',
+            pm_lb_prev: 'Previous image',
+            pm_lb_next: 'Next image',
+            pm_gallery_aria: 'Project screenshots'
         },
 
         id: {
@@ -486,6 +498,9 @@
             footer_privacy: 'Kebijakan Privasi',
             footer_terms: 'Ketentuan Penggunaan',
             palette_ph: 'Ketik untuk mencari…',
+            palette_title: 'Navigasi cepat',
+            palette_results_aria: 'Hasil navigasi cepat',
+            cookie_aria: 'Persetujuan cookie',
             palette_nav: 'navigasi',
             palette_open: 'buka',
             palette_close: 'tutup',
@@ -514,6 +529,8 @@
             est_reset: 'Ulangi',
             est_done: 'Estimasi siap — tinjau & kirim di bawah',
             est_budget: 'Kisaran indikatif: {range} — harga final setelah discovery call',
+            est_copy: 'Salin estimasi',
+            est_copied: 'Tersalin!',
             est_step: 'Langkah {n} dari {total}',
             est_msg: 'Halo! Estimasi proyek:\n- Jenis: {type}\n- Timeline: {timeline}\n- Tim: {team}',
             palette_results: 'hasil',
@@ -571,7 +588,14 @@
             badge_nda: 'NDA',
             pm_prev_aria: 'Proyek sebelumnya',
             pm_next_aria: 'Proyek berikutnya',
-            pm_close_aria: 'Tutup proyek'
+            pm_close_aria: 'Tutup proyek',
+            pm_copy_link: 'Salin tautan proyek',
+            pm_dots_nav: 'Navigasi proyek',
+            pm_share_native: 'Bagikan',
+            pm_lb_close: 'Tutup',
+            pm_lb_prev: 'Gambar sebelumnya',
+            pm_lb_next: 'Gambar berikutnya',
+            pm_gallery_aria: 'Tangkapan layar proyek'
         }
     };
 

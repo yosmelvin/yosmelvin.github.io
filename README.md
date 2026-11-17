@@ -126,7 +126,7 @@ the theme's legacy devDependencies; nothing is compiled or bundled.
 | What | Where |
 |---|---|
 | Formspree form | `js/contact_me.js` → `FORMSPREE_ENDPOINT` (currently `mppdpodr`) |
-| Google Maps API key | `index.html` inline script — **must stay referrer-restricted (`yosmelvin.github.io/*`) in Google Cloud Console**; also allowlisted in the CSP |
+| Google Maps API key | `js/maps-loader.js` — **must stay referrer-restricted (`yosmelvin.github.io/*`) in Google Cloud Console**; also allowlisted in the CSP |
 | Tawk.to widget | `js/consent.js` → `loadTawk()` (loads after cookie accept, on idle) |
 | Analytics (optional) | `js/consent.js` → `ANALYTICS_PROVIDER` (`goatcounter`/`plausible`) + `ANALYTICS_ID` — ships disabled (`null`) |
 | CV download | `files/cv-yosmelvin.pdf` — already present, "Download CV" buttons link here |
@@ -153,6 +153,12 @@ the theme's legacy devDependencies; nothing is compiled or bundled.
   `integrity` + `crossorigin` SRI hashes.
 - Full CSP shipped via `_headers` for hosts that support it, with meta-tag
   equivalents (`nosniff`, `referrer`, `Permissions-Policy`) for GitHub Pages.
+  `script-src` allows no `'unsafe-inline'` — all JS is external files
+  (`js/sw-register.js`, `js/maps-loader.js`, `js/privacy-lang.js`).
+  `img-src` is restricted to `'self' data:` (no arbitrary remote images).
+  `_headers` also sets `Cross-Origin-Opener-Policy`/`Cross-Origin-Resource-Policy`.
+- User input is HTML-escaped before DOM injection (contact-form messages) and
+  CRLF-stripped from Formspree header fields (`_subject`, `_replyto`).
 - Contact form uses a honeypot field (`hp_website`, `tabindex="-1"`,
   `autocomplete="off"`) in addition to Formspree-side spam filtering.
 - Third-party scripts (Tawk.to, analytics, Maps) are consent-gated and

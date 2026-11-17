@@ -52,6 +52,12 @@ $(function() {
         }
     } catch (e) {}
 
+    function esc(s) {
+        return String(s).replace(/[&<>"']/g, function(c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    }
+
     function showMessage(type, html) {
         $('#success').html("<div class='alert alert-" + type + "'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>" + html + "</div>");
     }
@@ -69,7 +75,7 @@ $(function() {
             var phone = $("input#phone").val();
             var subject = $("select#subject").val();
             var message = $("textarea#message").val();
-            var firstName = name.split(' ')[0];
+            var firstName = esc(name.split(' ')[0] || '');
 
             var lang = (function() {
                 try { return localStorage.getItem('ymt-lang') === 'id' ? 'id' : 'en'; } catch (e) { return 'en'; }
@@ -93,14 +99,17 @@ $(function() {
 
             $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Sending…');
 
+            var single = function(v) { return String(v || '').replace(/[\r\n]+/g, ' ').trim(); };
+            var safeName = single(name), safeEmail = single(email), safeSubject = single(subject);
+
             fetch(FORMSPREE_ENDPOINT, {
                 method: 'POST',
                 headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
                 body: JSON.stringify((function() {
                     var payload = {
-                        name: name, email: email, phone: phone, subject: subject, message: message,
-                        _subject: 'New project inquiry [' + lang + '] — ' + name,
-                        _replyto: email
+                        name: safeName, email: safeEmail, phone: single(phone), subject: safeSubject, message: message,
+                        _subject: 'New project inquiry [' + lang + '] — ' + safeName,
+                        _replyto: safeEmail
                     };
                     ['utm_source', 'utm_medium', 'utm_campaign', 'referrer'].forEach(function(k) {
                         if (YMT_ATTR[k]) payload[k] = YMT_ATTR[k];

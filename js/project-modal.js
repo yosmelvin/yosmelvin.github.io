@@ -9,6 +9,7 @@
     var lastTrigger = null;
     var openIndex = null; // explicit index for programmatic opens (palette) — beats stale hash
     var baseTitle = document.title;
+    var preModalHash = ''; // section anchor to restore when the modal closes
 
     function t(key) {
         return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(key) : key;
@@ -36,14 +37,24 @@
         var $img = $('#pmImg');
         $img.removeClass('img-broken');
         $img.attr({ src: p.img, alt: p.alt || p.title, decoding: 'async' });
-        // srcset for compressed projects (small + full variants)
-        if (/\.(jpe?g|webp)$/i.test(p.img)) {
-            var ext = p.img.match(/\.(jpe?g|webp)$/i)[0];
-            var base = p.img.slice(0, -ext.length);
-            var smExt = /\.jpe?g$/i.test(ext) ? '-sm.jpg' : '-sm.webp';
-            $img.attr('srcset', base + smExt + ' 480w, ' + p.img + ' 1000w');
-            $img.attr('sizes', '(max-width: 860px) 100vw, 810px');
+        // every project ships WebP + JPG variants — serve WebP via <picture>
+        var m = p.img.match(/^(.*)\.(jpe?g|webp|png)$/i);
+        var $webpSrc = $('#pmWebpSrc');
+        if (m) {
+            var base = m[1];
+            var isWebpProject = /\.webp$/i.test(p.img);
+            $webpSrc.attr('srcset', base + '-sm.webp 480w, ' + base + '.webp 1000w');
+            if (/\.(jpe?g|webp)$/i.test(p.img)) {
+                $img.attr('srcset', isWebpProject
+                    ? base + '.jpg 1000w'
+                    : base + '-sm.jpg 480w, ' + p.img + ' 1000w');
+                $img.attr('sizes', '(max-width: 860px) 100vw, 810px');
+                if (isWebpProject) $img.attr('src', base + '.jpg');
+            } else {
+                $img.removeAttr('srcset').removeAttr('sizes');
+            }
         } else {
+            $webpSrc.removeAttr('srcset');
             $img.removeAttr('srcset').removeAttr('sizes');
         }
         $('#pmTitle').text(p.title);
@@ -134,8 +145,9 @@
         var $dots = $('#pmDots').empty();
         projects.forEach(function(_, di) {
             $('<button type="button" class="pm-dot' + (di === i ? ' active' : '') + '"></button>')
+                .attr('role', 'tab')
                 .attr('aria-label', t('pm_dot_aria').replace('{n}', di + 1))
-                .attr('aria-current', di === i ? 'true' : 'false')
+                .attr('aria-selected', di === i ? 'true' : 'false')
                 .on('click', function() { render(di, true); })
                 .appendTo($dots);
         });
@@ -170,7 +182,8 @@
     }
 
     function showLb() {
-        $('#pmLbImg').attr({ src: lbGallery[lbIndex], decoding: 'async' });
+        var $lbImg = $('#pmLbImg').removeClass('img-broken');
+        $lbImg.attr({ src: lbGallery[lbIndex], alt: (projects[current] && projects[current].alt) || '', decoding: 'async' });
         $('#pmLbCounter').text((lbIndex + 1) + ' / ' + lbGallery.length);
         $('#pmLbPrev').prop('disabled', lbGallery.length < 2);
         $('#pmLbNext').prop('disabled', lbGallery.length < 2);
@@ -217,6 +230,8 @@
         var idx = $(e.relatedTarget).data('project');
         if (idx == null && openIndex != null) idx = openIndex;
         openIndex = null;
+        // remember the section anchor so closing the modal restores it
+        if (!window.location.hash.match(/^#project-\d+$/)) preModalHash = window.location.hash;
         if (idx == null) {
             var m = window.location.hash.match(/^#project-(\d+)$/);
             idx = m ? parseInt(m[1], 10) : current;
@@ -325,8 +340,11 @@
     // return focus to the card that opened the modal
     $modal.on('hidden.bs.modal', function() {
         document.title = baseTitle;
-        if (location.hash.match(/^#project-\d+$/)) {
-            try { history.replaceState(null, '', location.pathname + location.search); } catch (e) {}
+        // restore the pre-modal anchor (e.g. #services) instead of dropping it
+        var restore = preModalHash && !preModalHash.match(/^#project-\d+$/) ? preModalHash : '';
+        preModalHash = '';
+        if (location.hash !== restore) {
+            try { history.replaceState(null, '', location.pathname + location.search + restore); } catch (e) {}
         }
         if (lastTrigger && lastTrigger.focus) lastTrigger.focus();
         lastTrigger = null;

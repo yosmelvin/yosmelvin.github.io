@@ -1,8 +1,14 @@
     (function($) {
         var $scrollTop = $('.scroll-top');
-        $(window).on('scroll', function() {
-            $scrollTop.toggleClass('show', $(this).scrollTop() > 400);
-        });
+        var scrollTicking = false;
+        window.addEventListener('scroll', function() {
+            if (scrollTicking) return;
+            scrollTicking = true;
+            requestAnimationFrame(function() {
+                $scrollTop.toggleClass('show', window.scrollY > 400);
+                scrollTicking = false;
+            });
+        }, { passive: true });
         $scrollTop.on('click', function(e) {
             e.preventDefault();
             $('html, body').stop().animate({scrollTop: 0}, 600, 'easeInOutExpo');
@@ -478,6 +484,7 @@
                     var oldBudget = est.querySelector('.est-budget');
                     if (oldBudget) oldBudget.remove();
                     budgetEl = null;
+                    est.querySelectorAll('.est-opt').forEach(function(o) { o.disabled = false; });
                     showStep(0);
                     return;
                 }
@@ -505,6 +512,8 @@
                     done.setAttribute('data-i18n', 'est_done');
                     done.textContent = i18n ? i18n.t('est_done') : 'Estimate ready';
                     renderBudget();
+                    // lock the quiz once complete — answers are baked into the estimate
+                    est.querySelectorAll('.est-opt').forEach(function(o) { o.disabled = true; });
                     setTimeout(function() {
                         document.getElementById('contact').scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 300);
@@ -514,13 +523,44 @@
             // Indicative budget tier — static ranges (IDR millions), scaled by timeline
             var BUDGET_BASE = { web: [20, 80], mobile: [30, 120], ai: [60, 300], cloud: [40, 150], security: [50, 250] };
             var BUDGET_MULT = { rush: 1.35, month: 1, quarter: 0.9, flex: 0.8 };
-            var budgetEl = null;
+            var budgetEl = null, estCopyBtn = null;
             function renderBudget() {
                 if (!budgetEl) {
-                    budgetEl = document.createElement('p');
+                    budgetEl = document.createElement('div');
                     budgetEl.className = 'est-budget';
                     var d = est.querySelector('.est-done');
                     if (d) d.after(budgetEl); else est.querySelector('.est-actions').after(budgetEl);
+                    estCopyBtn = document.createElement('button');
+                    estCopyBtn.type = 'button';
+                    estCopyBtn.className = 'est-copy';
+                    estCopyBtn.innerHTML = '<i class="fa fa-copy" aria-hidden="true"></i> <span></span>';
+                    budgetEl.appendChild(estCopyBtn);
+                    estCopyBtn.addEventListener('click', function() {
+                        var text = [
+                            (i18n ? i18n.t('est_title') : 'Estimate'),
+                            i18n ? i18n.t('est_q1') : '' + ': ' + optLabel('type', answers.type),
+                            (i18n ? i18n.t('est_q2') : '') + ': ' + optLabel('timeline', answers.timeline),
+                            (i18n ? i18n.t('est_q3') : '') + ': ' + optLabel('team', answers.team),
+                            budgetEl.querySelector('.est-budget-text') ? budgetEl.querySelector('.est-budget-text').textContent : ''
+                        ].filter(Boolean).join('\n');
+                        var done = function(ok) {
+                            if (!ok) return;
+                            var span = estCopyBtn.querySelector('span');
+                            var i18n2 = window.YMTI18n;
+                            var prev = span.textContent;
+                            span.textContent = i18n2 && i18n2.t ? i18n2.t('est_copied') : 'Copied!';
+                            setTimeout(function() { span.textContent = prev; }, 1600);
+                        };
+                        function fb() {
+                            var ta = document.createElement('textarea');
+                            ta.value = text; document.body.appendChild(ta); ta.select();
+                            var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+                            document.body.removeChild(ta); return ok;
+                        }
+                        if (navigator.clipboard && navigator.clipboard.writeText) {
+                            navigator.clipboard.writeText(text).then(function() { done(true); }, function() { done(fb()); });
+                        } else { done(fb()); }
+                    });
                 }
                 var base = BUDGET_BASE[answers.type], mult = BUDGET_MULT[answers.timeline] || 1;
                 if (!base || !i18n) { budgetEl.hidden = true; return; }
@@ -528,7 +568,16 @@
                 var hi = Math.round(base[1] * mult / 5) * 5;
                 var isId = (document.documentElement.lang === 'id');
                 var range = 'IDR ' + lo + '–' + hi + (isId ? ' jt' : 'M');
-                budgetEl.textContent = i18n.t('est_budget').replace('{range}', range);
+                if (!budgetEl.querySelector('.est-budget-text')) {
+                    var tx = document.createElement('span');
+                    tx.className = 'est-budget-text';
+                    budgetEl.insertBefore(tx, estCopyBtn);
+                }
+                budgetEl.querySelector('.est-budget-text').textContent = i18n.t('est_budget').replace('{range}', range);
+                if (estCopyBtn) {
+                    estCopyBtn.querySelector('span').textContent = i18n.t('est_copy');
+                    estCopyBtn.setAttribute('aria-label', i18n.t('est_copy'));
+                }
                 budgetEl.hidden = false;
             }
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https:; connect-src 'self'; base-uri 'self'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="color-scheme" content="dark">
@@ -143,21 +143,6 @@
             © 2026 YMT Solution · <a href="/">Back to home</a>
         </div>
     </footer>
-    <script>
-    (function() {
-        var buttons = document.querySelectorAll('.lang-pill button');
-        var blocks = document.querySelectorAll('[data-lang-block]');
-        var saved = 'en';
-        try { saved = localStorage.getItem('ymt-lang') || 'en'; } catch (e) {}
-        function setLang(l) {
-            blocks.forEach(function(b) { b.hidden = b.getAttribute('data-lang-block') !== l; });
-            buttons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-lang') === l); });
-            document.documentElement.lang = l === 'id' ? 'id' : 'en';
-            try { localStorage.setItem('ymt-lang', l); } catch (e) {}
-        }
-        buttons.forEach(function(b) { b.addEventListener('click', function() { setLang(b.getAttribute('data-lang')); }); });
-        setLang(saved === 'id' ? 'id' : 'en');
-    })();
-    </script>
+    <script src="js/privacy-lang.js" defer></script>
 </body>
 </html>

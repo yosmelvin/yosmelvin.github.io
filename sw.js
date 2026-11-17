@@ -1,5 +1,5 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v6'; // bump on each release to refresh caches
+var CACHE = 'ymt-v7'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
@@ -18,8 +18,12 @@ var PRECACHE = [
     '/js/theme.js',
     '/js/consent.js',
     '/js/contact_me.js',
+    '/js/sw-register.js',
+    '/js/maps-loader.js',
+    '/js/privacy-lang.js',
     '/manifest.json',
-    '/img/header-bg.jpg',
+    '/img/header-bg.webp',
+    '/img/map-image.webp',
     '/img/portfolio/sahamai-1-sm.jpg',
     '/img/portfolio/osppay-1-sm.jpg',
     '/img/portfolio/robo-trading-hub-sm.webp',

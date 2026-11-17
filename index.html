@@ -34,7 +34,7 @@
     <!-- Security / privacy headers (meta equivalents) -->
     <!-- CSP fallback for GitHub Pages (real headers come from _headers on Netlify/CF Pages).
          'unsafe-inline' is required for the two inline bootstrap scripts (SW registration, Maps loader). -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com https://maps.gstatic.com https://embed.tawk.to https://www.google.com https://www.gstatic.com https://*.tawk.to; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://maps.googleapis.com https://maps.gstatic.com https://*.tawk.to https://va.tawk.to https://gc.zgo.at https://plausible.io; frame-src https://www.google.com https://maps.google.com https://*.tawk.to; base-uri 'self'; form-action 'self' https://formspree.io">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com https://maps.gstatic.com https://embed.tawk.to https://www.google.com https://www.gstatic.com https://*.tawk.to; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com; connect-src 'self' https://formspree.io https://maps.googleapis.com https://maps.gstatic.com https://*.tawk.to https://va.tawk.to https://gc.zgo.at https://plausible.io; frame-src https://www.google.com https://maps.google.com https://*.tawk.to; base-uri 'self'; form-action 'self' https://formspree.io">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self)">
@@ -166,12 +166,7 @@
     </script>
 
     <script src="js/theme.js"></script>
-    <script>
-    // Register service worker (PWA).
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() { navigator.serviceWorker.register('/sw.js').catch(function() {}); });
-    }
-    </script>
+    <script src="js/sw-register.js" defer></script>
     <title>YMT Solution — AI-First Software House</title>
 
     <!-- Bootstrap Core CSS -->
@@ -188,7 +183,7 @@
     <link rel="preload" href="fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwV6-xo6eeIw.woff2" as="font" type="font/woff2" crossorigin>
 
     <!-- Hero image preload (LCP) -->
-    <link rel="preload" as="image" href="img/header-bg.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="img/header-bg.webp" fetchpriority="high" type="image/webp">
 
     <!-- Theme CSS -->
     <link href="css/agency.min.css" rel="stylesheet">
@@ -198,7 +193,7 @@
       :root{--bg:#f6f7fb;--ink:#0b1220;--font-head:"Sora","Helvetica Neue",Helvetica,Arial,sans-serif;--font-body:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif}
       html[data-theme="dark"]{--bg:#0a0f1e;--ink:#f1f5f9}
       body{margin:0;font-family:var(--font-body);background:var(--bg);color:var(--ink)}
-      .overlay{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(99,102,241,.35),transparent 60%),radial-gradient(ellipse 50% 40% at 85% 75%,rgba(34,211,238,.25),transparent 60%),linear-gradient(rgba(11,18,32,.72),rgba(11,18,32,.78)),url('img/header-bg.jpg') center/cover no-repeat}
+      .overlay{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(99,102,241,.35),transparent 60%),radial-gradient(ellipse 50% 40% at 85% 75%,rgba(34,211,238,.25),transparent 60%),linear-gradient(rgba(11,18,32,.72),rgba(11,18,32,.78)),url('img/header-bg.webp') center/cover no-repeat}
       .navbar-custom{background:rgba(11,18,32,.82);border-bottom:1px solid rgba(255,255,255,.08);padding:14px 0}
       .navbar-brand{font-family:var(--font-head);font-weight:700;color:#fff}
       header .intro-text{padding:120px 0;position:relative;z-index:2}
@@ -556,7 +551,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/BM5-1-sm.jpg" srcset="img/portfolio/BM5-1-sm.jpg 480w, img/portfolio/BM5-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Binus Maya">
+                        <picture><source srcset="img/portfolio/BM5-1-sm.webp 480w, img/portfolio/BM5-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/BM5-1-sm-sm.jpg" srcset="img/portfolio/BM5-1-sm-sm.jpg 480w, img/portfolio/BM5-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Binus Maya"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Binusmaya</h4>
@@ -570,7 +565,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/inklo-1-sm.jpg" srcset="img/portfolio/inklo-1-sm.jpg 480w, img/portfolio/inklo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Inklo">
+                        <picture><source srcset="img/portfolio/inklo-1-sm.webp 480w, img/portfolio/inklo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/inklo-1-sm-sm.jpg" srcset="img/portfolio/inklo-1-sm-sm.jpg 480w, img/portfolio/inklo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Inklo"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Inklo</h4>
@@ -584,7 +579,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/asakbackend-1-sm.jpg" srcset="img/portfolio/asakbackend-1-sm.jpg 480w, img/portfolio/asakbackend-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ayo Sekolah Ayo Kuliah (ASAK)">
+                        <picture><source srcset="img/portfolio/asakbackend-1-sm.webp 480w, img/portfolio/asakbackend-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/asakbackend-1-sm-sm.jpg" srcset="img/portfolio/asakbackend-1-sm-sm.jpg 480w, img/portfolio/asakbackend-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ayo Sekolah Ayo Kuliah (ASAK)"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Ayo Sekolah Ayo Kuliah</h4>
@@ -598,7 +593,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/tome-1-sm.jpg" srcset="img/portfolio/tome-1-sm.jpg 480w, img/portfolio/tome-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="tolong menolong">
+                        <picture><source srcset="img/portfolio/tome-1-sm.webp 480w, img/portfolio/tome-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/tome-1-sm-sm.jpg" srcset="img/portfolio/tome-1-sm-sm.jpg 480w, img/portfolio/tome-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="tolong menolong"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Tolong Menolong</h4>
@@ -612,7 +607,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/ilogo-1-sm.jpg" srcset="img/portfolio/ilogo-1-sm.jpg 480w, img/portfolio/ilogo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="">
+                        <picture><source srcset="img/portfolio/ilogo-1-sm.webp 480w, img/portfolio/ilogo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/ilogo-1-sm-sm.jpg" srcset="img/portfolio/ilogo-1-sm-sm.jpg 480w, img/portfolio/ilogo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt=""></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>iLogo</h4>
@@ -626,7 +621,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/LibrarySystem-1-sm.jpg" srcset="img/portfolio/LibrarySystem-1-sm.jpg 480w, img/portfolio/LibrarySystem-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Library System">
+                        <picture><source srcset="img/portfolio/LibrarySystem-1-sm.webp 480w, img/portfolio/LibrarySystem-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/LibrarySystem-1-sm-sm.jpg" srcset="img/portfolio/LibrarySystem-1-sm-sm.jpg 480w, img/portfolio/LibrarySystem-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Library System"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Library System</h4>
@@ -640,7 +635,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/osppay-1-sm.jpg" srcset="img/portfolio/osppay-1-sm.jpg 480w, img/portfolio/osppay-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ospay Indonesia">
+                        <picture><source srcset="img/portfolio/osppay-1-sm.webp 480w, img/portfolio/osppay-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/osppay-1-sm-sm.jpg" srcset="img/portfolio/osppay-1-sm-sm.jpg 480w, img/portfolio/osppay-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ospay Indonesia"></picture>
                         <span class="card-new">NEW</span>
                     </a>
                     <div class="portfolio-caption">
@@ -655,7 +650,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <img loading="lazy" decoding="async" src="img/portfolio/sahamai-1-sm.jpg" srcset="img/portfolio/sahamai-1-sm.jpg 480w, img/portfolio/sahamai-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Saham AI">
+                        <picture><source srcset="img/portfolio/sahamai-1-sm.webp 480w, img/portfolio/sahamai-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/sahamai-1-sm-sm.jpg" srcset="img/portfolio/sahamai-1-sm-sm.jpg 480w, img/portfolio/sahamai-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Saham AI"></picture>
                         <span class="card-new">NEW</span>
                     </a>
                     <div class="portfolio-caption">
@@ -670,7 +665,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/robo-trading-hub.webp" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/robo-trading-hub.png" class="img-responsive img-portofolio" alt="Robo Trading Hub" width="1400" height="560"></picture>
+                        <picture><source srcset="img/portfolio/robo-trading-hub.webp" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/robo-trading-hub.jpg" class="img-responsive img-portofolio" alt="Robo Trading Hub" width="1400" height="560"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Robo Trading Hub</h4>
@@ -1157,7 +1152,7 @@
                 <button type="button" class="pm-close" data-dismiss="modal" aria-label="Close project" data-i18n-aria="pm_close_aria"><i class="fa fa-times"></i></button>
 
                 <div class="pm-hero">
-                    <img loading="lazy" decoding="async" id="pmImg" alt="">
+                    <picture><source id="pmWebpSrc" type="image/webp"><img loading="lazy" decoding="async" id="pmImg" alt=""></picture>
                     <div class="pm-hero-overlay">
                         <span class="pm-cat" id="pmCat"></span>
                     </div>
@@ -1165,7 +1160,7 @@
                     <button type="button" class="pm-nav pm-prev" id="pmPrev" aria-label="Previous project"><i class="fa fa-chevron-left"></i></button>
                     <button type="button" class="pm-nav pm-next" id="pmNext" aria-label="Next project"><i class="fa fa-chevron-right"></i></button>
                 </div>
-                <div class="pm-gallery" id="pmGallery" hidden role="list"></div>
+                <div class="pm-gallery" id="pmGallery" hidden role="list" data-i18n-aria="pm_gallery_aria" aria-label="Project screenshots"></div>
 
                 <div class="pm-body" id="pmBodyWrap">
                     <h2 id="pmTitle"></h2>
@@ -1183,14 +1178,14 @@
                     </div>
                     <div class="pm-share" id="pmShare" hidden>
                         <span class="pm-share-label" data-i18n="share_label">Share this project</span>
-                        <button type="button" class="pm-share-native" id="pmShareNative" hidden aria-label="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
+                        <button type="button" class="pm-share-native" id="pmShareNative" hidden data-i18n-aria="pm_share_native" aria-label="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
                         <a id="pmShareX" href="#" target="_blank" rel="noopener" aria-label="Share on X"><i class="fa fa-twitter"></i></a>
                         <a id="pmShareLi" href="#" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fa fa-linkedin"></i></a>
                         <a id="pmShareWa" href="#" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WA</a>
-                        <button type="button" class="pm-share-copy" id="pmShareCopy" aria-label="Copy project link"><i class="fa fa-link" aria-hidden="true"></i></button>
+                        <button type="button" class="pm-share-copy" id="pmShareCopy" data-i18n-aria="pm_copy_link" aria-label="Copy project link"><i class="fa fa-link" aria-hidden="true"></i></button>
                         <button type="button" class="pm-share-copy pm-brief" id="pmBriefCopy" data-i18n-aria="pm_brief" aria-label="Copy project brief"><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
                     </div>
-                    <div class="pm-dots" id="pmDots" role="tablist" aria-label="Projects"></div>
+                    <div class="pm-dots" id="pmDots" role="tablist" data-i18n-aria="pm_dots_nav" aria-label="Project navigation"></div>
                 </div>
 
             </div>
@@ -1199,10 +1194,10 @@
 
     <!-- Project image lightbox -->
     <div class="pm-lightbox" id="pmLightbox" hidden role="dialog" aria-modal="true" aria-label="Project images">
-        <button type="button" class="pm-lb-close" id="pmLbClose" aria-label="Close"><i class="fa fa-times"></i></button>
-        <button type="button" class="pm-lb-nav pm-lb-prev" id="pmLbPrev" aria-label="Previous image"><i class="fa fa-chevron-left"></i></button>
-        <img id="pmLbImg" src="" alt="">
-        <button type="button" class="pm-lb-nav pm-lb-next" id="pmLbNext" aria-label="Next image"><i class="fa fa-chevron-right"></i></button>
+        <button type="button" class="pm-lb-close" id="pmLbClose" data-i18n-aria="pm_lb_close" aria-label="Close"><i class="fa fa-times"></i></button>
+        <button type="button" class="pm-lb-nav pm-lb-prev" id="pmLbPrev" data-i18n-aria="pm_lb_prev" aria-label="Previous image"><i class="fa fa-chevron-left"></i></button>
+        <img id="pmLbImg" alt="">
+        <button type="button" class="pm-lb-nav pm-lb-next" id="pmLbNext" data-i18n-aria="pm_lb_next" aria-label="Next image"><i class="fa fa-chevron-right"></i></button>
         <span class="pm-lb-counter" id="pmLbCounter"></span>
     </div>
 
@@ -1244,67 +1239,7 @@
     <script src="js/site.js" defer></script>
     <script src="js/palette.js" defer></script>
 
-    <script type="text/javascript">
-    // Load Google Maps lazily — only when the map section approaches the viewport.
-    // NOTE: restrict this API key by HTTP referrer in Google Cloud Console.
-    (function() {
-        var mapsUrl = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAAR9KT_jWFWX-IoVuHsyyrG6-vbqNPLkA&callback=initYmtMap';
-        var mapEl = document.getElementById('map');
-
-        function loadMaps() {
-            var s = document.createElement('script');
-            s.src = mapsUrl;
-            s.async = true;
-            document.head.appendChild(s);
-        }
-
-        if ('IntersectionObserver' in window && mapEl) {
-            var io = new IntersectionObserver(function(entries) {
-                if (entries[0].isIntersecting) {
-                    io.disconnect();
-                    loadMaps();
-                }
-            }, { rootMargin: '300px' });
-            io.observe(mapEl);
-        } else {
-            loadMaps();
-        }
-    })();
-
-    function initYmtMap() {
-    //* Fungsi untuk mendapatkan nilai latitude longitude
-    function updateMarkerPosition(latLng) {
-      document.getElementById('latitude').value = [latLng.lat()]
-      document.getElementById('longitude').value = [latLng.lng()]
-    }
-
-    var map = new google.maps.Map(document.getElementById('map'), {
-    zoom: 14,
-    center: new google.maps.LatLng($("#latitude").val(),$("#longitude").val()),
-     mapTypeId: google.maps.MapTypeId.ROADMAP
-      });
-    //posisi awal marker
-    var latLng = new google.maps.LatLng($("#latitude").val(),$("#longitude").val());
-
-    /* buat marker yang bisa di drag lalu
-      panggil fungsi updateMarkerPosition(latLng)
-     dan letakan posisi terakhir di id=latitude dan id=longitude
-     */
-    var marker = new google.maps.Marker({
-        position : latLng,
-        title : 'lokasi',
-        map : map,
-        draggable : true
-      });
-
-    updateMarkerPosition(latLng);
-    google.maps.event.addListener(marker, 'drag', function() {
-     // ketika marker di drag, otomatis nilai latitude dan longitude
-     //menyesuaikan dengan posisi marker
-        updateMarkerPosition(marker.getPosition());
-      });
-    }
-    </script>
+    <script src="js/maps-loader.js" defer></script>
 
     <!-- reCAPTCHA removed: no longer used by the contact form -->
 
@@ -1320,9 +1255,9 @@
 
     <!-- Command palette (Ctrl+K / Cmd+K) -->
     <div class="palette-overlay" id="paletteOverlay" hidden>
-        <div class="palette" role="dialog" aria-modal="true" aria-label="Quick navigation">
+        <div class="palette" role="dialog" aria-modal="true" data-i18n-aria="palette_title" aria-label="Quick navigation">
             <input type="text" class="palette-input" id="paletteInput" data-i18n-ph="palette_ph" placeholder="Type to search…" autocomplete="off" spellcheck="false" role="combobox" aria-expanded="true" aria-controls="paletteList" aria-activedescendant="" aria-keyshortcuts="Control+K Meta+K">
-            <div class="palette-list" id="paletteList" role="listbox" aria-label="Quick navigation results"></div>
+            <div class="palette-list" id="paletteList" role="listbox" data-i18n-aria="palette_results_aria" aria-label="Quick navigation results"></div>
             <div class="palette-status sr-only" id="paletteStatus" role="status" aria-live="polite"></div>
             <div class="palette-cheatsheet" id="paletteCheatsheet">
                 <div class="pc-title" data-i18n="cheat_title">Keyboard shortcuts</div>
@@ -1345,12 +1280,12 @@
     </div>
 
     <!-- Sticky mobile CTA -->
-    <a href="#contact" class="sticky-cta page-scroll" id="stickyCta" aria-label="Start a project">
+    <a href="#contact" class="sticky-cta page-scroll" id="stickyCta" data-i18n-aria="sticky_cta" aria-label="Start a project">
         <i class="fa fa-rocket" aria-hidden="true"></i> <span data-i18n="sticky_cta">Start a project</span>
     </a>
 
     <!-- Cookie consent -->
-    <div id="cookieConsent" class="cookie-consent" role="region" aria-label="Cookie consent" hidden>
+    <div id="cookieConsent" class="cookie-consent" role="region" data-i18n-aria="cookie_aria" aria-label="Cookie consent" hidden>
         <p class="cookie-text"><span data-i18n="cookie_text">We use cookies and a live-chat service to improve your experience.</span> <a href="privacy.html" class="cookie-link" data-i18n="cookie_learn">Learn more</a></p>
         <div class="cookie-actions">
             <button type="button" class="cookie-btn cookie-accept" id="cookieAccept" data-i18n="cookie_accept">Accept</button>
