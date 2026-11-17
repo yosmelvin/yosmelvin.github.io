@@ -1,11 +1,12 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v10'; // bump on each release to refresh caches
+var CACHE = 'ymt-v12'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
     '/privacy.html',
     '/posts/',
     '/posts/posts.js',
+    '/offline.html',
     '/rss.xml',
     '/css/style.css',
     '/fonts/fonts.css',
@@ -20,6 +21,7 @@ var PRECACHE = [
     '/js/sw-register.js',
     '/js/maps-loader.js',
     '/js/privacy-lang.js',
+    '/js/offline-lang.js',
     '/manifest.json',
     '/img/header-bg.webp',
     '/img/map-image.webp',
@@ -74,7 +76,12 @@ self.addEventListener('fetch', function(e) {
             var copy = res.clone();
             caches.open(CACHE).then(function(c) { c.put(e.request, copy); });
             return res;
-        }).catch(function() { return caches.match(e.request).then(function(r) { return r || caches.match('/index.html'); }); }));
+        }).catch(function() {
+            return caches.match(e.request).then(function(r) {
+                if (r) return r;
+                return caches.match('/offline.html');
+            });
+        }));
         return;
     }
 

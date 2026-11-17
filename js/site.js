@@ -179,6 +179,13 @@
             progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
         }, { passive: true });
 
+        // Shared screen-reader announcer for copy actions
+        var srLive = document.createElement('div');
+        srLive.className = 'sr-only';
+        srLive.setAttribute('aria-live', 'polite');
+        document.body.appendChild(srLive);
+        window.YMTSay = function(msg) { srLive.textContent = ''; setTimeout(function() { srLive.textContent = msg; }, 30); };
+
         // Copy email button — icon injected next to the footer email address
         var emailBtn = document.createElement('button');
         emailBtn.type = 'button';
@@ -202,6 +209,8 @@
                 return ok;
             }
             function done(ok) {
+                var i18nA = window.YMTI18n;
+                if (window.YMTSay) YMTSay(ok ? (i18nA && i18nA.t('copy_done')) : (i18nA && i18nA.t('copy_fail')));
                 if (!ok) return; // don't claim success when the copy failed
                 emailBtn.classList.add('copied');
                 emailBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
@@ -226,6 +235,13 @@
         document.addEventListener('DOMContentLoaded', mountCopyEmail);
         document.addEventListener('ymt:langchange', mountCopyEmail);
 
+        // Fade in images once decoded (pairs with CSS shimmer placeholder)
+        document.querySelectorAll('img').forEach(function(img) {
+            function markLoaded() { img.classList.add('loaded', 'complete'); }
+            if (img.complete && img.naturalWidth > 0) markLoaded();
+            else img.addEventListener('load', markLoaded, { once: true });
+        });
+
         // Broken-image fallback: hide gracefully instead of showing alt text/border
         document.querySelectorAll('img').forEach(function(img) {
             if (img.complete && img.naturalWidth === 0) img.classList.add('img-broken');
@@ -239,6 +255,20 @@
                 if (nav && nav.classList.contains('show') && window.bootstrap && bootstrap.Collapse) {
                     bootstrap.Collapse.getOrCreateInstance(nav).hide();
                 }
+            });
+        });
+
+        // Smooth-scroll for in-page anchors (was agency.min.js)
+        document.querySelectorAll('a.page-scroll').forEach(function(a) {
+            a.addEventListener('click', function(e) {
+                var href = a.getAttribute('href') || '';
+                if (href.charAt(0) !== '#') return;
+                var target = document.querySelector(href);
+                if (!target) return;
+                e.preventDefault();
+                var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+                target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+                if (history.replaceState) { try { history.replaceState(null, '', href); } catch (err) {} }
             });
         });
 
@@ -393,6 +423,13 @@
             });
             if (filterStatus) filterStatus.textContent = filterLabel(activeFilter, shown);
             if (emptyState) emptyState.hidden = shown !== 0;
+            try {
+                sessionStorage.setItem('ymt_pf_state', JSON.stringify({
+                    f: activeFilter,
+                    q: (document.getElementById('portfolioSearch') || {}).value || '',
+                    s: sortSel ? sortSel.value : 'default'
+                }));
+            } catch (e) {}
         }
 
         // empty-state reset button
@@ -400,6 +437,8 @@
             emptyState.querySelector('.pf-reset').addEventListener('click', function() {
                 var si = document.getElementById('portfolioSearch');
                 if (si) { si.value = ''; si.dispatchEvent(new Event('input', { bubbles: true })); }
+                try { sessionStorage.removeItem('ymt_pf_state'); } catch (e) {}
+                if (sortSel) sortSel.value = 'default';
                 var allChip = document.querySelector('.filter-chip[data-filter="all"]');
                 if (allChip && !allChip.classList.contains('active')) allChip.click();
                 else applyFilters();
@@ -482,6 +521,29 @@
                 applyFilters();
             });
         }
+        // restore persisted filter/search/sort + ?cat= deep link
+        (function() {
+            var st = null;
+            try { st = JSON.parse(sessionStorage.getItem('ymt_pf_state') || 'null'); } catch (e) {}
+            var catParam = new URLSearchParams(location.search).get('cat');
+            if (catParam && document.querySelector('.filter-chip[data-filter="' + catParam + '"]')) {
+                st = { f: catParam, q: '', s: 'default' };
+            }
+            if (st) {
+                if (st.f && st.f !== 'all') {
+                    var chip = document.querySelector('.filter-chip[data-filter="' + st.f + '"]');
+                    if (chip) chip.click();
+                }
+                if (st.q && searchInput) {
+                    searchInput.value = st.q;
+                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+                if (st.s && sortSel && st.s !== 'default') {
+                    sortSel.value = st.s;
+                    sortSel.dispatchEvent(new Event('change'));
+                }
+            }
+        })();
         applyFilters();
         document.addEventListener('ymt:langchange', applyFilters);
 
@@ -615,6 +677,7 @@
             var step = 0;
             var steps = est.querySelectorAll('.est-step');
             var nextBtn = document.getElementById('estNext');
+            var backBtn = document.getElementById('estBack');
             var resetBtn = document.getElementById('estReset');
             var i18n = window.YMTI18n;
 
@@ -632,6 +695,7 @@
                         d.classList.toggle('on', i === n);
                     });
                 }
+                if (backBtn) backBtn.hidden = n === 0;
                 nextBtn.textContent = n === steps.length - 1
                     ? (i18n ? i18n.t('est_apply') : 'Use this estimate')
                     : (i18n ? i18n.t('est_next') : 'Next →');
@@ -663,6 +727,10 @@
                     budgetEl = null;
                     est.querySelectorAll('.est-opt').forEach(function(o) { o.disabled = false; });
                     showStep(0);
+                    return;
+                }
+                if (e.target.closest('#estBack')) {
+                    if (step > 0) showStep(step - 1);
                     return;
                 }
                 if (e.target.closest('#estNext')) {

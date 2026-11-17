@@ -59,7 +59,10 @@ $(function() {
     }
 
     function showMessage(type, html) {
-        $('#success').html("<div class='alert alert-" + type + " alert-dismissible fade show'><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" + html + "</div>");
+        var role = type === 'success' ? 'status' : 'alert';
+        $('#success').html("<div class='alert alert-" + type + " alert-dismissible fade show' role='" + role + "'><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" + html + "</div>");
+        var box = document.getElementById('success');
+        if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
     var $contactForm = $("#contactForm");
@@ -94,6 +97,11 @@ $(function() {
 
         if (FORMSPREE_ENDPOINT.indexOf('REPLACE_WITH_FORM_ID') !== -1) {
             showMessage('danger', "<strong>" + i18nT('cf_not_configured', 'Form is not configured yet.') + "</strong>");
+            return;
+        }
+
+        if (navigator.onLine === false) {
+            showMessage('danger', "<strong>" + i18nT('cf_offline', 'You appear to be offline — check your connection and try again.') + "</strong>");
             return;
         }
 

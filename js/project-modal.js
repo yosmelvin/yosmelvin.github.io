@@ -282,6 +282,8 @@
             return ok;
         }
         function done(ok) {
+            var i18nA = window.YMTI18n;
+            if (window.YMTSay) YMTSay(ok ? (i18nA && i18nA.t('copy_done')) : (i18nA && i18nA.t('copy_fail')));
             if (!ok) return;
             $b.find('i').attr('class', 'fa fa-check');
             setTimeout(function() { $b.find('i').attr('class', 'fa fa-link'); }, 1500);
@@ -313,6 +315,8 @@
             return ok;
         }
         function done(ok) {
+            var i18nA = window.YMTI18n;
+            if (window.YMTSay) YMTSay(ok ? (i18nA && i18nA.t('copy_done')) : (i18nA && i18nA.t('copy_fail')));
             if (!ok) return;
             var i18n = window.YMTI18n;
             var prev = $b.find('i').attr('class');
@@ -340,6 +344,26 @@
         document.body.removeChild(a);
         setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
     });
+
+    // touch swipe: horizontal flick navigates projects (mobile)
+    (function() {
+        var startX = 0, startY = 0, tracking = false;
+        modalEl.addEventListener('touchstart', function(e) {
+            if (!$lb.prop('hidden')) return;
+            if (e.touches.length !== 1) return;
+            tracking = true;
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+        modalEl.addEventListener('touchend', function(e) {
+            if (!tracking) return;
+            tracking = false;
+            var t = e.changedTouches[0];
+            var dx = t.clientX - startX, dy = t.clientY - startY;
+            if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return; // horizontal intent only
+            go(dx < 0 ? 1 : -1);
+        }, { passive: true });
+    })();
 
     $('#pmPrev').on('click', function(e) { e.preventDefault(); go(-1); });
     $('#pmNext').on('click', function(e) { e.preventDefault(); go(1); });

@@ -16,6 +16,10 @@
             prev: '← Previous',
             next: 'Next →',
             min_read: 'min read',
+            toc: 'On this page',
+            copy_link: 'Copy link',
+            copied: 'Copied',
+            copy_failed: 'Copy failed',
             crumb_home: 'Home',
             crumb_blog: 'Blog'
         },
@@ -31,6 +35,10 @@
             prev: '← Sebelumnya',
             next: 'Berikutnya →',
             min_read: 'mnt baca',
+            toc: 'Di halaman ini',
+            copy_link: 'Salin tautan',
+            copied: 'Tersalin',
+            copy_failed: 'Gagal menyalin',
             crumb_home: 'Beranda',
             crumb_blog: 'Blog'
         }
@@ -70,6 +78,54 @@
         if (el) el.textContent = mins + ' ' + t('min_read');
     }
 
+    // auto TOC from article h2/h3
+    function buildToc() {
+        var art = document.querySelector('article');
+        var hero = document.querySelector('.hero');
+        if (!art || !hero || document.getElementById('toc')) return;
+        var heads = art.querySelectorAll('h2, h3');
+        if (heads.length < 2) return;
+        var nav = document.createElement('nav');
+        nav.id = 'toc';
+        nav.setAttribute('aria-label', t('toc'));
+        var list = document.createElement('ul');
+        heads.forEach(function(h, i) {
+            if (!h.id) h.id = 'sec-' + (i + 1);
+            var li = document.createElement('li');
+            li.className = h.tagName.toLowerCase() === 'h3' ? 'toc-h3' : '';
+            var a = document.createElement('a');
+            a.href = '#' + h.id;
+            a.textContent = h.textContent;
+            li.appendChild(a);
+            list.appendChild(li);
+        });
+        var title = document.createElement('p');
+        title.className = 'toc-title';
+        title.textContent = t('toc');
+        nav.appendChild(title);
+        nav.appendChild(list);
+        hero.parentNode.insertBefore(nav, hero.nextSibling);
+    }
+
+    // copy-link button in share row
+    function copyLink() {
+        var btn = document.querySelector('.share .share-copy');
+        if (!btn) return;
+        btn.addEventListener('click', function() {
+            var url = location.href.split('#')[0];
+            function ok() { btn.textContent = t('copied'); setTimeout(function() { btn.textContent = t('copy_link'); }, 1600); }
+            function fail() { btn.textContent = t('copy_failed'); setTimeout(function() { btn.textContent = t('copy_link'); }, 1600); }
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(ok, fail);
+            } else {
+                var ta = document.createElement('textarea');
+                ta.value = url; document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy') ? ok() : fail(); } catch (e) { fail(); }
+                ta.remove();
+            }
+        });
+    }
+
     // reading-progress bar on article pages
     function progressBar() {
         if (!document.querySelector('article') || document.getElementById('readProgress')) return;
@@ -98,5 +154,7 @@
 
     apply();
     readingTime();
+    buildToc();
+    copyLink();
     progressBar();
 })();

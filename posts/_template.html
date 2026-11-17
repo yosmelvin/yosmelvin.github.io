@@ -74,6 +74,16 @@
         .share{display:flex;align-items:center;gap:10px;margin:44px 0 10px;padding-top:26px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
         .share a{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);color:var(--accent);text-decoration:none;transition:all .25s}
         .share a:hover{border-color:var(--accent);transform:translateY(-2px)}
+        .share .share-copy{background:none;cursor:pointer;font:inherit;color:var(--accent);border:1px solid var(--border);border-radius:20px;padding:4px 12px}
+        .share .share-copy:hover{border-color:var(--accent)}
+        #toc{margin:0 0 8px;padding:18px 20px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.02)}
+        #toc .toc-title{margin:0 0 10px;font-family:'Sora',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+        #toc ul{list-style:none;margin:0;padding:0}
+        #toc li{margin:0}
+        #toc li.toc-h3 a{padding-left:16px;font-size:13px}
+        #toc a{display:block;padding:5px 0;color:var(--ink);text-decoration:none;font-size:14px;border-left:2px solid transparent;padding-left:10px}
+        #toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+        @media(max-width:760px){#toc{display:none}}
         .pager{display:flex;justify-content:space-between;gap:16px;margin:30px 0 60px}
         .pager a{flex:1;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--ink);font-size:14px;transition:border-color .3s}
         .pager a:hover{border-color:rgba(34,211,238,.5)}
@@ -121,6 +131,7 @@
             <a href="https://twitter.com/intent/tweet?url=https://yosmelvin.github.io/posts/POST-SLUG.html&text=POST%20TITLE" target="_blank" rel="noopener" aria-label="Share on X"><i>𝕏</i></a>
             <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://yosmelvin.github.io/posts/POST-SLUG.html" target="_blank" rel="noopener" aria-label="Share on LinkedIn">in</a>
             <a href="https://wa.me/?text=https://yosmelvin.github.io/posts/POST-SLUG.html" target="_blank" rel="noopener" aria-label="Share on WhatsApp">wa</a>
+            <button type="button" class="share-copy" data-i18n="copy_link">Copy link</button>
         </div>
         <nav class="pager">
             <a href="#"><span class="lbl" data-i18n="prev">← Previous</span>Older post title</a>
