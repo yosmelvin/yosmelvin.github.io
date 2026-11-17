@@ -1,5 +1,5 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v12'; // bump on each release to refresh caches
+var CACHE = 'ymt-v13'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
@@ -10,6 +10,7 @@ var PRECACHE = [
     '/rss.xml',
     '/css/style.css',
     '/fonts/fonts.css',
+    '/js/utils.js',
     '/js/i18n.js',
     '/js/projects.js',
     '/js/project-modal.js',
@@ -39,7 +40,6 @@ var PRECACHE = [
     '/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7W0Q5n-wU.woff2',
     '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwV6-xo6eeIw.woff2',
     '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwWa-xo6eeI7fM.woff2',
-    '/vendor/jquery.min.js',
     '/vendor/bootstrap.bundle.min.js',
     '/vendor/bootstrap.min.css',
     '/vendor/font-awesome.min.css',
@@ -55,13 +55,25 @@ var PRECACHE = [
 ];
 
 self.addEventListener('install', function(e) {
-    e.waitUntil(caches.open(CACHE).then(function(c) { return c.addAll(PRECACHE); }).then(function() { return self.skipWaiting(); }));
+    e.waitUntil(caches.open(CACHE).then(function(c) {
+        // per-asset caching: one missing file must not fail the whole install
+        return Promise.allSettled(PRECACHE.map(function(u) {
+            return c.add(new Request(u, { cache: 'reload' })).catch(function(err) {
+                console.warn('[sw] precache failed:', u, err);
+            });
+        }));
+    }).then(function() { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function(e) {
-    e.waitUntil(caches.keys().then(function(keys) {
-        return Promise.all(keys.filter(function(k) { return k !== CACHE; }).map(function(k) { return caches.delete(k); }));
-    }).then(function() { return self.clients.claim(); }));
+    e.waitUntil(
+        caches.keys().then(function(keys) {
+            return Promise.all(keys.filter(function(k) { return k !== CACHE; }).map(function(k) { return caches.delete(k); }));
+        }).then(function() { return self.clients.claim(); })
+        .then(function() {
+            if (self.registration.navigationPreload) return self.registration.navigationPreload.enable();
+        })
+    );
 });
 
 self.addEventListener('fetch', function(e) {
@@ -73,8 +85,10 @@ self.addEventListener('fetch', function(e) {
     // HTML: network-first so content stays fresh
     if (e.request.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname === '/') {
         e.respondWith(fetch(e.request).then(function(res) {
-            var copy = res.clone();
-            caches.open(CACHE).then(function(c) { c.put(e.request, copy); });
+            if (res.ok) {
+                var copy = res.clone();
+                caches.open(CACHE).then(function(c) { c.put(e.request, copy); });
+            }
             return res;
         }).catch(function() {
             return caches.match(e.request).then(function(r) {

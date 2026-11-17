@@ -9,9 +9,7 @@
     "url": "https://github.com/yosmelvin/yosmelvin.github.io"
   },
   "devDependencies": {
-    "bootstrap": "^3.3.7",
-    "font-awesome": "^4.6.3",
-    "jquery": "^3.7.1"
+    "bootstrap": "^5.3.3"
   },
   "repository": {
     "type": "git",

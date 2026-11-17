@@ -3,6 +3,7 @@
 window.YMTProjects = [
     {
         title: 'Binusmaya',
+        card: { img: 'img/portfolio/BM5-1.jpg', title: 'Binusmaya', alt: 'Binus Maya', cap: 'pf_bm_d' },
         cat: 'web',
         img: 'img/portfolio/BM5-1.jpg',
         alt: 'Binusmaya',
@@ -14,6 +15,7 @@ window.YMTProjects = [
     },
     {
         title: 'Inklo',
+        card: { img: 'img/portfolio/inklo-1.jpg', title: 'Inklo', alt: 'Inklo', cap: 'pf_inklo_d' },
         cat: 'web',
         img: 'img/portfolio/inklo-3.jpg',
         alt: 'Inklo',
@@ -25,6 +27,7 @@ window.YMTProjects = [
     },
     {
         title: 'Ayo Sekolah Ayo Kuliah',
+        card: { img: 'img/portfolio/asakbackend-1.jpg', title: 'Ayo Sekolah Ayo Kuliah', alt: 'Ayo Sekolah Ayo Kuliah (ASAK)', cap: 'pf_asak_d' },
         cat: 'mobile',
         img: 'img/portfolio/asakbackend-1.jpg',
         alt: 'ASAK',
@@ -35,6 +38,7 @@ window.YMTProjects = [
     },
     {
         title: 'TOME',
+        card: { img: 'img/portfolio/tome-1.jpg', title: 'Tolong Menolong', alt: 'tolong menolong', cap: 'pf_tome_d' },
         cat: 'mobile',
         img: 'img/portfolio/tome-1.jpg',
         alt: 'Tolong Menolong',
@@ -45,6 +49,7 @@ window.YMTProjects = [
     },
     {
         title: 'iLogo',
+        card: { img: 'img/portfolio/ilogo-1.jpg', title: 'iLogo', alt: '', cap: 'pf_ilogo_d' },
         cat: 'web',
         img: 'img/portfolio/ilogo-1.jpg',
         alt: 'iLogo',
@@ -55,6 +60,7 @@ window.YMTProjects = [
     },
     {
         title: 'Library System',
+        card: { img: 'img/portfolio/LibrarySystem-1.jpg', title: 'Library System', alt: 'Library System', cap: 'pf_lib_d' },
         cat: 'web',
         img: 'img/portfolio/LibrarySystem-1.jpg',
         alt: 'Library System',
@@ -65,6 +71,7 @@ window.YMTProjects = [
     },
     {
         title: 'Ospay Indonesia',
+        card: { img: 'img/portfolio/osppay-1.jpg', title: 'Ospay Indonesia', alt: 'Ospay Indonesia', cap: 'pf_osppay_d', isNew: true },
         cat: 'fintech',
         img: 'img/portfolio/osppay-1.jpg',
         alt: 'Ospay Indonesia',
@@ -76,6 +83,7 @@ window.YMTProjects = [
     },
     {
         title: 'Saham AI',
+        card: { img: 'img/portfolio/sahamai-1.jpg', title: 'Saham AI', alt: 'Saham AI', cap: 'pf_saham_d', isNew: true },
         cat: 'ai',
         img: 'img/portfolio/sahamai-1.jpg',
         alt: 'Saham AI',
@@ -87,6 +95,7 @@ window.YMTProjects = [
     },
     {
         title: 'Robo Trading Hub',
+        card: { img: 'img/portfolio/robo-trading-hub.webp', title: 'Robo Trading Hub', alt: 'Robo Trading Hub', cap: 'pf_robo_d', w: 1400, h: 560 },
         cat: 'trading',
         img: 'img/portfolio/robo-trading-hub.webp',
         alt: 'Robo Trading Hub',

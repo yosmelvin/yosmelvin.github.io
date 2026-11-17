@@ -1,18 +1,22 @@
-    (function($) {
-        var $scrollTop = $('.scroll-top');
+    (function() {
+        var U = window.YMTUtils || {};
+        window.YMTSay = U.announce || function() {};
+        var scrollTopBtn = document.querySelector('.scroll-top');
         var scrollTicking = false;
         window.addEventListener('scroll', function() {
             if (scrollTicking) return;
             scrollTicking = true;
             requestAnimationFrame(function() {
-                $scrollTop.toggleClass('show', window.scrollY > 400);
+                if (scrollTopBtn) scrollTopBtn.classList.toggle('show', window.scrollY > 400);
                 scrollTicking = false;
             });
         }, { passive: true });
-        $scrollTop.on('click', function(e) {
-            e.preventDefault();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
+        if (scrollTopBtn) {
+            scrollTopBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
         // Deep-link support: open a project modal via URL hash (#project-3)
         // or query param (?project=3)
@@ -28,16 +32,113 @@
         }
 
         // Recently viewed projects — last 3, shown as quick-jump chips
+        var RECENT_MAX = 3;
         var RECENT_KEY = 'ymt_recent';
         var recentWrap = document.getElementById('recentProjects');
         var recentChips = document.getElementById('recentChips');
         var projects = window.YMTProjects || [];
+
+        // Render portfolio cards from projects.js — single source of truth
+        // (card metadata lives in each project's `card` field)
+        (function renderPortfolioCards() {
+            var grid = document.getElementById('portfolioGrid');
+            if (!grid || !projects.length) return;
+            var i18n = window.YMTI18n;
+            function tt(k) { return (i18n && i18n.t) ? i18n.t(k) : k; }
+            projects.forEach(function(p, i) {
+                var c = p.card || {};
+                var item = document.createElement('div');
+                item.className = 'col-md-4 col-sm-6 portfolio-item';
+                item.setAttribute('data-cat', p.cat || 'web');
+
+                var a = document.createElement('a');
+                a.href = '#projectModal';
+                a.className = 'portfolio-link';
+                a.setAttribute('data-bs-toggle', 'modal');
+                a.setAttribute('data-bs-target', '#projectModal');
+                a.setAttribute('data-project', i);
+
+                var hov = document.createElement('div');
+                hov.className = 'portfolio-hover';
+                var hcont = document.createElement('div');
+                hcont.className = 'portfolio-hover-content';
+                var ic = document.createElement('i');
+                ic.className = 'fa fa-plus fa-3x';
+                ic.setAttribute('aria-hidden', 'true');
+                hcont.appendChild(ic);
+                hov.appendChild(hcont);
+                a.appendChild(hov);
+
+                var pic = document.createElement('picture');
+                var imgPath = c.img || p.img;
+                var m = imgPath.match(/^(.*)\.(jpe?g|webp|png)$/i);
+                var img = document.createElement('img');
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                img.className = 'img-fluid img-portofolio';
+                img.alt = c.alt != null ? c.alt : (p.alt || p.title);
+                if (m && !/\.webp$/i.test(imgPath)) {
+                    var base = m[1];
+                    var src = document.createElement('source');
+                    src.setAttribute('srcset', base + '-sm.webp 480w, ' + base + '.webp 1000w');
+                    src.setAttribute('sizes', '(max-width: 767px) 100vw, 400px');
+                    src.setAttribute('type', 'image/webp');
+                    pic.appendChild(src);
+                    img.src = base + '-sm.jpg';
+                    img.setAttribute('srcset', base + '-sm.jpg 480w, ' + base + '.jpg 1000w');
+                    img.setAttribute('sizes', '(max-width: 767px) 100vw, 400px');
+                    img.width = 400; img.height = 210;
+                } else if (m) {
+                    var src2 = document.createElement('source');
+                    src2.setAttribute('srcset', imgPath);
+                    src2.setAttribute('type', 'image/webp');
+                    pic.appendChild(src2);
+                    img.src = m[1] + '.jpg';
+                    img.width = c.w || 1400; img.height = c.h || 560;
+                } else {
+                    img.src = imgPath;
+                }
+                pic.appendChild(img);
+                a.appendChild(pic);
+
+                if (c.isNew) {
+                    var n = document.createElement('span');
+                    n.className = 'card-new';
+                    n.textContent = 'NEW';
+                    a.appendChild(n);
+                }
+                // category chip for scanability (localized via data-i18n)
+                var catChip = document.createElement('span');
+                catChip.className = 'card-cat';
+                catChip.setAttribute('data-i18n', 'f_' + (p.cat || 'web'));
+                catChip.textContent = tt('f_' + (p.cat || 'web'));
+                a.appendChild(catChip);
+
+                item.appendChild(a);
+
+                var cap = document.createElement('div');
+                cap.className = 'portfolio-caption';
+                var h4 = document.createElement('h4');
+                h4.textContent = c.title || p.title;
+                cap.appendChild(h4);
+                var capP = document.createElement('p');
+                capP.className = 'text-muted';
+                if (c.cap) {
+                    capP.setAttribute('data-i18n', c.cap);
+                    capP.textContent = tt(c.cap);
+                }
+                cap.appendChild(capP);
+                item.appendChild(cap);
+                grid.appendChild(item);
+            });
+        })();
+
         function getRecent() {
             try { return JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); } catch (e) { return []; }
         }
         function renderRecent() {
             if (!recentWrap || !recentChips) return;
-            var list = getRecent().filter(function(i) { return projects[i]; }).slice(0, 3);
+            var list = getRecent().filter(function(i) { return projects[i]; }).slice(0, RECENT_MAX);
             recentChips.innerHTML = '';
             list.forEach(function(i) {
                 var b = document.createElement('button');
@@ -56,13 +157,14 @@
             var i = e.detail;
             var list = getRecent().filter(function(x) { return x !== i; });
             list.unshift(i);
-            try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, 3))); } catch (err) {}
+            try { localStorage.setItem(RECENT_KEY, JSON.stringify(list.slice(0, RECENT_MAX))); } catch (err) {}
             renderRecent();
         });
         document.addEventListener('ymt:langchange', renderRecent);
         renderRecent();
 
         // Project shortlist — star toggles on cards, quote prefill to contact
+        var SL_MAX = 6;
         var SL_KEY = 'ymt_shortlist';
         var shortlistBar = document.getElementById('shortlistBar');
         var shortlistChips = document.getElementById('shortlistChips');
@@ -70,7 +172,7 @@
             try { return JSON.parse(localStorage.getItem(SL_KEY) || '[]'); } catch (e) { return []; }
         }
         function setShortlist(list) {
-            try { localStorage.setItem(SL_KEY, JSON.stringify(list.slice(0, 6))); } catch (e) {}
+            try { localStorage.setItem(SL_KEY, JSON.stringify(list.slice(0, SL_MAX))); } catch (e) {}
         }
         function slLabel() {
             var i18n = window.YMTI18n;
@@ -125,7 +227,7 @@
                 e.stopPropagation();
                 var list = getShortlist();
                 var pos = list.indexOf(idx);
-                if (pos === -1) { if (list.length < 6) list.push(idx); }
+                if (pos === -1) { if (list.length < SL_MAX) list.push(idx); }
                 else list.splice(pos, 1);
                 setShortlist(list);
                 syncStars(); renderShortlist();
@@ -139,11 +241,11 @@
             if (!list.length) return;
             var i18n = window.YMTI18n;
             var tpl = i18n && i18n.t ? i18n.t('pf_shortlist_msg') : 'Hi, I would like a quote for: {list}';
-            var $msg = $('#message');
-            if ($msg.length) $msg.val(tpl.replace('{list}', list.map(function(i) { return projects[i].title; }).join(', ')));
+            var msgEl = document.getElementById('message');
+            if (msgEl) msgEl.value = tpl.replace('{list}', list.map(function(i) { return projects[i].title; }).join(', '));
             var c = document.getElementById('contact');
             if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(function() { $msg.trigger('focus'); }, 700);
+            setTimeout(function() { if (msgEl) msgEl.focus(); }, 700);
         });
         if (slClear) slClear.addEventListener('click', function() {
             setShortlist([]); renderShortlist(); syncStars();
@@ -158,14 +260,14 @@
             var shared = (sp.get('share_text') || sp.get('share_title') || '').trim();
             var sUrl = (sp.get('share_url') || '').trim();
             if (!shared && !sUrl) return;
-            var $msg = $('#message');
-            if (!$msg.length) return;
+            var msgEl = document.getElementById('message');
+            if (!msgEl) return;
             var lines = [];
             if (shared) lines.push(shared);
             if (sUrl) lines.push(sUrl);
             var text = lines.join('\n');
-            if (!$msg.val()) $msg.val(text);
-            else if ($msg.val().indexOf(text) === -1) $msg.val($msg.val() + '\n\n' + text);
+            if (!msgEl.value) msgEl.value = text;
+            else if (msgEl.value.indexOf(text) === -1) msgEl.value = msgEl.value + '\n\n' + text;
         })();
 
         // Scroll progress bar
@@ -178,13 +280,6 @@
             var max = h.scrollHeight - h.clientHeight;
             progress.style.width = (max > 0 ? (h.scrollTop / max) * 100 : 0) + '%';
         }, { passive: true });
-
-        // Shared screen-reader announcer for copy actions
-        var srLive = document.createElement('div');
-        srLive.className = 'sr-only';
-        srLive.setAttribute('aria-live', 'polite');
-        document.body.appendChild(srLive);
-        window.YMTSay = function(msg) { srLive.textContent = ''; setTimeout(function() { srLive.textContent = msg; }, 30); };
 
         // Copy email button — icon injected next to the footer email address
         var emailBtn = document.createElement('button');
@@ -200,17 +295,8 @@
         document.addEventListener('ymt:langchange', copyEmailLabel);
         emailBtn.addEventListener('click', function() {
             var email = 'ymtsolution@gmail.com';
-            function fallbackCopy() {
-                var ta = document.createElement('textarea');
-                ta.value = email; document.body.appendChild(ta); ta.select();
-                var ok = false;
-                try { ok = document.execCommand('copy'); } catch (e) {}
-                document.body.removeChild(ta);
-                return ok;
-            }
             function done(ok) {
-                var i18nA = window.YMTI18n;
-                if (window.YMTSay) YMTSay(ok ? (i18nA && i18nA.t('copy_done')) : (i18nA && i18nA.t('copy_fail')));
+                if (U.announceCopy) U.announceCopy(ok);
                 if (!ok) return; // don't claim success when the copy failed
                 emailBtn.classList.add('copied');
                 emailBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
@@ -219,11 +305,7 @@
                     emailBtn.innerHTML = '<i class="fa fa-copy" aria-hidden="true"></i>';
                 }, 1600);
             }
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(email).then(function() { done(true); }, function() { done(fallbackCopy()); });
-            } else {
-                done(fallbackCopy());
-            }
+            U.copyText(email).then(done);
         });
         function mountCopyEmail() {
             var emailP = document.querySelector('[data-i18n-html="bottom_email"]');
@@ -596,6 +678,7 @@
                     el.textContent = target + suffix;
                     return;
                 }
+                el.setAttribute('aria-busy', 'true');
                 var start = null, dur = 1400;
                 function step(ts) {
                     if (!start) start = ts;
@@ -603,6 +686,7 @@
                     var eased = 1 - Math.pow(1 - p, 3);
                     el.textContent = Math.round(target * eased) + suffix;
                     if (p < 1) requestAnimationFrame(step);
+                    else el.removeAttribute('aria-busy');
                 }
                 requestAnimationFrame(step);
             }
@@ -796,15 +880,7 @@
                             span.textContent = i18n2 && i18n2.t ? i18n2.t('est_copied') : 'Copied!';
                             setTimeout(function() { span.textContent = prev; }, 1600);
                         };
-                        function fb() {
-                            var ta = document.createElement('textarea');
-                            ta.value = text; document.body.appendChild(ta); ta.select();
-                            var ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
-                            document.body.removeChild(ta); return ok;
-                        }
-                        if (navigator.clipboard && navigator.clipboard.writeText) {
-                            navigator.clipboard.writeText(text).then(function() { done(true); }, function() { done(fb()); });
-                        } else { done(fb()); }
+                        U.copyText(text).then(done);
                     });
                 }
                 var base = BUDGET_BASE[answers.type], mult = BUDGET_MULT[answers.timeline] || 1;
@@ -836,5 +912,5 @@
 
             showStep(0);
         }
-    })(jQuery);
+    })();
     

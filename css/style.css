@@ -112,6 +112,7 @@ a:hover, a:focus {
 	position: relative;
 	z-index: 1;
 	min-height: 100vh;
+	min-height: 100svh;
 	display: flex;
 	align-items: center;
 	overflow: hidden;
@@ -133,7 +134,10 @@ a:hover, a:focus {
 	background: radial-gradient(circle, rgba(99, 102, 241, .28), transparent 65%);
 	filter: blur(10px);
 	pointer-events: none;
-	animation: heroDrift 22s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.overlay::before { animation: heroDrift 22s ease-in-out infinite alternate; }
 }
 
 .overlay::after {
@@ -146,7 +150,10 @@ a:hover, a:focus {
 	background: radial-gradient(circle, rgba(34, 211, 238, .2), transparent 65%);
 	filter: blur(10px);
 	pointer-events: none;
-	animation: heroDrift 26s ease-in-out infinite alternate-reverse;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.overlay::after { animation: heroDrift 26s ease-in-out infinite alternate-reverse; }
 }
 
 @keyframes heroDrift {
@@ -215,7 +222,13 @@ header .intro-text .intro-heading {
 /* living gradient on the headline */
 header .intro-text .intro-heading {
 	background-size: 220% 220%;
-	animation: heroIn .9s cubic-bezier(.22, 1, .36, 1) .4s both, heroGradient 9s ease-in-out 1.4s infinite alternate;
+	animation: heroIn .9s cubic-bezier(.22, 1, .36, 1) .4s both;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	header .intro-text .intro-heading {
+		animation: heroIn .9s cubic-bezier(.22, 1, .36, 1) .4s both, heroGradient 9s ease-in-out 1.4s infinite alternate;
+	}
 }
 
 @keyframes heroGradient {
@@ -262,7 +275,6 @@ header .intro-text .intro-heading {
 	border: 1px solid rgba(255, 255, 255, .2);
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
-	animation: bounce 2.2s ease-in-out infinite;
 	z-index: 2;
 	transition: color .3s ease, border-color .3s ease, background .3s ease;
 }
@@ -530,8 +542,11 @@ header .intro-text .intro-heading {
 	inset: 0;
 	border-radius: 50%;
 	border: 2px solid rgba(37, 211, 102, .6);
-	animation: wa-ping 2.4s cubic-bezier(0, 0, .2, 1) infinite;
 	pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.wa-float-ring { animation: wa-ping 2.4s cubic-bezier(0, 0, .2, 1) infinite; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -2358,7 +2373,8 @@ html.save-data *, html.save-data *::before, html.save-data *::after {
 
 /* ============ Booking badge (hero) ============ */
 .booking-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.4);color:#4ade80;font-size:12.5px;font-weight:600;letter-spacing:.04em;padding:8px 16px;border-radius:999px;margin-bottom:22px;backdrop-filter:blur(6px)}
-.booking-badge .dot{width:8px;height:8px;border-radius:50%;background:#4ade80;animation:pulse 2s infinite}
+.booking-badge .dot{width:8px;height:8px;border-radius:50%;background:#4ade80}
+@media (prefers-reduced-motion: no-preference){.booking-badge .dot{animation:pulse 2s infinite}}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
 
 /* ============ Process steps ============ */
@@ -3098,6 +3114,10 @@ a, button, .filter-chip, .est-opt, .est-next, .est-back, .est-reset, .skill-card
 }
 
 
+@media (prefers-reduced-motion: no-preference) {
+	.scroll-indicator { animation: bounce 2.2s ease-in-out infinite; }
+}
+
 /* ============ Hero trust row ============ */
 .hero-trust {
 	display: flex;
@@ -3139,8 +3159,10 @@ a, button, .filter-chip, .est-opt, .est-next, .est-back, .est-reset, .skill-card
 	font-size: 12px;
 }
 
-.booking-badge {
-	animation: badgeGlow 3.2s ease-in-out infinite;
+@media (prefers-reduced-motion: no-preference) {
+	.booking-badge {
+		animation: badgeGlow 3.2s ease-in-out infinite;
+	}
 }
 
 @keyframes badgeGlow {
@@ -3164,4 +3186,66 @@ header .intro-text .intro-heading {
 .btn-hero-primary:hover::after,
 .btn-hero-primary:focus-visible::after {
 	transform: translateX(4px);
+}
+
+
+/* category chip on portfolio cards */
+#portfolio .portfolio-item .portfolio-link .card-cat {
+	position: absolute;
+	top: 12px;
+	left: 12px;
+	z-index: 2;
+	font-size: 10.5px;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	color: #e0f2fe;
+	background: rgba(11, 18, 32, .55);
+	border: 1px solid rgba(255, 255, 255, .18);
+	padding: 4px 10px;
+	border-radius: 999px;
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	pointer-events: none;
+}
+
+
+/* modal hero image: shimmer until decoded */
+#projectModal .pm-hero picture { display: block; width: 100%; height: 100%; }
+#projectModal .pm-hero img {
+	opacity: 0;
+	transition: opacity .45s ease;
+	background: linear-gradient(100deg, rgba(255,255,255,.04) 30%, rgba(255,255,255,.09) 50%, rgba(255,255,255,.04) 70%);
+	background-size: 220% 100%;
+}
+#projectModal .pm-hero img.loaded,
+#projectModal .pm-hero img.complete { opacity: 1; background: none; }
+#projectModal .pm-hero img.img-broken { opacity: 0; }
+
+/* SW update toast */
+.sw-toast {
+	position: fixed;
+	left: 50%;
+	bottom: 24px;
+	transform: translateX(-50%);
+	z-index: 10060;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 12px;
+	padding: 12px 18px;
+	box-shadow: var(--shadow-lg);
+	font-size: 14px;
+	color: var(--ink);
+}
+.sw-toast button {
+	background: var(--grad);
+	color: #0b1220;
+	border: none;
+	border-radius: 8px;
+	padding: 6px 14px;
+	font-weight: 600;
+	cursor: pointer;
 }

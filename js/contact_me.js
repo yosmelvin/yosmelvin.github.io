@@ -1,6 +1,7 @@
 // Contact Form Scripts
 // Submits via Formspree (static-site friendly).
 var FORMSPREE_ENDPOINT = 'https://formspree.io/f/mppdpodr';
+var U = window.YMTUtils || {};
 
 // Capture UTM params + referrer once per session for attribution.
 function ymtAttribution() {
@@ -36,7 +37,58 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
     } catch (e) {}
 })();
 
-$(function() {
+(function() {
+
+    var esc = U.esc || function(s) {
+        return String(s).replace(/[&<>"']/g, function(c) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+        });
+    };
+
+    function showMessage(type, html) {
+        var role = type === 'success' ? 'status' : 'alert';
+        var box = document.getElementById('success');
+        if (!box) return;
+        box.innerHTML = "<div class='alert alert-" + type + " alert-dismissible fade show' role='" + role + "'><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" + html + "</div>";
+        if (box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    var contactForm = document.getElementById('contactForm');
+    if (!contactForm) return;
+
+    var DRAFT_KEY = 'ymt_form_draft';
+    var DRAFT_FIELDS = ['name', 'email', 'phone', 'subject', 'message'];
+
+    // Draft persistence — restore on load, save on input, clear on success
+    function saveDraft() {
+        try {
+            var d = {};
+            DRAFT_FIELDS.forEach(function(id) {
+                var f = document.getElementById(id);
+                if (f) d[id] = f.value;
+            });
+            if (Object.keys(d).some(function(k) { return d[k]; })) {
+                sessionStorage.setItem(DRAFT_KEY, JSON.stringify(d));
+            } else {
+                sessionStorage.removeItem(DRAFT_KEY);
+            }
+        } catch (e) {}
+    }
+    function restoreDraft() {
+        try {
+            var d = JSON.parse(sessionStorage.getItem(DRAFT_KEY) || 'null');
+            if (!d) return;
+            DRAFT_FIELDS.forEach(function(id) {
+                var f = document.getElementById(id);
+                if (f && d[id] && !f.value) f.value = d[id];
+            });
+        } catch (e) {}
+    }
+    function clearDraft() {
+        try { sessionStorage.removeItem(DRAFT_KEY); } catch (e) {}
+    }
+    contactForm.addEventListener('input', saveDraft);
+    restoreDraft();
 
     // Apply share_target prefill once the form exists.
     try {
@@ -52,32 +104,18 @@ $(function() {
         }
     } catch (e) {}
 
-    function esc(s) {
-        return String(s).replace(/[&<>"']/g, function(c) {
-            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-        });
-    }
-
-    function showMessage(type, html) {
-        var role = type === 'success' ? 'status' : 'alert';
-        $('#success').html("<div class='alert alert-" + type + " alert-dismissible fade show' role='" + role + "'><button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>" + html + "</div>");
-        var box = document.getElementById('success');
-        if (box && box.scrollIntoView) box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    var $contactForm = $("#contactForm");
-
-    $contactForm.on('submit', function(e) {
+    contactForm.addEventListener('submit', function(e) {
         var formEl = this;
         if (!formEl.checkValidity()) { formEl.reportValidity(); return; }
         e.preventDefault();
-        var $form = $(formEl);
-        var $btn = $form.find('button[type="submit"]');
-        var name = $("input#name").val();
-        var email = $("input#email").val();
-        var phone = $("input#phone").val();
-        var subject = $("select#subject").val();
-        var message = $("textarea#message").val();
+        var name = document.getElementById('name').value;
+        var email = document.getElementById('email').value;
+        var phoneEl = document.getElementById('phone');
+        var phone = phoneEl ? phoneEl.value : '';
+        var subjectEl = document.getElementById('subject');
+        var subject = subjectEl ? subjectEl.value : '';
+        var messageEl = document.getElementById('message');
+        var message = messageEl ? messageEl.value : '';
         var firstName = esc(name.split(' ')[0] || '');
 
         var lang = (function() {
@@ -88,10 +126,12 @@ $(function() {
         };
 
         // Honeypot: bots fill hidden fields — pretend success, send nothing.
-        if ($('input#hp_website').val()) {
+        var hp = document.getElementById('hp_website');
+        if (hp && hp.value) {
             var hpFirst = firstName || '';
             showMessage('success', "<strong>" + i18nT('cf_thanks', 'Thank you') + " " + hpFirst + "!</strong> " + i18nT('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
-            $form.trigger("reset");
+            formEl.reset();
+            clearDraft();
             return;
         }
 
@@ -105,7 +145,12 @@ $(function() {
             return;
         }
 
-        $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Sending…');
+        var btn = contactForm.querySelector('button[type="submit"]');
+        var btnLabel = btn ? btn.textContent : 'Send Message';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Sending…';
+        }
 
         var single = function(v) { return String(v || '').replace(/[\r\n]+/g, ' ').trim(); };
         var safeName = single(name), safeEmail = single(email), safeSubject = single(subject);
@@ -127,20 +172,25 @@ $(function() {
         }).then(function(res) {
             if (!res.ok) throw new Error('bad response');
             showMessage('success', "<strong>" + i18nT('cf_thanks', 'Thank you') + " " + firstName + "!</strong> " + i18nT('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
-            $form.trigger("reset");
+            formEl.reset();
+            clearDraft();
         }).catch(function() {
             showMessage('danger', "<strong>" + i18nT('cf_sorry', 'Sorry') + " " + firstName + ",</strong> " + i18nT('cf_err_send', 'your message could not be sent. Please try again later or email us directly.'));
         }).finally(function() {
-            $btn.prop('disabled', false).text($btn.data('label') || 'Send Message');
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = btnLabel;
+            }
         });
     });
 
-    $("#contactForm button[type='submit']").each(function() { $(this).data('label', $(this).text()); });
+    // hide stale alerts when the visitor starts editing again
+    var nameInput = document.getElementById('name');
+    if (nameInput) {
+        nameInput.addEventListener('focus', function() {
+            var box = document.getElementById('success');
+            if (box) box.innerHTML = '';
+        });
+    }
 
-});
-
-
-/*When clicking on Full hide fail/success boxes */
-$('#name').focus(function() {
-    $('#success').html('');
-});
+})();

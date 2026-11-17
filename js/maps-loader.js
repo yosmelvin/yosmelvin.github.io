@@ -31,13 +31,17 @@
       document.getElementById('longitude').value = [latLng.lng()]
     }
 
+    var initialLatLng = new google.maps.LatLng(
+        document.getElementById('latitude').value,
+        document.getElementById('longitude').value
+    );
     var map = new google.maps.Map(document.getElementById('map'), {
     zoom: 14,
-    center: new google.maps.LatLng($("#latitude").val(),$("#longitude").val()),
+    center: initialLatLng,
      mapTypeId: google.maps.MapTypeId.ROADMAP
       });
     //posisi awal marker
-    var latLng = new google.maps.LatLng($("#latitude").val(),$("#longitude").val());
+    var latLng = initialLatLng;
 
     /* buat marker yang bisa di drag lalu
       panggil fungsi updateMarkerPosition(latLng)

@@ -90,7 +90,7 @@
         nav.setAttribute('aria-label', t('toc'));
         var list = document.createElement('ul');
         heads.forEach(function(h, i) {
-            if (!h.id) h.id = 'sec-' + (i + 1);
+            if (!h.id) h.id = 'toc-sec-' + (i + 1);
             var li = document.createElement('li');
             li.className = h.tagName.toLowerCase() === 'h3' ? 'toc-h3' : '';
             var a = document.createElement('a');

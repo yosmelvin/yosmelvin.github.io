@@ -34,7 +34,7 @@
     <!-- Security / privacy headers (meta equivalents) -->
     <!-- CSP fallback for GitHub Pages (real headers come from _headers on Netlify/CF Pages).
          'unsafe-inline' is required for the two inline bootstrap scripts (SW registration, Maps loader). -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://embed.tawk.to https://www.google.com https://www.gstatic.com https://*.tawk.to; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com; connect-src 'self' https://formspree.io https://maps.googleapis.com https://maps.gstatic.com https://*.tawk.to https://va.tawk.to https://gc.zgo.at https://plausible.io; frame-src https://www.google.com https://maps.google.com https://*.tawk.to; base-uri 'self'; form-action 'self' https://formspree.io">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://embed.tawk.to https://www.google.com https://www.gstatic.com https://*.tawk.to; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com; connect-src 'self' https://formspree.io https://maps.googleapis.com https://maps.gstatic.com https://*.tawk.to https://va.tawk.to https://gc.zgo.at https://plausible.io; frame-src https://www.google.com https://maps.google.com https://*.tawk.to; base-uri 'self'; form-action 'self' https://formspree.io">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self)">
@@ -560,136 +560,7 @@
                 <button type="button" class="pf-quote" id="shortlistQuote" data-i18n="pf_shortlist_quote">Request quote</button>
                 <button type="button" class="pf-clear" id="shortlistClear" data-i18n="pf_shortlist_clear">Clear</button>
             </div>
-            <div class="row">
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="web">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="0">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/BM5-1-sm.webp 480w, img/portfolio/BM5-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/BM5-1-sm.jpg" srcset="img/portfolio/BM5-1-sm.jpg 480w, img/portfolio/BM5-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="Binus Maya"></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Binusmaya</h4>
-                        <p class="text-muted" data-i18n="pf_bm_d">Website Binusmaya</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="web">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="1">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/inklo-1-sm.webp 480w, img/portfolio/inklo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/inklo-1-sm.jpg" srcset="img/portfolio/inklo-1-sm.jpg 480w, img/portfolio/inklo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="Inklo"></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Inklo</h4>
-                        <p class="text-muted" data-i18n="pf_inklo_d">Crowdfunding website</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="mobile">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="2">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/asakbackend-1-sm.webp 480w, img/portfolio/asakbackend-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/asakbackend-1-sm.jpg" srcset="img/portfolio/asakbackend-1-sm.jpg 480w, img/portfolio/asakbackend-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="Ayo Sekolah Ayo Kuliah (ASAK)"></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Ayo Sekolah Ayo Kuliah</h4>
-                        <p class="text-muted" data-i18n="pf_asak_d">Website ASAK</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="mobile">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="3">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/tome-1-sm.webp 480w, img/portfolio/tome-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/tome-1-sm.jpg" srcset="img/portfolio/tome-1-sm.jpg 480w, img/portfolio/tome-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="tolong menolong"></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Tolong Menolong</h4>
-                        <p class="text-muted" data-i18n="pf_tome_d">Website TOME</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="web">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="4">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/ilogo-1-sm.webp 480w, img/portfolio/ilogo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/ilogo-1-sm.jpg" srcset="img/portfolio/ilogo-1-sm.jpg 480w, img/portfolio/ilogo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt=""></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>iLogo</h4>
-                        <p class="text-muted" data-i18n="pf_ilogo_d">Website iLogo</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="web">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="5">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/LibrarySystem-1-sm.webp 480w, img/portfolio/LibrarySystem-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/LibrarySystem-1-sm.jpg" srcset="img/portfolio/LibrarySystem-1-sm.jpg 480w, img/portfolio/LibrarySystem-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="Library System"></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Library System</h4>
-                        <p class="text-muted" data-i18n="pf_lib_d">Library System website</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="fintech">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="6">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/osppay-1-sm.webp 480w, img/portfolio/osppay-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/osppay-1-sm.jpg" srcset="img/portfolio/osppay-1-sm.jpg 480w, img/portfolio/osppay-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="Ospay Indonesia"></picture>
-                        <span class="card-new">NEW</span>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Ospay Indonesia</h4>
-                        <p class="text-muted" data-i18n="pf_osppay_d">Payment gateway platform</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="ai">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="7">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/sahamai-1-sm.webp 480w, img/portfolio/sahamai-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/sahamai-1-sm.jpg" srcset="img/portfolio/sahamai-1-sm.jpg 480w, img/portfolio/sahamai-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-fluid img-portofolio" alt="Saham AI"></picture>
-                        <span class="card-new">NEW</span>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Saham AI</h4>
-                        <p class="text-muted" data-i18n="pf_saham_d">AI stock screener</p>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 portfolio-item" data-cat="trading">
-                    <a href="#projectModal" class="portfolio-link" data-bs-toggle="modal" data-bs-target="#projectModal" data-project="8">
-                        <div class="portfolio-hover">
-                            <div class="portfolio-hover-content">
-                                <i class="fa fa-plus fa-3x"></i>
-                            </div>
-                        </div>
-                        <picture><source srcset="img/portfolio/robo-trading-hub.webp" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/robo-trading-hub.jpg" class="img-fluid img-portofolio" alt="Robo Trading Hub" width="1400" height="560"></picture>
-                    </a>
-                    <div class="portfolio-caption">
-                        <h4>Robo Trading Hub</h4>
-                        <p class="text-muted" data-i18n="pf_robo_d">Automated trading platform</p>
-                    </div>
-                </div>
-            </div>
+            <div class="row" id="portfolioGrid"></div>
         </div>
     </section>
 
@@ -757,7 +628,7 @@
                     <ul class="timeline">
                         <li>
                             <div class="timeline-image">
-                                <img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/1.jpg" alt="" width="200" height="200">
+                                <picture><source srcset="img/about/1.webp" type="image/webp"><img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/1.jpg" alt="" width="200" height="200"></picture>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -771,7 +642,7 @@
                         </li>
                         <li class="timeline-inverted">
                             <div class="timeline-image">
-                                <img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/2.jpg" alt="" width="200" height="200">
+                                <picture><source srcset="img/about/2.webp" type="image/webp"><img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/2.jpg" alt="" width="200" height="200"></picture>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -785,7 +656,7 @@
                         </li>
                         <li>
                             <div class="timeline-image">
-                                <img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/3.jpg" alt="" width="300" height="300">
+                                <picture><source srcset="img/about/3.webp" type="image/webp"><img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/3.jpg" alt="" width="300" height="300"></picture>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -799,7 +670,7 @@
                         </li>
                         <li class="timeline-inverted">
                             <div class="timeline-image">
-                                <img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/4.jpg" alt="" width="200" height="200">
+                                <picture><source srcset="img/about/4.webp" type="image/webp"><img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/4.jpg" alt="" width="200" height="200"></picture>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -813,7 +684,7 @@
                         </li>
                         <li>
                             <div class="timeline-image">
-                                <img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/5-sm.jpg" srcset="img/about/5-sm.jpg 480w, img/about/5.jpg 800w" sizes="(max-width: 991px) 80px, 170px" alt="" width="800" height="533">
+                                <picture><source srcset="img/about/5-sm.webp 480w, img/about/5.webp 800w" sizes="(max-width: 991px) 80px, 170px" type="image/webp"><img loading="lazy" decoding="async" class="rounded-circle img-fluid" src="img/about/5-sm.jpg" srcset="img/about/5-sm.jpg 480w, img/about/5.jpg 800w" sizes="(max-width: 991px) 80px, 170px" alt="" width="800" height="533"></picture>
                             </div>
                             <div class="timeline-panel">
                                 <div class="timeline-heading">
@@ -850,7 +721,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="team-member">
-                        <img loading="lazy" decoding="async" src="img/team/yosmelvin-sm.jpg" srcset="img/team/yosmelvin-sm.jpg 480w, img/team/yosmelvin.jpg 1080w" sizes="(max-width: 991px) 200px, 260px" class="img-fluid rounded-circle img-member" alt="Yos Melvin Tanoto" width="1080" height="1080">
+                        <picture><source srcset="img/team/yosmelvin-sm.webp 480w, img/team/yosmelvin.webp 1080w" sizes="(max-width: 991px) 200px, 260px" type="image/webp"><img loading="lazy" decoding="async" src="img/team/yosmelvin-sm.jpg" srcset="img/team/yosmelvin-sm.jpg 480w, img/team/yosmelvin.jpg 1080w" sizes="(max-width: 991px) 200px, 260px" class="img-fluid rounded-circle img-member" alt="Yos Melvin Tanoto" width="1080" height="1080"></picture>
                         <h4>Yos Melvin Tanoto</h4>
                         <p class="text-muted" data-i18n="team_role">Lead Developer</p>
                         <ul class="list-inline social-buttons">
@@ -1156,7 +1027,7 @@
                     <ul class="list-inline quicklinks">
                         <li><a href="privacy.html" data-i18n="footer_privacy">Privacy</a></li>
                         <li><button type="button" class="footer-link" id="installAppBtn" hidden><i class="fa fa-download" aria-hidden="true"></i> <span data-i18n="install_app">Install App</span></button></li>
-                        <li><a href="#" id="cookieSettingsLink" data-i18n="cookie_settings">Cookie Settings</a></li>
+                        <li><a href="privacy.html" id="cookieSettingsLink" data-i18n="cookie_settings">Cookie Settings</a></li>
                     </ul>
                 </div>
             </div>
@@ -1197,9 +1068,9 @@
                     <div class="pm-share" id="pmShare" hidden>
                         <span class="pm-share-label" data-i18n="share_label">Share this project</span>
                         <button type="button" class="pm-share-native" id="pmShareNative" hidden data-i18n-aria="pm_share_native" aria-label="Share"><i class="fa fa-share-alt" aria-hidden="true"></i></button>
-                        <a id="pmShareX" href="#" target="_blank" rel="noopener" aria-label="Share on X"><i class="fa fa-twitter"></i></a>
-                        <a id="pmShareLi" href="#" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fa fa-linkedin"></i></a>
-                        <a id="pmShareWa" href="#" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WA</a>
+                        <a id="pmShareX" href="https://twitter.com/intent/tweet?url=https://yosmelvin.github.io" target="_blank" rel="noopener" aria-label="Share on X"><i class="fa fa-twitter"></i></a>
+                        <a id="pmShareLi" href="https://www.linkedin.com/sharing/share-offsite/?url=https://yosmelvin.github.io" target="_blank" rel="noopener" aria-label="Share on LinkedIn"><i class="fa fa-linkedin"></i></a>
+                        <a id="pmShareWa" href="https://wa.me/?text=https://yosmelvin.github.io" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WA</a>
                         <button type="button" class="pm-share-copy" id="pmShareCopy" data-i18n-aria="pm_copy_link" aria-label="Copy project link"><i class="fa fa-link" aria-hidden="true"></i></button>
                         <button type="button" class="pm-share-copy pm-brief" id="pmBriefCopy" data-i18n-aria="pm_brief" aria-label="Copy project brief"><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
                         <button type="button" class="pm-share-copy pm-brief-dl" id="pmBriefDl" data-i18n-aria="pm_brief_dl" aria-label="Download project brief"><i class="fa fa-download" aria-hidden="true"></i></button>
@@ -1231,15 +1102,13 @@
 
 
 
-    <!-- jQuery -->
-    <script src="vendor/jquery.min.js" defer></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="vendor/bootstrap.bundle.min.js" defer></script>
 
     <!-- Plugin JavaScript -->
     
-    <!-- Contact Form JavaScript -->
+    <!-- Shared utilities + Contact Form JavaScript -->
+        <script src="js/utils.js" defer></script>
         <script src="js/contact_me.js" defer></script>
 
 
@@ -1280,6 +1149,7 @@
                 <div class="pc-grid">
                     <span><kbd>Ctrl/⌘ K</kbd><span data-i18n="cheat_palette">open palette</span></span>
                     <span><kbd>?</kbd><span data-i18n="cheat_help">toggle palette</span></span>
+                    <span><kbd>/</kbd><span data-i18n="cheat_search">search projects</span></span>
                     <span><kbd>↑↓</kbd><span data-i18n="palette_nav">navigate</span></span>
                     <span><kbd>↵</kbd><span data-i18n="palette_open">open</span></span>
                     <span><kbd>Tab</kbd><span data-i18n="cheat_tab">cycle results</span></span>

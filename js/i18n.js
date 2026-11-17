@@ -232,6 +232,9 @@
             cheat_palette: 'open palette',
             cheat_help: 'toggle palette',
             cheat_tab: 'cycle results',
+            cheat_search: 'search projects',
+            sw_update: 'A new version is available.',
+            sw_refresh: 'Refresh',
             sticky_cta: 'Start a project',
             est_title: 'Quick project estimator',
             est_sub: "Answer 3 quick questions — we'll prefill your inquiry.",
@@ -547,6 +550,9 @@
             cheat_palette: 'buka palet',
             cheat_help: 'buka/tutup palet',
             cheat_tab: 'putar hasil',
+            cheat_search: 'cari proyek',
+            sw_update: 'Versi baru tersedia.',
+            sw_refresh: 'Muat ulang',
             sticky_cta: 'Mulai proyek',
             est_title: 'Estimator proyek singkat',
             est_sub: "Jawab 3 pertanyaan singkat — kami akan mengisi otomatis pesan Anda.",
@@ -652,9 +658,14 @@
             if (dict[key] != null) el.textContent = dict[key];
         });
 
+        // allowlist sanitizer: only <br> survives — dicts stay trusted but the
+        // sink can never inject markup even if a translation is ever compromised
+        function safeHtml(v) {
+            return String(v).replace(/<(?!\/?br\b)[^>]*>/gi, '');
+        }
         document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
             var key = el.getAttribute('data-i18n-html');
-            if (dict[key] != null) el.innerHTML = dict[key];
+            if (dict[key] != null) el.innerHTML = safeHtml(dict[key]);
         });
 
         document.querySelectorAll('[data-i18n-ph]').forEach(function(el) {

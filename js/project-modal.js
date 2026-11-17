@@ -1,17 +1,19 @@
 /* Single reusable project modal — populates #projectModal from
    window.YMTProjects + the active language dictionary (YMTI18n.t). */
-(function($) {
+(function() {
     'use strict';
 
+    var U = window.YMTUtils || {};
     var projects = window.YMTProjects || [];
     var current = 0;
-    var $modal = $('#projectModal');
     var modalEl = document.getElementById('projectModal');
     function modalApi() {
         return (window.bootstrap && bootstrap.Modal)
             ? bootstrap.Modal.getOrCreateInstance(modalEl) : null;
     }
     function modalShown() { return modalEl.classList.contains('show'); }
+    function $(id) { return document.getElementById(id); }
+    function el(sel) { return modalEl.querySelector(sel); }
     var lastTrigger = null;
     var openIndex = null; // explicit index for programmatic opens (palette) — beats stale hash
     var baseTitle = document.title;
@@ -23,6 +25,13 @@
 
     function pad(n) {
         return (n < 10 ? '0' : '') + n;
+    }
+
+    function chip(cls, text) {
+        var s = document.createElement('span');
+        s.className = cls;
+        s.textContent = text;
+        return s;
     }
 
     function render(i, animate) {
@@ -38,136 +47,159 @@
         document.title = p.title + ' — YMT Solution';
         document.dispatchEvent(new CustomEvent('ymt:projectview', { detail: i }));
 
-        var $hero = $('.pm-hero');
-        $hero.toggleClass('pm-hero-logo', !!p.logo);
-        var $img = $('#pmImg');
-        $img.removeClass('img-broken');
-        $img.attr({ src: p.img, alt: p.alt || p.title, decoding: 'async' });
+        var hero = el('.pm-hero');
+        hero.classList.toggle('pm-hero-logo', !!p.logo);
+        var img = $('pmImg');
+        img.classList.remove('img-broken');
+        img.src = p.img;
+        img.alt = p.alt || p.title;
+        img.decoding = 'async';
         // every project ships WebP + JPG variants — serve WebP via <picture>
         var m = p.img.match(/^(.*)\.(jpe?g|webp|png)$/i);
-        var $webpSrc = $('#pmWebpSrc');
+        var webpSrc = $('pmWebpSrc');
         if (m) {
             var base = m[1];
             var isWebpProject = /\.webp$/i.test(p.img);
-            $webpSrc.attr('srcset', base + '-sm.webp 480w, ' + base + '.webp 1000w');
+            webpSrc.setAttribute('srcset', base + '-sm.webp 480w, ' + base + '.webp 1000w');
             if (/\.(jpe?g|webp)$/i.test(p.img)) {
-                $img.attr('srcset', isWebpProject
+                img.setAttribute('srcset', isWebpProject
                     ? base + '.jpg 1000w'
                     : base + '-sm.jpg 480w, ' + p.img + ' 1000w');
-                $img.attr('sizes', '(max-width: 860px) 100vw, 810px');
-                if (isWebpProject) $img.attr('src', base + '.jpg');
+                img.setAttribute('sizes', '(max-width: 860px) 100vw, 810px');
+                if (isWebpProject) img.src = base + '.jpg';
             } else {
-                $img.removeAttr('srcset').removeAttr('sizes');
+                img.removeAttribute('srcset');
+                img.removeAttribute('sizes');
             }
         } else {
-            $webpSrc.removeAttr('srcset');
-            $img.removeAttr('srcset').removeAttr('sizes');
+            webpSrc.removeAttribute('srcset');
+            img.removeAttribute('srcset');
+            img.removeAttribute('sizes');
         }
-        $('#pmTitle').text(p.title);
-        $('#pmIntro').text(t(p.keys.intro));
-        $('#pmText').html(t(p.keys.body));
-        $('#pmCounter').text(pad(i + 1) + ' / ' + pad(projects.length));
+        $('pmTitle').textContent = p.title;
+        $('pmIntro').textContent = t(p.keys.intro);
+        $('pmText').innerHTML = t(p.keys.body);
+        $('pmCounter').textContent = pad(i + 1) + ' / ' + pad(projects.length);
 
         // category chip in hero (only projects that define one)
+        var cat = $('pmCat');
         if (p.meta && p.meta.cat) {
-            $('#pmCat').text(t(p.meta.cat)).show();
+            cat.textContent = t(p.meta.cat);
+            cat.style.display = '';
         } else {
-            $('#pmCat').hide();
+            cat.style.display = 'none';
         }
 
         // meta chips
-        var $meta = $('#pmMeta').empty();
+        var meta = $('pmMeta');
+        meta.textContent = '';
         if (p.meta) {
             ['date', 'client'].forEach(function(field) {
-                if (p.meta[field]) {
-                    $('<span class="pm-chip"></span>').text(t(p.meta[field])).appendTo($meta);
-                }
+                if (p.meta[field]) meta.appendChild(chip('pm-chip', t(p.meta[field])));
             });
         }
-        $meta.toggle($meta.children().length > 0);
+        meta.style.display = meta.children.length ? '' : 'none';
 
         // unified badges (vvip / live / nda)
         var badgeTypes = p.badges || (p.exclusive ? ['vvip'] : []);
-        var $badges = $('#pmBadges').empty();
+        var badges = $('pmBadges');
+        badges.textContent = '';
         badgeTypes.forEach(function(b) {
-            $('<span class="pm-badge-static pm-badge-' + b + '"></span>').text(t('badge_' + b)).appendTo($badges);
+            badges.appendChild(chip('pm-badge-static pm-badge-' + b, t('badge_' + b)));
         });
-        $badges.prop('hidden', badgeTypes.length === 0);
+        badges.hidden = badgeTypes.length === 0;
 
         // visit button
+        var visit = $('pmVisit');
         if (p.link) {
-            $('#pmVisit').attr('href', p.link).prop('hidden', false);
+            visit.href = p.link;
+            visit.hidden = false;
         } else {
-            $('#pmVisit').prop('hidden', true);
+            visit.hidden = true;
         }
 
         // tech stack chips
-        var $tech = $('#pmTech').empty();
+        var tech = $('pmTech');
+        tech.textContent = '';
         if (p.tech && p.tech.length) {
-            $('<span class="pm-tech-label"></span>').text(t('pm_tech')).appendTo($tech);
+            tech.appendChild(chip('pm-tech-label', t('pm_tech')));
             p.tech.forEach(function(tk) {
-                $('<span class="pm-chip pm-chip-tech"></span>').text(tk).appendTo($tech);
+                tech.appendChild(chip('pm-chip pm-chip-tech', tk));
             });
-            $tech.prop('hidden', false);
+            tech.hidden = false;
         } else {
-            $tech.prop('hidden', true);
+            tech.hidden = true;
         }
 
         // gallery thumbnails + lightbox (only when extra images provided)
         var gallery = p.gallery || [];
-        var $gal = $('#pmGallery').empty();
+        var gal = $('pmGallery');
+        gal.textContent = '';
         if (gallery.length) {
             gallery.forEach(function(src, gi) {
-                $('<button type="button" class="pm-thumb" role="listitem"></button>')
-                    .append($('<img loading="lazy" decoding="async">').attr({ src: src, alt: p.alt || p.title }))
-                    .on('click', function() { openLightbox(gi); })
-                    .appendTo($gal);
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'pm-thumb';
+                btn.setAttribute('role', 'listitem');
+                var gimg = document.createElement('img');
+                gimg.loading = 'lazy';
+                gimg.decoding = 'async';
+                gimg.src = src;
+                gimg.alt = p.alt || p.title;
+                btn.appendChild(gimg);
+                btn.addEventListener('click', function() { openLightbox(gi); });
+                gal.appendChild(btn);
             });
-            $gal.prop('hidden', false);
+            gal.hidden = false;
         } else {
-            $gal.prop('hidden', true);
+            gal.hidden = true;
         }
 
         // share links — deep link to this project
         var shareUrl = location.origin + location.pathname + '#project-' + i;
         var shareText = encodeURIComponent(p.title + ' | YMT Solution');
         var shareUrlEnc = encodeURIComponent(shareUrl);
-        $('#pmShareX').attr('href', 'https://twitter.com/intent/tweet?url=' + shareUrlEnc + '&text=' + shareText);
-        $('#pmShareLi').attr('href', 'https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrlEnc);
-        $('#pmShareWa').attr('href', 'https://wa.me/?text=' + shareText + '%20' + shareUrlEnc);
-        $('#pmShareCopy').data('url', shareUrl);
+        $('pmShareX').href = 'https://twitter.com/intent/tweet?url=' + shareUrlEnc + '&text=' + shareText;
+        $('pmShareLi').href = 'https://www.linkedin.com/sharing/share-offsite/?url=' + shareUrlEnc;
+        $('pmShareWa').href = 'https://wa.me/?text=' + shareText + '%20' + shareUrlEnc;
+        $('pmShareCopy')._shareUrl = shareUrl;
         // native share sheet when available (mobile)
-        var $native = $('#pmShareNative');
+        var nativeBtn = $('pmShareNative');
         if (navigator.share) {
-            $native.prop('hidden', false).off('click').on('click', function() {
+            nativeBtn.hidden = false;
+            nativeBtn.onclick = function() {
                 navigator.share({ title: p.title + ' | YMT Solution', text: p.title, url: shareUrl }).catch(function() {});
-            });
+            };
         } else {
-            $native.prop('hidden', true);
+            nativeBtn.hidden = true;
+            nativeBtn.onclick = null;
         }
-        $('#pmShare').prop('hidden', false);
+        $('pmShare').hidden = false;
 
         // project jump dots
-        var $dots = $('#pmDots').empty();
+        var dots = $('pmDots');
+        dots.textContent = '';
         projects.forEach(function(_, di) {
-            $('<button type="button" class="pm-dot' + (di === i ? ' active' : '') + '"></button>')
-                .attr('role', 'tab')
-                .attr('aria-label', t('pm_dot_aria').replace('{n}', di + 1))
-                .attr('aria-selected', di === i ? 'true' : 'false')
-                .on('click', function() { render(di, true); })
-                .appendTo($dots);
+            var d = document.createElement('button');
+            d.type = 'button';
+            d.className = 'pm-dot' + (di === i ? ' active' : '');
+            d.setAttribute('role', 'tab');
+            d.setAttribute('aria-label', t('pm_dot_aria').replace('{n}', di + 1));
+            d.setAttribute('aria-selected', di === i ? 'true' : 'false');
+            d.addEventListener('click', function() { render(di, true); });
+            dots.appendChild(d);
         });
 
         // nav button labels
-        $('#pmPrev').attr('aria-label', t('pm_prev_aria'));
-        $('#pmNext').attr('aria-label', t('pm_next_aria'));
+        $('pmPrev').setAttribute('aria-label', t('pm_prev_aria'));
+        $('pmNext').setAttribute('aria-label', t('pm_next_aria'));
 
         // reset scroll & subtle fade on content swap
-        var $body = $('#pmBodyWrap');
-        $body.scrollTop(0);
+        var bodyWrap = $('pmBodyWrap');
+        bodyWrap.scrollTop = 0;
         if (animate) {
-            $body.css('opacity', 0);
-            setTimeout(function() { $body.css('opacity', 1); }, 60);
+            bodyWrap.style.opacity = '0';
+            setTimeout(function() { bodyWrap.style.opacity = '1'; }, 60);
         }
     }
 
@@ -177,22 +209,24 @@
 
     /* ---------- lightbox ---------- */
     var lbIndex = 0, lbGallery = [];
-    var $lb = $('#pmLightbox');
+    var lb = $('pmLightbox');
 
     function openLightbox(i) {
         lbGallery = projects[current].gallery || [];
         lbIndex = i;
         showLb();
-        $lb.prop('hidden', false);
+        lb.hidden = false;
         document.body.style.overflow = 'hidden';
     }
 
     function showLb() {
-        var $lbImg = $('#pmLbImg').removeClass('img-broken');
-        $lbImg.attr({ src: lbGallery[lbIndex], alt: (projects[current] && projects[current].alt) || '', decoding: 'async' });
-        $('#pmLbCounter').text((lbIndex + 1) + ' / ' + lbGallery.length);
-        $('#pmLbPrev').prop('disabled', lbGallery.length < 2);
-        $('#pmLbNext').prop('disabled', lbGallery.length < 2);
+        var lbImg = $('pmLbImg').classList.remove('img-broken');
+        lbImg.src = lbGallery[lbIndex];
+        lbImg.alt = (projects[current] && projects[current].alt) || '';
+        lbImg.decoding = 'async';
+        $('pmLbCounter').textContent = (lbIndex + 1) + ' / ' + lbGallery.length;
+        $('pmLbPrev').disabled = lbGallery.length < 2;
+        $('pmLbNext').disabled = lbGallery.length < 2;
     }
 
     function lbGo(d) {
@@ -201,45 +235,45 @@
     }
 
     function closeLightbox() {
-        $lb.prop('hidden', true);
+        lb.hidden = true;
         document.body.style.overflow = '';
     }
 
-    $('#pmLbClose').on('click', closeLightbox);
-    $('#pmLbPrev').on('click', function() { lbGo(-1); });
-    $('#pmLbNext').on('click', function() { lbGo(1); });
-    $lb.on('click', function(e) { if (e.target === this) closeLightbox(); });
+    $('pmLbClose').addEventListener('click', closeLightbox);
+    $('pmLbPrev').addEventListener('click', function() { lbGo(-1); });
+    $('pmLbNext').addEventListener('click', function() { lbGo(1); });
+    lb.addEventListener('click', function(e) { if (e.target === lb) closeLightbox(); });
 
     /* ---------- "start a similar project" ---------- */
-    $('#pmSimilar').on('click', function() {
+    $('pmSimilar').addEventListener('click', function() {
         var p = projects[current];
         var m = modalApi(); if (m) m.hide(); else modalEl.classList.remove('show');
         setTimeout(function() {
-            var $form = $('#contactForm');
-            var $subject = $('#subject');
-            var $msg = $('#message');
-            if ($subject.length) {
-                var match = p.cat && $subject.find('option[value="' + p.cat + '"]').length ? p.cat : 'other';
-                $subject.val(match);
+            var form = document.getElementById('contactForm');
+            var subject = document.getElementById('subject');
+            var msg = document.getElementById('message');
+            if (subject) {
+                var match = p.cat && subject.querySelector('option[value="' + p.cat + '"]') ? p.cat : 'other';
+                subject.value = match;
             }
-            if ($msg.length && !$msg.val()) {
+            if (msg && !msg.value) {
                 var tpl = t('pm_similar_msg');
-                $msg.val((tpl !== 'pm_similar_msg' ? tpl : "I'm interested in a project similar to \"{title}\". ").replace('{title}', p.title));
+                msg.value = (tpl !== 'pm_similar_msg' ? tpl : "I'm interested in a project similar to \"{title}\". ").replace('{title}', p.title);
             }
             var c = document.getElementById('contact');
             if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            setTimeout(function() { $msg.trigger('focus'); }, 850);
+            setTimeout(function() { if (msg) msg.focus(); }, 850);
         }, 350);
     });
 
     modalEl.addEventListener('show.bs.modal', function(e) {
         lastTrigger = e.relatedTarget || null;
-        var idx = e.relatedTarget ? $(e.relatedTarget).data('project') : null;
-        if (idx == null && openIndex != null) idx = openIndex;
+        var idx = e.relatedTarget && e.relatedTarget.dataset ? parseInt(e.relatedTarget.dataset.project, 10) : null;
+        if (isNaN(idx) && openIndex != null) idx = openIndex;
         openIndex = null;
         // remember the section anchor so closing the modal restores it
         if (!window.location.hash.match(/^#project-\d+$/)) preModalHash = window.location.hash;
-        if (idx == null) {
+        if (idx == null || isNaN(idx)) {
             var m = window.location.hash.match(/^#project-(\d+)$/);
             idx = m ? parseInt(m[1], 10) : current;
         }
@@ -252,7 +286,7 @@
     });
 
     // deep-link / back-forward sync: hash changes open, navigate or close the modal
-    $(window).on('hashchange', function() {
+    window.addEventListener('hashchange', function() {
         var m = window.location.hash.match(/^#project-(\d+)$/);
         if (m) {
             var idx = parseInt(m[1], 10);
@@ -265,34 +299,24 @@
                 render(idx, true);
             }
         } else if (modalShown()) {
-            var m = modalApi(); if (m) m.hide(); else modalEl.classList.remove('show');
+            var m2 = modalApi(); if (m2) m2.hide(); else modalEl.classList.remove('show');
         }
     });
 
     // copy project link — only show success when the copy actually worked
-    $('#pmShareCopy').on('click', function() {
-        var url = $(this).data('url');
-        var $b = $(this);
-        function fallbackCopy() {
-            var ta = document.createElement('textarea');
-            ta.value = url; document.body.appendChild(ta); ta.select();
-            var ok = false;
-            try { ok = document.execCommand('copy'); } catch (e) {}
-            document.body.removeChild(ta);
-            return ok;
-        }
+    $('pmShareCopy').addEventListener('click', function() {
+        var url = this._shareUrl;
+        var btn = this;
         function done(ok) {
-            var i18nA = window.YMTI18n;
-            if (window.YMTSay) YMTSay(ok ? (i18nA && i18nA.t('copy_done')) : (i18nA && i18nA.t('copy_fail')));
+            if (U.announceCopy) U.announceCopy(ok);
             if (!ok) return;
-            $b.find('i').attr('class', 'fa fa-check');
-            setTimeout(function() { $b.find('i').attr('class', 'fa fa-link'); }, 1500);
+            var icon = btn.querySelector('i');
+            if (icon) {
+                icon.className = 'fa fa-check';
+                setTimeout(function() { icon.className = 'fa fa-link'; }, 1500);
+            }
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url).then(function() { done(true); }, function() { done(fallbackCopy()); });
-        } else {
-            done(fallbackCopy());
-        }
+        U.copyText(url).then(done);
     });
 
     // copy a plain-text project brief (title + intro + tech + link)
@@ -301,38 +325,25 @@
             (p.link ? '\n' + p.link : '') + '\n\n— YMT Solution · ' + location.origin + location.pathname;
     }
 
-    $('#pmBriefCopy').on('click', function() {
+    $('pmBriefCopy').addEventListener('click', function() {
         var p = projects[current];
         if (!p) return;
         var brief = buildBrief(p);
-        var $b = $(this);
-        function fallbackCopy() {
-            var ta = document.createElement('textarea');
-            ta.value = brief; document.body.appendChild(ta); ta.select();
-            var ok = false;
-            try { ok = document.execCommand('copy'); } catch (e) {}
-            document.body.removeChild(ta);
-            return ok;
-        }
+        var btn = this;
         function done(ok) {
-            var i18nA = window.YMTI18n;
-            if (window.YMTSay) YMTSay(ok ? (i18nA && i18nA.t('copy_done')) : (i18nA && i18nA.t('copy_fail')));
+            if (U.announceCopy) U.announceCopy(ok);
             if (!ok) return;
+            var icon = btn.querySelector('i');
+            if (icon) icon.className = 'fa fa-check';
             var i18n = window.YMTI18n;
-            var prev = $b.find('i').attr('class');
-            $b.find('i').attr('class', 'fa fa-check');
-            $b.attr('aria-label', i18n && i18n.t ? i18n.t('pm_brief_done') : 'Brief copied!');
-            setTimeout(function() { $b.find('i').attr('class', prev); }, 1600);
+            btn.setAttribute('aria-label', i18n && i18n.t ? i18n.t('pm_brief_done') : 'Brief copied!');
+            setTimeout(function() { if (icon) icon.className = 'fa fa-copy'; }, 1600);
         }
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(brief).then(function() { done(true); }, function() { done(fallbackCopy()); });
-        } else {
-            done(fallbackCopy());
-        }
+        U.copyText(brief).then(done);
     });
 
     // download the same brief as a .txt file
-    $('#pmBriefDl').on('click', function() {
+    $('pmBriefDl').addEventListener('click', function() {
         var p = projects[current];
         if (!p) return;
         var blob = new Blob([buildBrief(p)], { type: 'text/plain;charset=utf-8' });
@@ -347,9 +358,10 @@
 
     // touch swipe: horizontal flick navigates projects (mobile)
     (function() {
+        var SWIPE_MIN = 50, SWIPE_RATIO = 1.5;
         var startX = 0, startY = 0, tracking = false;
         modalEl.addEventListener('touchstart', function(e) {
-            if (!$lb.prop('hidden')) return;
+            if (!lb.hidden) return;
             if (e.touches.length !== 1) return;
             tracking = true;
             startX = e.touches[0].clientX;
@@ -360,29 +372,29 @@
             tracking = false;
             var t = e.changedTouches[0];
             var dx = t.clientX - startX, dy = t.clientY - startY;
-            if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return; // horizontal intent only
+            if (Math.abs(dx) < SWIPE_MIN || Math.abs(dx) < Math.abs(dy) * SWIPE_RATIO) return;
             go(dx < 0 ? 1 : -1);
         }, { passive: true });
     })();
 
-    $('#pmPrev').on('click', function(e) { e.preventDefault(); go(-1); });
-    $('#pmNext').on('click', function(e) { e.preventDefault(); go(1); });
+    $('pmPrev').addEventListener('click', function(e) { e.preventDefault(); go(-1); });
+    $('pmNext').addEventListener('click', function(e) { e.preventDefault(); go(1); });
 
     // keyboard navigation while modal/lightbox is open
-    $(document).on('keydown', function(e) {
-        if (!$lb.prop('hidden')) {
+    document.addEventListener('keydown', function(e) {
+        if (!lb.hidden) {
             if (e.key === 'Escape') closeLightbox();
             else if (e.key === 'ArrowLeft') lbGo(-1);
             else if (e.key === 'ArrowRight') lbGo(1);
             return;
         }
         if (!modalShown()) return;
-        if (e.keyCode === 37) go(-1);        // left arrow
-        else if (e.keyCode === 39) go(1);    // right arrow
+        if (e.key === 'ArrowLeft') go(-1);
+        else if (e.key === 'ArrowRight') go(1);
     });
 
     // re-render with new language if modal is open
-    $(document).on('ymt:langchange', function() {
+    document.addEventListener('ymt:langchange', function() {
         if (modalShown()) render(current, false);
     });
 
@@ -400,15 +412,18 @@
     });
 
     // simple focus trap: keep Tab cycling inside the modal
-    $modal.on('keydown', function(e) {
+    modalEl.addEventListener('keydown', function(e) {
         if (e.key !== 'Tab') return;
-        var focusables = $modal.find('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])').filter(':visible');
+        var focusables = Array.prototype.filter.call(
+            modalEl.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'),
+            function(n) { return n.offsetParent !== null; }
+        );
         if (!focusables.length) return;
-        var first = focusables.first()[0], last = focusables.last()[0];
+        var first = focusables[0], last = focusables[focusables.length - 1];
         if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
 
     // expose for deep-linking / debugging
     window.YMTModal = { open: function(i) { openIndex = i; render(i, false); var m = modalApi(); if (m) m.show(); } };
-})(jQuery);
+})();
