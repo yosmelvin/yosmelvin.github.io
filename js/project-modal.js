@@ -6,6 +6,12 @@
     var projects = window.YMTProjects || [];
     var current = 0;
     var $modal = $('#projectModal');
+    var modalEl = document.getElementById('projectModal');
+    function modalApi() {
+        return (window.bootstrap && bootstrap.Modal)
+            ? bootstrap.Modal.getOrCreateInstance(modalEl) : null;
+    }
+    function modalShown() { return modalEl.classList.contains('show'); }
     var lastTrigger = null;
     var openIndex = null; // explicit index for programmatic opens (palette) — beats stale hash
     var baseTitle = document.title;
@@ -26,7 +32,7 @@
 
         // keep the URL hash in sync while the modal is open (refresh/back share
         // the same project); the opening entry is pushed in show.bs.modal
-        if ($modal.hasClass('in')) {
+        if (modalShown()) {
             try { history.replaceState(null, '', '#project-' + i); } catch (e) {}
         }
         document.title = p.title + ' — YMT Solution';
@@ -207,7 +213,7 @@
     /* ---------- "start a similar project" ---------- */
     $('#pmSimilar').on('click', function() {
         var p = projects[current];
-        $modal.modal('hide');
+        var m = modalApi(); if (m) m.hide(); else modalEl.classList.remove('show');
         setTimeout(function() {
             var $form = $('#contactForm');
             var $subject = $('#subject');
@@ -220,14 +226,15 @@
                 var tpl = t('pm_similar_msg');
                 $msg.val((tpl !== 'pm_similar_msg' ? tpl : "I'm interested in a project similar to \"{title}\". ").replace('{title}', p.title));
             }
-            $('html, body').stop().animate({ scrollTop: $('#contact').offset().top - 60 }, 800, 'easeInOutExpo');
+            var c = document.getElementById('contact');
+            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
             setTimeout(function() { $msg.trigger('focus'); }, 850);
         }, 350);
     });
 
-    $modal.on('show.bs.modal', function(e) {
+    modalEl.addEventListener('show.bs.modal', function(e) {
         lastTrigger = e.relatedTarget || null;
-        var idx = $(e.relatedTarget).data('project');
+        var idx = e.relatedTarget ? $(e.relatedTarget).data('project') : null;
         if (idx == null && openIndex != null) idx = openIndex;
         openIndex = null;
         // remember the section anchor so closing the modal restores it
@@ -250,15 +257,15 @@
         if (m) {
             var idx = parseInt(m[1], 10);
             if (idx < 0 || idx >= projects.length) return;
-            if (!$modal.hasClass('in')) {
+            if (!modalShown()) {
                 openIndex = null;
                 render(idx, false);
-                $modal.modal('show');
+                var hm = modalApi(); if (hm) hm.show();
             } else if (idx !== current) {
                 render(idx, true);
             }
-        } else if ($modal.hasClass('in')) {
-            $modal.modal('hide');
+        } else if (modalShown()) {
+            var m = modalApi(); if (m) m.hide(); else modalEl.classList.remove('show');
         }
     });
 
@@ -345,18 +352,18 @@
             else if (e.key === 'ArrowRight') lbGo(1);
             return;
         }
-        if (!$modal.hasClass('in')) return;
+        if (!modalShown()) return;
         if (e.keyCode === 37) go(-1);        // left arrow
         else if (e.keyCode === 39) go(1);    // right arrow
     });
 
     // re-render with new language if modal is open
     $(document).on('ymt:langchange', function() {
-        if ($modal.hasClass('in')) render(current, false);
+        if (modalShown()) render(current, false);
     });
 
     // return focus to the card that opened the modal
-    $modal.on('hidden.bs.modal', function() {
+    modalEl.addEventListener('hidden.bs.modal', function() {
         document.title = baseTitle;
         // restore the pre-modal anchor (e.g. #services) instead of dropping it
         var restore = preModalHash && !preModalHash.match(/^#project-\d+$/) ? preModalHash : '';
@@ -379,5 +386,5 @@
     });
 
     // expose for deep-linking / debugging
-    window.YMTModal = { open: function(i) { openIndex = i; render(i, false); $modal.modal('show'); } };
+    window.YMTModal = { open: function(i) { openIndex = i; render(i, false); var m = modalApi(); if (m) m.show(); } };
 })(jQuery);

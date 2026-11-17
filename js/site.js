@@ -11,7 +11,7 @@
         }, { passive: true });
         $scrollTop.on('click', function(e) {
             e.preventDefault();
-            $('html, body').stop().animate({scrollTop: 0}, 600, 'easeInOutExpo');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
 
         // Deep-link support: open a project modal via URL hash (#project-3)
@@ -22,7 +22,9 @@
             : (pmQuery !== null && !isNaN(parseInt(pmQuery, 10)) ? parseInt(pmQuery, 10) : -1);
         if (pmIdx >= 0 && pmIdx < (window.YMTProjects || []).length) {
             if (window.YMTModal && YMTModal.open) { YMTModal.open(pmIdx); }
-            else { $('#projectModal').modal('show'); }
+            else if (window.bootstrap && bootstrap.Modal) {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('projectModal')).show();
+            }
         }
 
         // Recently viewed projects — last 3, shown as quick-jump chips
@@ -234,11 +236,55 @@
         document.querySelectorAll('.navbar-nav a.page-scroll').forEach(function(a) {
             a.addEventListener('click', function() {
                 var nav = document.getElementById('bs-example-navbar-collapse-1');
-                if (nav && nav.classList.contains('in') && window.jQuery) {
-                    jQuery(nav).collapse('hide');
+                if (nav && nav.classList.contains('show') && window.bootstrap && bootstrap.Collapse) {
+                    bootstrap.Collapse.getOrCreateInstance(nav).hide();
                 }
             });
         });
+
+        // Navbar affix + scrollspy (replaces agency.min.js BS3 helpers)
+        var mainNav = document.getElementById('mainNav');
+        if (mainNav) {
+            var navTicking = false;
+            window.addEventListener('scroll', function() {
+                if (navTicking) return;
+                navTicking = true;
+                requestAnimationFrame(function() {
+                    mainNav.classList.toggle('affix', window.scrollY > 100);
+                    navTicking = false;
+                });
+            }, { passive: true });
+            mainNav.classList.toggle('affix', window.scrollY > 100);
+        }
+        // scrollspy: highlight the nav link for the section in view
+        var spySections = ['services', 'portfolio', 'skills', 'about', 'faq', 'team', 'contact']
+            .map(function(id) { return document.getElementById(id); })
+            .filter(Boolean);
+        var spyLinks = {};
+        document.querySelectorAll('.navbar-nav a.page-scroll').forEach(function(a) {
+            var href = a.getAttribute('href') || '';
+            if (href.charAt(0) === '#') spyLinks[href.slice(1)] = a;
+        });
+        if (spySections.length && 'IntersectionObserver' in window) {
+            var spyObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(en) {
+                    if (!en.isIntersecting) return;
+                    var link = spyLinks[en.target.id];
+                    if (!link) return;
+                    document.querySelectorAll('.navbar-nav li').forEach(function(li) {
+                        var l = li.querySelector('a.page-scroll');
+                        if (l === link) {
+                            li.classList.add('active');
+                            l.setAttribute('aria-current', 'true');
+                        } else {
+                            li.classList.remove('active');
+                            if (l) l.removeAttribute('aria-current');
+                        }
+                    });
+                });
+            }, { rootMargin: '-40% 0px -55% 0px' });
+            spySections.forEach(function(sec) { spyObserver.observe(sec); });
+        }
 
         // Mirror scrollspy .active onto aria-current for assistive tech
         var navList = document.querySelector('.navbar-nav');

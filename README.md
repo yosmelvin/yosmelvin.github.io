@@ -150,9 +150,11 @@ the theme's legacy devDependencies; nothing is compiled or bundled.
 ## Security notes
 
 - All front-end libraries are **self-hosted** under `vendor/` (jQuery 3.7.1,
-  Bootstrap 3.4.1, jQuery Easing 1.3, Font Awesome 4.6.3 + fonts) — no third-party
-  script/style CDN dependencies remain; only Maps, Tawk.to and Formspree are remote.
-  Bootstrap 3.x and Font Awesome 4.x are EOL — plan a Bootstrap 5 / FA 6 migration.
+  Bootstrap 5.3.3 bundle, Font Awesome 6.5.2 + v4-shims for legacy `fa fa-*`
+  markup) — no third-party script/style CDN dependencies remain; only Maps,
+  Tawk.to and Formspree are remote. jQuery is retained for DOM utilities;
+  Bootstrap components use the vanilla JS API (`bootstrap.Modal`,
+  `bootstrap.Collapse`).
 - Full CSP shipped via `_headers` for hosts that support it, with meta-tag
   equivalents (`nosniff`, `referrer`, `Permissions-Policy`) for GitHub Pages.
   `script-src` allows no `'unsafe-inline'` — all JS is external files

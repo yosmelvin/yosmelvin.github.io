@@ -432,13 +432,15 @@ header .intro-text .intro-heading {
 	background: transparent;
 }
 
-.navbar-custom .navbar-toggle {
+.navbar-custom .navbar-toggler, .navbar-custom .navbar-toggle {
 	background: transparent;
 	border: 1px solid rgba(255, 255, 255, .25);
 	border-radius: 8px;
 	color: #fff;
 }
 
+.navbar-custom .navbar-toggler:hover,
+.navbar-custom .navbar-toggler:focus,
 .navbar-custom .navbar-toggle:hover,
 .navbar-custom .navbar-toggle:focus {
 	background: rgba(255, 255, 255, .08);
@@ -2054,6 +2056,7 @@ html.save-data *, html.save-data *::before, html.save-data *::after {
 }
 
 /* ============ Accessibility helpers ============ */
+.hidden{display:none!important}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .sr-only-focusable:focus{position:static;width:auto;height:auto;overflow:visible;clip:auto;white-space:normal;margin:0;padding:.5rem 1rem;background:#0e7490;color:#fff;z-index:9999}
 .skip-link{left:50%;transform:translateX(-50%);top:-60px}

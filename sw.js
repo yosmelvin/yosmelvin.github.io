@@ -1,5 +1,5 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v9'; // bump on each release to refresh caches
+var CACHE = 'ymt-v10'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
@@ -8,7 +8,6 @@ var PRECACHE = [
     '/posts/posts.js',
     '/rss.xml',
     '/css/style.css',
-    '/css/agency.min.css',
     '/fonts/fonts.css',
     '/js/i18n.js',
     '/js/projects.js',
@@ -39,10 +38,14 @@ var PRECACHE = [
     '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwV6-xo6eeIw.woff2',
     '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwWa-xo6eeI7fM.woff2',
     '/vendor/jquery.min.js',
-    '/vendor/jquery.easing.min.js',
-    '/vendor/bootstrap.min.js',
+    '/vendor/bootstrap.bundle.min.js',
     '/vendor/bootstrap.min.css',
-    '/vendor/css/font-awesome.min.css',
+    '/vendor/font-awesome.min.css',
+    '/vendor/v4-shims.min.css',
+    '/vendor/webfonts/fa-solid-900.woff2',
+    '/vendor/webfonts/fa-regular-400.woff2',
+    '/vendor/webfonts/fa-brands-400.woff2',
+    '/vendor/webfonts/fa-v4compatibility.woff2',
     '/img/portfolio/inklo-1-sm.webp',
     '/img/portfolio/inklo-1.webp',
     '/img/portfolio/inklo-1-sm.jpg',
