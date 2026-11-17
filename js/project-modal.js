@@ -287,11 +287,15 @@
     });
 
     // copy a plain-text project brief (title + intro + tech + link)
+    function buildBrief(p) {
+        return p.title + '\n' + t(p.keys.intro) + '\n\n' + t('pm_tech') + ': ' + (p.tech || []).join(', ') +
+            (p.link ? '\n' + p.link : '') + '\n\n— YMT Solution · ' + location.origin + location.pathname;
+    }
+
     $('#pmBriefCopy').on('click', function() {
         var p = projects[current];
         if (!p) return;
-        var brief = p.title + '\n' + t(p.keys.intro) + '\n\n' + t('pm_tech') + ': ' + (p.tech || []).join(', ') +
-            (p.link ? '\n' + p.link : '') + '\n\n— YMT Solution · ' + location.origin + location.pathname;
+        var brief = buildBrief(p);
         var $b = $(this);
         function fallbackCopy() {
             var ta = document.createElement('textarea');
@@ -314,6 +318,20 @@
         } else {
             done(fallbackCopy());
         }
+    });
+
+    // download the same brief as a .txt file
+    $('#pmBriefDl').on('click', function() {
+        var p = projects[current];
+        if (!p) return;
+        var blob = new Blob([buildBrief(p)], { type: 'text/plain;charset=utf-8' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = (p.title || 'project').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-brief.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(a.href); }, 1000);
     });
 
     $('#pmPrev').on('click', function(e) { e.preventDefault(); go(-1); });

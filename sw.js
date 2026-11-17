@@ -1,5 +1,5 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v7'; // bump on each release to refresh caches
+var CACHE = 'ymt-v9'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
@@ -37,7 +37,16 @@ var PRECACHE = [
     '/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2ZL7W0Q5n-wU.woff2',
     '/fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa2pL7W0Q5n-wU.woff2',
     '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwV6-xo6eeIw.woff2',
-    '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwWa-xo6eeI7fM.woff2'
+    '/fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwWa-xo6eeI7fM.woff2',
+    '/vendor/jquery.min.js',
+    '/vendor/jquery.easing.min.js',
+    '/vendor/bootstrap.min.js',
+    '/vendor/bootstrap.min.css',
+    '/vendor/css/font-awesome.min.css',
+    '/img/portfolio/inklo-1-sm.webp',
+    '/img/portfolio/inklo-1.webp',
+    '/img/portfolio/inklo-1-sm.jpg',
+    '/img/portfolio/inklo-1.jpg'
 ];
 
 self.addEventListener('install', function(e) {

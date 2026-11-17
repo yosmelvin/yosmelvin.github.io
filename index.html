@@ -34,7 +34,7 @@
     <!-- Security / privacy headers (meta equivalents) -->
     <!-- CSP fallback for GitHub Pages (real headers come from _headers on Netlify/CF Pages).
          'unsafe-inline' is required for the two inline bootstrap scripts (SW registration, Maps loader). -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://maps.googleapis.com https://maps.gstatic.com https://embed.tawk.to https://www.google.com https://www.gstatic.com https://*.tawk.to; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; font-src 'self' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com; connect-src 'self' https://formspree.io https://maps.googleapis.com https://maps.gstatic.com https://*.tawk.to https://va.tawk.to https://gc.zgo.at https://plausible.io; frame-src https://www.google.com https://maps.google.com https://*.tawk.to; base-uri 'self'; form-action 'self' https://formspree.io">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://maps.googleapis.com https://maps.gstatic.com https://embed.tawk.to https://www.google.com https://www.gstatic.com https://*.tawk.to; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://maps.googleapis.com https://maps.gstatic.com; connect-src 'self' https://formspree.io https://maps.googleapis.com https://maps.gstatic.com https://*.tawk.to https://va.tawk.to https://gc.zgo.at https://plausible.io; frame-src https://www.google.com https://maps.google.com https://*.tawk.to; base-uri 'self'; form-action 'self' https://formspree.io">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(self)">
@@ -170,14 +170,10 @@
     <title>YMT Solution — AI-First Software House</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="vendor/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <link href="vendor/css/font-awesome.min.css" rel="stylesheet">
     <link href="fonts/fonts.css" rel="stylesheet">
     <link rel="preload" href="fonts/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw.woff2" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="fonts/xMQ9uFFYT72X5wkB_18qmnndmSdSnh2BAfO5mnuyOo1lfiQwV6-xo6eeIw.woff2" as="font" type="font/woff2" crossorigin>
@@ -538,10 +534,24 @@
                     <button type="button" class="filter-chip" data-filter="fintech" aria-pressed="false"><i class="fa fa-line-chart" aria-hidden="true"></i><span data-i18n="f_fintech">Fintech</span><span class="filter-count"></span></button>
                     <button type="button" class="filter-chip" data-filter="trading" aria-pressed="false"><i class="fa fa-area-chart" aria-hidden="true"></i><span data-i18n="f_trading">Trading</span><span class="filter-count"></span></button>
                 </div>
+                <label class="pf-sort">
+                    <span data-i18n="pf_sort">Sort</span>
+                    <select id="pfSort" data-i18n-aria="pf_sort_aria" aria-label="Sort projects">
+                        <option value="default" data-i18n="pf_sort_default">Featured</option>
+                        <option value="az" data-i18n="pf_sort_az">A–Z</option>
+                        <option value="za" data-i18n="pf_sort_za">Z–A</option>
+                    </select>
+                </label>
             </div>
             <div class="recent-projects" id="recentProjects" hidden>
                 <span class="recent-label" data-i18n="pf_recent">Recently viewed</span>
                 <div class="recent-chips" id="recentChips"></div>
+            </div>
+            <div class="recent-projects shortlist-bar" id="shortlistBar" hidden>
+                <span class="recent-label" data-i18n="pf_shortlist">Shortlist</span>
+                <div class="recent-chips" id="shortlistChips"></div>
+                <button type="button" class="pf-quote" id="shortlistQuote" data-i18n="pf_shortlist_quote">Request quote</button>
+                <button type="button" class="pf-clear" id="shortlistClear" data-i18n="pf_shortlist_clear">Clear</button>
             </div>
             <div class="row">
                 <div class="col-md-4 col-sm-6 portfolio-item" data-cat="web">
@@ -551,7 +561,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/BM5-1-sm.webp 480w, img/portfolio/BM5-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/BM5-1-sm-sm.jpg" srcset="img/portfolio/BM5-1-sm-sm.jpg 480w, img/portfolio/BM5-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Binus Maya"></picture>
+                        <picture><source srcset="img/portfolio/BM5-1-sm.webp 480w, img/portfolio/BM5-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/BM5-1-sm.jpg" srcset="img/portfolio/BM5-1-sm.jpg 480w, img/portfolio/BM5-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Binus Maya"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Binusmaya</h4>
@@ -565,7 +575,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/inklo-1-sm.webp 480w, img/portfolio/inklo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/inklo-1-sm-sm.jpg" srcset="img/portfolio/inklo-1-sm-sm.jpg 480w, img/portfolio/inklo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Inklo"></picture>
+                        <picture><source srcset="img/portfolio/inklo-1-sm.webp 480w, img/portfolio/inklo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/inklo-1-sm.jpg" srcset="img/portfolio/inklo-1-sm.jpg 480w, img/portfolio/inklo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Inklo"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Inklo</h4>
@@ -579,7 +589,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/asakbackend-1-sm.webp 480w, img/portfolio/asakbackend-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/asakbackend-1-sm-sm.jpg" srcset="img/portfolio/asakbackend-1-sm-sm.jpg 480w, img/portfolio/asakbackend-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ayo Sekolah Ayo Kuliah (ASAK)"></picture>
+                        <picture><source srcset="img/portfolio/asakbackend-1-sm.webp 480w, img/portfolio/asakbackend-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/asakbackend-1-sm.jpg" srcset="img/portfolio/asakbackend-1-sm.jpg 480w, img/portfolio/asakbackend-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ayo Sekolah Ayo Kuliah (ASAK)"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Ayo Sekolah Ayo Kuliah</h4>
@@ -593,7 +603,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/tome-1-sm.webp 480w, img/portfolio/tome-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/tome-1-sm-sm.jpg" srcset="img/portfolio/tome-1-sm-sm.jpg 480w, img/portfolio/tome-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="tolong menolong"></picture>
+                        <picture><source srcset="img/portfolio/tome-1-sm.webp 480w, img/portfolio/tome-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/tome-1-sm.jpg" srcset="img/portfolio/tome-1-sm.jpg 480w, img/portfolio/tome-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="tolong menolong"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Tolong Menolong</h4>
@@ -607,7 +617,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/ilogo-1-sm.webp 480w, img/portfolio/ilogo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/ilogo-1-sm-sm.jpg" srcset="img/portfolio/ilogo-1-sm-sm.jpg 480w, img/portfolio/ilogo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt=""></picture>
+                        <picture><source srcset="img/portfolio/ilogo-1-sm.webp 480w, img/portfolio/ilogo-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/ilogo-1-sm.jpg" srcset="img/portfolio/ilogo-1-sm.jpg 480w, img/portfolio/ilogo-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt=""></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>iLogo</h4>
@@ -621,7 +631,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/LibrarySystem-1-sm.webp 480w, img/portfolio/LibrarySystem-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/LibrarySystem-1-sm-sm.jpg" srcset="img/portfolio/LibrarySystem-1-sm-sm.jpg 480w, img/portfolio/LibrarySystem-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Library System"></picture>
+                        <picture><source srcset="img/portfolio/LibrarySystem-1-sm.webp 480w, img/portfolio/LibrarySystem-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/LibrarySystem-1-sm.jpg" srcset="img/portfolio/LibrarySystem-1-sm.jpg 480w, img/portfolio/LibrarySystem-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Library System"></picture>
                     </a>
                     <div class="portfolio-caption">
                         <h4>Library System</h4>
@@ -635,7 +645,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/osppay-1-sm.webp 480w, img/portfolio/osppay-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/osppay-1-sm-sm.jpg" srcset="img/portfolio/osppay-1-sm-sm.jpg 480w, img/portfolio/osppay-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ospay Indonesia"></picture>
+                        <picture><source srcset="img/portfolio/osppay-1-sm.webp 480w, img/portfolio/osppay-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/osppay-1-sm.jpg" srcset="img/portfolio/osppay-1-sm.jpg 480w, img/portfolio/osppay-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Ospay Indonesia"></picture>
                         <span class="card-new">NEW</span>
                     </a>
                     <div class="portfolio-caption">
@@ -650,7 +660,7 @@
                                 <i class="fa fa-plus fa-3x"></i>
                             </div>
                         </div>
-                        <picture><source srcset="img/portfolio/sahamai-1-sm.webp 480w, img/portfolio/sahamai-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/sahamai-1-sm-sm.jpg" srcset="img/portfolio/sahamai-1-sm-sm.jpg 480w, img/portfolio/sahamai-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Saham AI"></picture>
+                        <picture><source srcset="img/portfolio/sahamai-1-sm.webp 480w, img/portfolio/sahamai-1.webp 1000w" sizes="(max-width: 767px) 100vw, 400px" type="image/webp"><img loading="lazy" decoding="async" src="img/portfolio/sahamai-1-sm.jpg" srcset="img/portfolio/sahamai-1-sm.jpg 480w, img/portfolio/sahamai-1.jpg 1000w" sizes="(max-width: 767px) 100vw, 400px" width="400" height="210" class="img-responsive img-portofolio" alt="Saham AI"></picture>
                         <span class="card-new">NEW</span>
                     </a>
                     <div class="portfolio-caption">
@@ -1184,6 +1194,7 @@
                         <a id="pmShareWa" href="#" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WA</a>
                         <button type="button" class="pm-share-copy" id="pmShareCopy" data-i18n-aria="pm_copy_link" aria-label="Copy project link"><i class="fa fa-link" aria-hidden="true"></i></button>
                         <button type="button" class="pm-share-copy pm-brief" id="pmBriefCopy" data-i18n-aria="pm_brief" aria-label="Copy project brief"><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
+                        <button type="button" class="pm-share-copy pm-brief-dl" id="pmBriefDl" data-i18n-aria="pm_brief_dl" aria-label="Download project brief"><i class="fa fa-download" aria-hidden="true"></i></button>
                     </div>
                     <div class="pm-dots" id="pmDots" role="tablist" data-i18n-aria="pm_dots_nav" aria-label="Project navigation"></div>
                 </div>
@@ -1213,13 +1224,13 @@
 
 
     <!-- jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js" integrity="sha384-1H217gwSVyLSIfaLxHbE7dRb3v4mYCKbpQvzx0cegeju1MVsGrX5xXxAvs/HgeFs" crossorigin="anonymous" defer></script>
+    <script src="vendor/jquery.min.js" defer></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" defer></script>
+    <script src="vendor/bootstrap.min.js" defer></script>
 
     <!-- Plugin JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" integrity="sha384-mE6eXfrb8jxl0rzJDBRanYqgBxtJ6Unn4/1F7q4xRRyIw7Vdg9jP4ycT7x1iVsgb" crossorigin="anonymous" defer></script>
+    <script src="vendor/jquery.easing.min.js" defer></script>
 
     <!-- Contact Form JavaScript -->
     <script src="js/jqBootstrapValidation.js" defer></script>

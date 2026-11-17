@@ -2086,6 +2086,16 @@ html.save-data *, html.save-data *::before, html.save-data *::after {
 .filter-chip.active i,.filter-chip.active .filter-count{opacity:1;color:#06121f}
 .filter-count{font-size:.68rem;font-weight:700;background:var(--chip-bg);color:var(--chip-text);border-radius:999px;padding:2px 8px;line-height:1.4;transition:all .3s}
 .filter-chip.active .filter-count{background:rgba(255,255,255,.28);color:#06121f}
+
+/* sort dropdown */
+.pf-sort{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--muted);letter-spacing:.02em}
+.pf-sort select{appearance:none;-webkit-appearance:none;background:var(--chip-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2394a3b8'/%3E%3C/svg%3E") no-repeat right 12px center;border:1px solid var(--border);border-radius:999px;color:var(--ink);font:inherit;font-weight:600;padding:9px 32px 9px 16px;cursor:pointer;transition:border-color .25s,box-shadow .25s}
+.pf-sort select:hover{border-color:rgba(34,211,238,.5)}
+.pf-sort select:focus-visible{outline:none;border-color:#22d3ee;box-shadow:0 0 0 3px rgba(34,211,238,.2)}
+@media (max-width:640px){.pf-sort{width:100%;justify-content:space-between}.pf-sort select{flex:1}}
+
+/* skip rendering for below-fold sections (modern browsers) */
+#services,#process,#skills,#portfolio,#stats,#about,#team,#faq,#contact{content-visibility:auto;contain-intrinsic-size:auto 600px}
 .filter-chip:focus-visible{outline:2px solid #22d3ee;outline-offset:2px}
 @media (max-width:640px){
 	.filter-bar{flex-direction:column;align-items:stretch;gap:12px}
@@ -2735,6 +2745,30 @@ img.img-broken { visibility: hidden; }
 	box-shadow: 0 4px 14px rgba(99,102,241,.4);
 }
 .portfolio-link { position: relative; display: block; }
+
+/* ============ Project shortlist ============ */
+.portfolio-item{position:relative}
+.pf-star{
+	position:absolute;top:12px;left:12px;z-index:4;
+	width:34px;height:34px;border-radius:50%;border:1px solid var(--border);
+	background:rgba(11,18,32,.72);backdrop-filter:blur(6px);
+	color:#fbbf24;font-size:.95rem;cursor:pointer;
+	display:flex;align-items:center;justify-content:center;
+	opacity:0;transform:scale(.8);transition:all .25s cubic-bezier(.4,0,.2,1);
+}
+.portfolio-item:hover .pf-star,.pf-star:focus-visible,.pf-star.on{opacity:1;transform:scale(1)}
+.pf-star.on{background:rgba(251,191,36,.18);border-color:#fbbf24;box-shadow:0 0 12px rgba(251,191,36,.35)}
+.pf-star:focus-visible{outline:2px solid #22d3ee;outline-offset:2px}
+.pf-quote,.pf-clear{
+	border-radius:999px;padding:7px 14px;font-size:.8rem;font-weight:700;cursor:pointer;
+	border:1px solid var(--border);background:var(--card);color:var(--ink);
+	font-family:inherit;transition:all .25s;
+}
+.pf-quote{background:linear-gradient(135deg,#6366f1,#0891b2);color:#fff;border:none;box-shadow:0 4px 14px rgba(99,102,241,.35)}
+.pf-quote:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(99,102,241,.5)}
+.pf-clear{color:var(--muted)}
+.pf-clear:hover{color:#f87171;border-color:rgba(248,113,113,.4)}
+@media (max-width:640px){.pf-star{opacity:1;transform:scale(1)}}
 
 /* ============ Recently viewed projects ============ */
 .recent-projects {

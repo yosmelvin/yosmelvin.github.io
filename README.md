@@ -149,8 +149,10 @@ the theme's legacy devDependencies; nothing is compiled or bundled.
 
 ## Security notes
 
-- All CDN assets (Bootstrap, jQuery, Font Awesome, jQuery Easing) load with
-  `integrity` + `crossorigin` SRI hashes.
+- All front-end libraries are **self-hosted** under `vendor/` (jQuery 3.7.1,
+  Bootstrap 3.4.1, jQuery Easing 1.3, Font Awesome 4.6.3 + fonts) — no third-party
+  script/style CDN dependencies remain; only Maps, Tawk.to and Formspree are remote.
+  Bootstrap 3.x and Font Awesome 4.x are EOL — plan a Bootstrap 5 / FA 6 migration.
 - Full CSP shipped via `_headers` for hosts that support it, with meta-tag
   equivalents (`nosniff`, `referrer`, `Permissions-Policy`) for GitHub Pages.
   `script-src` allows no `'unsafe-inline'` — all JS is external files

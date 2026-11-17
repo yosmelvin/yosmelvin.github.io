@@ -60,6 +60,112 @@
         document.addEventListener('ymt:langchange', renderRecent);
         renderRecent();
 
+        // Project shortlist — star toggles on cards, quote prefill to contact
+        var SL_KEY = 'ymt_shortlist';
+        var shortlistBar = document.getElementById('shortlistBar');
+        var shortlistChips = document.getElementById('shortlistChips');
+        function getShortlist() {
+            try { return JSON.parse(localStorage.getItem(SL_KEY) || '[]'); } catch (e) { return []; }
+        }
+        function setShortlist(list) {
+            try { localStorage.setItem(SL_KEY, JSON.stringify(list.slice(0, 6))); } catch (e) {}
+        }
+        function slLabel() {
+            var i18n = window.YMTI18n;
+            return {
+                add: i18n && i18n.t ? i18n.t('pf_shortlist_add') : 'Add to shortlist',
+                rm: i18n && i18n.t ? i18n.t('pf_shortlist_remove') : 'Remove from shortlist'
+            };
+        }
+        function renderShortlist() {
+            if (!shortlistBar || !shortlistChips) return;
+            var list = getShortlist().filter(function(i) { return projects[i]; });
+            shortlistChips.innerHTML = '';
+            list.forEach(function(i) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'recent-chip';
+                b.innerHTML = '<i class="fa fa-star" aria-hidden="true"></i><span></span>';
+                b.querySelector('span').textContent = projects[i].title;
+                b.addEventListener('click', function() {
+                    setShortlist(getShortlist().filter(function(x) { return x !== i; }));
+                    renderShortlist(); syncStars();
+                });
+                shortlistChips.appendChild(b);
+            });
+            shortlistBar.hidden = list.length === 0;
+        }
+        function syncStars() {
+            var list = getShortlist();
+            document.querySelectorAll('.portfolio-item').forEach(function(item) {
+                var link = item.querySelector('[data-project]');
+                if (!link) return;
+                var idx = parseInt(link.getAttribute('data-project'), 10);
+                var star = item.querySelector('.pf-star');
+                if (!star) return;
+                var on = list.indexOf(idx) !== -1;
+                star.classList.toggle('on', on);
+                var lb = slLabel();
+                star.setAttribute('aria-label', on ? lb.rm : lb.add);
+                star.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
+        }
+        document.querySelectorAll('.portfolio-item').forEach(function(item) {
+            var link = item.querySelector('[data-project]');
+            if (!link) return;
+            var idx = parseInt(link.getAttribute('data-project'), 10);
+            var star = document.createElement('button');
+            star.type = 'button';
+            star.className = 'pf-star';
+            star.innerHTML = '<i class="fa fa-star" aria-hidden="true"></i>';
+            star.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                var list = getShortlist();
+                var pos = list.indexOf(idx);
+                if (pos === -1) { if (list.length < 6) list.push(idx); }
+                else list.splice(pos, 1);
+                setShortlist(list);
+                syncStars(); renderShortlist();
+            });
+            item.appendChild(star);
+        });
+        var slQuote = document.getElementById('shortlistQuote');
+        var slClear = document.getElementById('shortlistClear');
+        if (slQuote) slQuote.addEventListener('click', function() {
+            var list = getShortlist().filter(function(i) { return projects[i]; });
+            if (!list.length) return;
+            var i18n = window.YMTI18n;
+            var tpl = i18n && i18n.t ? i18n.t('pf_shortlist_msg') : 'Hi, I would like a quote for: {list}';
+            var $msg = $('#message');
+            if ($msg.length) $msg.val(tpl.replace('{list}', list.map(function(i) { return projects[i].title; }).join(', ')));
+            var c = document.getElementById('contact');
+            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(function() { $msg.trigger('focus'); }, 700);
+        });
+        if (slClear) slClear.addEventListener('click', function() {
+            setShortlist([]); renderShortlist(); syncStars();
+        });
+        document.addEventListener('ymt:langchange', function() { renderShortlist(); syncStars(); });
+        renderShortlist();
+        syncStars();
+
+        // PWA share_target: prefill the contact message from shared content
+        (function() {
+            var sp = new URLSearchParams(location.search);
+            var shared = (sp.get('share_text') || sp.get('share_title') || '').trim();
+            var sUrl = (sp.get('share_url') || '').trim();
+            if (!shared && !sUrl) return;
+            var $msg = $('#message');
+            if (!$msg.length) return;
+            var lines = [];
+            if (shared) lines.push(shared);
+            if (sUrl) lines.push(sUrl);
+            var text = lines.join('\n');
+            if (!$msg.val()) $msg.val(text);
+            else if ($msg.val().indexOf(text) === -1) $msg.val($msg.val() + '\n\n' + text);
+        })();
+
         // Scroll progress bar
         var progress = document.createElement('div');
         progress.className = 'scroll-progress';
@@ -306,7 +412,32 @@
             });
             syncClear();
         }
+        // portfolio sort — reorders the grid, then re-applies filters
+        var sortSel = document.getElementById('pfSort');
+        var originalOrder = Array.prototype.slice.call($items);
+        function itemTitle(item) {
+            var link = item.querySelector('[data-project]');
+            var idx = link ? parseInt(link.getAttribute('data-project'), 10) : -1;
+            return idx >= 0 && projects[idx] ? projects[idx].title : (item.textContent || '');
+        }
+        if (sortSel) {
+            sortSel.addEventListener('change', function() {
+                var mode = sortSel.value;
+                var grid = $items[0] ? $items[0].parentNode : null;
+                if (!grid) return;
+                var sorted = originalOrder.slice();
+                if (mode === 'az' || mode === 'za') {
+                    sorted.sort(function(a, b) {
+                        var c = itemTitle(a).localeCompare(itemTitle(b));
+                        return mode === 'az' ? c : -c;
+                    });
+                }
+                sorted.forEach(function(item) { grid.appendChild(item); });
+                applyFilters();
+            });
+        }
         applyFilters();
+        document.addEventListener('ymt:langchange', applyFilters);
 
         // Skills → portfolio cross-link: click a tech card to filter projects by it
         document.querySelectorAll('.skill-card').forEach(function(card) {
