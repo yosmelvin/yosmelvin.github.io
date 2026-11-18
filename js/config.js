@@ -1,7 +1,7 @@
 /* YMT Solution — single source of truth for release + third-party config.
    Update VERSION to match package.json (tools/check.mjs verifies parity). */
 export const CONFIG = {
-    VERSION: '3.3.7',
+    VERSION: '3.3.8',
 
     // Contact form (Formspree)
     FORMSPREE_ENDPOINT: 'https://formspree.io/f/mppdpodr',
