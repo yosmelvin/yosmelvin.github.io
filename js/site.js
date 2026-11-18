@@ -745,6 +745,16 @@
         // Sticky mobile CTA — hide while the contact section is on screen
         var stickyCta = document.getElementById('stickyCta');
         var contactSec = document.getElementById('contact');
+        if (contactSec && 'IntersectionObserver' in window) {
+            // lazy-load the contact section's map photo only near the viewport
+            var bgObserver = new IntersectionObserver(function(entries) {
+                if (entries[0].isIntersecting) {
+                    contactSec.classList.add('bg-loaded');
+                    bgObserver.disconnect();
+                }
+            }, { rootMargin: '200px' });
+            bgObserver.observe(contactSec);
+        }
         if (stickyCta && contactSec && 'IntersectionObserver' in window) {
             new IntersectionObserver(function(entries) {
                 stickyCta.classList.toggle('gone', entries[0].isIntersecting);
