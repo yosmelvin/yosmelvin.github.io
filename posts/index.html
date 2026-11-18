@@ -86,7 +86,12 @@ html[data-theme="light"] .meta .rt{opacity:1}
       a { color: #111 !important; text-decoration: none; }
       .card, .post, .policy-section { box-shadow: none !important; border: 1px solid #ddd !important; break-inside: avoid; }
     }
-    </style>
+            .crumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin:26px 0 0}
+        .crumbs a{color:var(--muted);text-decoration:none}
+        .crumbs a:hover{color:var(--accent)}
+        .crumbs .sep{opacity:.5}
+        .crumbs [aria-current]{color:var(--ink)}
+</style>
 </head>
 <body>
     <header>
@@ -100,6 +105,10 @@ html[data-theme="light"] .meta .rt{opacity:1}
     </header>
     <main>
         <div class="wrap">
+            <nav class="crumbs" aria-label="Breadcrumb" data-i18n-aria="crumb_aria">
+                <a href="/" data-i18n="crumb_home">Home</a><span class="sep" aria-hidden="true">/</span>
+                <span aria-current="page" data-i18n="blog_title">Blog</span>
+            </nav>
             <h1 data-i18n="blog_h1">Insights &amp; Engineering Notes</h1>
             <p class="sub" data-i18n="blog_sub">What we're building, learning and shipping at YMT Solution.</p>
             <div class="post-grid">

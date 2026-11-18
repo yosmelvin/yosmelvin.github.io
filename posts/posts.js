@@ -25,6 +25,7 @@
             copy_failed: 'Copy failed',
             crumb_home: 'Home',
             crumb_blog: 'Blog',
+            crumb_aria: 'Breadcrumb',
             post1_cat: 'Product',
             post1_title: 'Sahamai: a stock screener built for the Indonesian market',
             post1_excerpt: 'Screening, watchlists and WhatsApp alerts for the IDX — designed around how Indonesian investors actually work.',
@@ -63,6 +64,7 @@
             copy_failed: 'Gagal menyalin',
             crumb_home: 'Beranda',
             crumb_blog: 'Blog',
+            crumb_aria: 'Breadcrumb',
             post1_cat: 'Produk',
             post1_title: 'Sahamai: screener saham untuk pasar Indonesia',
             post1_excerpt: 'Screener, watchlist, dan notifikasi WhatsApp untuk BEI — dirancang mengikuti cara investor Indonesia bekerja.',
@@ -109,6 +111,9 @@
         });
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
             el.textContent = t(el.getAttribute('data-i18n'));
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+            el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
         });
         // only retitle the listing page — article pages keep their own <title>
         if (!document.querySelector('article')) {

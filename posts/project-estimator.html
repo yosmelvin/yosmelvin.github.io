@@ -121,7 +121,12 @@ html[data-theme="light"] .meta .rt{opacity:1}
       a { color: #111 !important; text-decoration: none; }
       .card, .post, .policy-section { box-shadow: none !important; border: 1px solid #ddd !important; break-inside: avoid; }
     }
-    </style>
+            .crumbs{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin:26px 0 0}
+        .crumbs a{color:var(--muted);text-decoration:none}
+        .crumbs a:hover{color:var(--accent)}
+        .crumbs .sep{opacity:.5}
+        .crumbs [aria-current]{color:var(--ink)}
+</style>
 </head>
 <body>
     <header>
@@ -134,6 +139,11 @@ html[data-theme="light"] .meta .rt{opacity:1}
         </div>
     </header>
     <main class="wrap">
+        <nav class="crumbs" aria-label="Breadcrumb" data-i18n-aria="crumb_aria">
+            <a href="/" data-i18n="crumb_home">Home</a><span class="sep" aria-hidden="true">/</span>
+            <a href="/posts/" data-i18n="crumb_blog">Blog</a><span class="sep" aria-hidden="true">/</span>
+            <span aria-current="page" data-i18n="post3_title">Title</span>
+        </nav>
         <div class="hero">
             <div class="meta"><span data-i18n="meta_estimator">2 December 2026 · Engineering</span> · <span class="rt" id="readingTime"></span></div>
             <div data-lang-block="en"><h1>Qualifying leads without a backend: our project estimator</h1>
