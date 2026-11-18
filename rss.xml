@@ -5,9 +5,16 @@
         <link>https://yosmelvin.github.io/posts/</link>
         <description>Articles and engineering insights from the YMT Solution team.</description>
         <language>en</language>
-        <lastBuildDate>Wed, 25 Nov 2026 00:00:00 +0700</lastBuildDate>
+        <lastBuildDate>Wed, 02 Dec 2026 00:00:00 +0700</lastBuildDate>
         <atom:link href="https://yosmelvin.github.io/rss.xml" rel="self" type="application/rss+xml"/>
         <!-- Add one <item> per published post: -->
+        <item>
+            <title>Qualifying leads without a backend: our project estimator</title>
+            <link>https://yosmelvin.github.io/posts/project-estimator.html</link>
+            <guid>https://yosmelvin.github.io/posts/project-estimator.html</guid>
+            <pubDate>Wed, 02 Dec 2026 00:00:00 +0700</pubDate>
+            <description>How a three-question quiz on a static site turns vague inquiries into structured project briefs — no backend required.</description>
+        </item>
         <item>
             <title>Sahamai: a stock screener built for the Indonesian market</title>
             <link>https://yosmelvin.github.io/posts/sahamai-stock-screener.html</link>

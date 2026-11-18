@@ -30,7 +30,10 @@
             post1_excerpt: 'Screening, watchlists and WhatsApp alerts for the IDX — designed around how Indonesian investors actually work.',
             post2_cat: 'Engineering',
             post2_title: 'Why we self-host everything',
-            post2_excerpt: "Every font, script, and stylesheet on our portfolio is served from our own origin — here's what that buys us."
+            post2_excerpt: "Every font, script, and stylesheet on our portfolio is served from our own origin — here's what that buys us.",
+            post3_cat: 'Engineering',
+            post3_title: 'Qualifying leads without a backend: our project estimator',
+            post3_excerpt: 'How a three-question quiz on a static site turns vague inquiries into structured project briefs.'
         },
         id: {
             blog_title: 'Blog',
@@ -58,7 +61,10 @@
             post1_excerpt: 'Screener, watchlist, dan notifikasi WhatsApp untuk BEI — dirancang mengikuti cara investor Indonesia bekerja.',
             post2_cat: 'Engineering',
             post2_title: 'Kenapa kami self-host semuanya',
-            post2_excerpt: 'Setiap font, skrip, dan stylesheet portofolio kami dilayani dari origin sendiri — ini yang kami dapatkan.'
+            post2_excerpt: 'Setiap font, skrip, dan stylesheet portofolio kami dilayani dari origin sendiri — ini yang kami dapatkan.',
+            post3_cat: 'Engineering',
+            post3_title: 'Kualifikasi lead tanpa backend: estimator proyek kami',
+            post3_excerpt: 'Bagaimana kuis tiga pertanyaan di situs statis mengubah pertanyaan samar menjadi brief terstruktur.'
         }
     };
 

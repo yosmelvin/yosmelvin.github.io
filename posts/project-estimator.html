@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="color-scheme" content="dark">
+    <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+    <title>Qualifying leads without a backend: our project estimator — YMT Solution Blog</title>
+    <meta name="description" content="How a three-question quiz on a static site turns vague 'I need a website' inquiries into structured project briefs — no backend required.">
+    <link rel="canonical" href="https://yosmelvin.github.io/posts/project-estimator.html">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Qualifying leads without a backend: our project estimator">
+    <meta property="og:description" content="How a three-question quiz on a static site turns vague inquiries into structured project briefs — no backend required.">
+    <meta property="og:url" content="https://yosmelvin.github.io/posts/project-estimator.html">
+    <meta property="og:image" content="https://yosmelvin.github.io/img/og-image.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://yosmelvin.github.io/img/og-image.png">
+    <meta property="article:published_time" content="2026-12-02T00:00:00+07:00">
+    <link rel="icon" type="image/png" sizes="32x32" href="../img/pwa/favicon-32.png">
+    <link href="../fonts/fonts.css" rel="stylesheet">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "Qualifying leads without a backend: our project estimator",
+        "description": "How a three-question quiz on a static site turns vague inquiries into structured project briefs — no backend required.",
+        "datePublished": "2026-12-02",
+        "author": { "@type": "Person", "name": "Yos Melvin Tanoto", "url": "https://yosmelvin.github.io/" },
+        "publisher": { "@type": "Organization", "name": "YMT Solution", "url": "https://yosmelvin.github.io/" },
+        "mainEntityOfPage": "https://yosmelvin.github.io/posts/project-estimator.html"
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yosmelvin.github.io/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://yosmelvin.github.io/posts/" },
+            { "@type": "ListItem", "position": 3, "name": "Qualifying leads without a backend: our project estimator", "item": "https://yosmelvin.github.io/posts/project-estimator.html" }
+        ]
+    }
+    </script>
+    <style>
+        :root{--bg:#0a0f1e;--card:#111a2e;--border:rgba(148,163,184,.15);--ink:#e2e8f0;--muted:#94a3b8;--accent:#22d3ee;--grad:linear-gradient(135deg,#6366f1,#22d3ee)}
+        *{box-sizing:border-box;margin:0}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
+        header{padding:22px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,15,30,.85);backdrop-filter:blur(12px);z-index:10}
+        .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+        .brand{display:inline-flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:800;color:#fff;text-decoration:none;font-size:1.1rem}
+        .brand .mk{width:32px;height:32px;border-radius:9px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+        .lang-toggle{display:inline-flex;gap:2px;border:1px solid var(--border);border-radius:999px;padding:3px;background:rgba(255,255,255,.03)}
+        .lang-btn{border:none;background:transparent;color:var(--muted);font:600 12px 'Inter',sans-serif;padding:5px 12px;border-radius:999px;cursor:pointer}
+        .lang-btn.active{background:var(--grad);color:#fff}
+        .meta .rt{opacity:.75}
+        .hero{padding:56px 0 30px}
+        .meta{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+        h1{font-family:'Sora',sans-serif;font-size:clamp(28px,5vw,42px);line-height:1.2;margin-bottom:18px}
+        .lede{font-size:19px;color:var(--muted);font-style:italic}
+        article{padding:20px 0 40px}
+        article h2{font-family:'Sora',sans-serif;font-size:24px;margin:40px 0 14px;color:var(--ink)}
+        article h3{font-family:'Sora',sans-serif;font-size:19px;margin:30px 0 10px}
+        article p{margin-bottom:18px;color:#c3cede}
+        article ul,article ol{margin:0 0 18px 22px;color:#c3cede}
+        article li{margin-bottom:6px}
+        article code{background:rgba(34,211,238,.12);color:#67e8f9;padding:2px 7px;border-radius:6px;font-size:.9em}
+        article pre{background:#0d1526;border:1px solid var(--border);border-radius:12px;padding:18px;overflow-x:auto;margin-bottom:18px}
+        article pre code{background:none;padding:0;color:#c3cede}
+        article blockquote{border-left:3px solid var(--accent);padding:6px 0 6px 18px;color:var(--muted);margin:0 0 18px;font-style:italic}
+        .share{display:flex;align-items:center;gap:10px;margin:44px 0 10px;padding-top:26px;border-top:1px solid var(--border);font-size:13px;color:var(--muted)}
+        .share a{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;border:1px solid var(--border);color:var(--accent);text-decoration:none;transition:all .25s}
+        .share a:hover{border-color:var(--accent);transform:translateY(-2px)}
+        .share .share-copy{background:none;cursor:pointer;font:inherit;color:var(--accent);border:1px solid var(--border);border-radius:20px;padding:4px 12px}
+        .share .share-copy:hover{border-color:var(--accent)}
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+        #toc{margin:0 0 8px;padding:18px 20px;border:1px solid var(--border);border-radius:14px;background:rgba(255,255,255,.02)}
+        #toc .toc-title{margin:0 0 10px;font-family:'Sora',sans-serif;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+        #toc ul{list-style:none;margin:0;padding:0}
+        #toc li{margin:0}
+        #toc li.toc-h3 a{padding-left:16px;font-size:13px}
+        #toc a{display:block;padding:5px 0;color:var(--ink);text-decoration:none;font-size:14px;border-left:2px solid transparent;padding-left:10px}
+        #toc a:hover{color:var(--accent);border-left-color:var(--accent)}
+        @media(max-width:760px){#toc{display:none}}
+        .pager{display:flex;justify-content:space-between;gap:16px;margin:30px 0 60px}
+        .pager a{flex:1;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--ink);font-size:14px;transition:border-color .3s}
+        .pager a:hover{border-color:rgba(34,211,238,.5)}
+        .pager .lbl{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
+        footer{border-top:1px solid var(--border);padding:26px 0;text-align:center;color:var(--muted);font-size:13px}
+        footer a{color:var(--accent);text-decoration:underline}
+        @media(max-width:600px){.pager{flex-direction:column}}
+
+    /* Print: clean document output */
+    @media print {
+      .lang-toggle, .theme-toggle, .print-hide, nav, .cookie-consent, .btn { display: none !important; }
+      body { background: #fff !important; color: #111 !important; }
+      a { color: #111 !important; text-decoration: none; }
+      .card, .post, .policy-section { box-shadow: none !important; border: 1px solid #ddd !important; break-inside: avoid; }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="wrap">
+            <a class="brand" href="/"><span class="mk">YMT</span> <span data-i18n="blog_title">Blog</span></a>
+            <span class="lang-toggle" role="group" aria-label="Language / Bahasa" style="float:right">
+                <button type="button" class="lang-btn" data-lang="en">EN</button>
+                <button type="button" class="lang-btn" data-lang="id">ID</button>
+            </span>
+        </div>
+    </header>
+    <main class="wrap">
+        <div class="hero">
+            <div class="meta">2 December 2026 · Engineering · <span class="rt" id="readingTime"></span></div>
+            <div data-lang-block="en"><h1>Qualifying leads without a backend: our project estimator</h1>
+            <p class="lede">A three-question quiz turns "we need a website" into a structured brief — no database, no CRM, no backend.</p></div>
+            <div data-lang-block="id" hidden><h1>Kualifikasi lead tanpa backend: estimator proyek kami</h1>
+            <p class="lede">Kuis tiga pertanyaan mengubah "kami butuh website" menjadi brief terstruktur — tanpa database, tanpa CRM, tanpa backend.</p></div>
+        </div>
+        <article>
+            <div data-lang-block="en">
+            <p>"We need a website." It's the most common opening line in our inbox — and the least useful. Scope, timeline, budget and team size are all unknown, which means the first reply is always the same: a list of questions. We wanted to skip that round-trip without building a backend, a database, or a CRM.</p>
+            <p>The answer is sitting in the contact section of our homepage: a three-question estimator that turns a vague inquiry into a structured brief before the visitor ever writes a word.</p>
+
+            <h2>1. Three questions, not thirty</h2>
+            <p>The quiz asks exactly what a discovery call's first five minutes would ask: what are you building (web, mobile, AI/ML, cloud, security), roughly how long do you need it, and what team size are you considering. Each answer maps to a project type that pre-fills the contact form's subject field — so the message that arrives in our inbox is already categorized.</p>
+
+            <h2>2. The estimate is honest about being an estimate</h2>
+            <p>On completion, the quiz shows an indicative budget range in IDR, scaled by the chosen timeline — an ASAP project costs more per week than a flexible one, and the range says so. We label it "indicative" deliberately: it's a starting point for conversation, not a quote. A copy button puts the whole breakdown — type, timeline, team, range — into the clipboard so the visitor can paste it into the form or send it to a colleague.</p>
+
+            <h2>3. Zero backend, zero lock-in</h2>
+            <p>Everything runs client-side. Answers live in memory, the message is composed in the browser, and the form submits through Formspree like any other contact message. There's no quiz database to secure, no analytics event pipeline to maintain, and nothing to migrate if we ever change form providers. The only persistence is the contact form itself — which we wanted anyway.</p>
+
+            <h2>4. It respects the visitor's time</h2>
+            <p>The quiz is optional by design — it sits above the form, not in front of it. Visitors who'd rather just write can ignore it entirely. Those who use it get a head start: their message arrives pre-structured, and our reply skips the interrogation phase and goes straight to substance. Everyone saves a round-trip.</p>
+
+            <blockquote>Good qualification isn't a form — it's a conversation that starts before the first email.</blockquote>
+
+            <h2>What we'd do differently</h2>
+            <p>If traffic grows enough to justify it, the next step is saving partial answers server-side so a returning visitor doesn't restart. For now, the honest trade-off is that a closed tab loses progress — acceptable for a three-question quiz that takes under a minute.</p>
+
+            <h2>Takeaway</h2>
+            <p>You don't need a backend to qualify leads — you need a clear idea of what you actually need to know. Ask the three questions that matter, compose the answer into the message yourself, and let the form do what forms do. Try it on our <a href="https://yosmelvin.github.io/#contact">contact section</a> — the estimator is the first thing you'll see.</p>
+            </div>
+            <div data-lang-block="id" hidden>
+            <p>"Kami butuh website." Itulah kalimat pembuka paling umum di kotak masuk kami — dan paling tidak berguna. Scope, timeline, budget, dan ukuran tim semuanya belum diketahui, jadi balasan pertama selalu sama: daftar pertanyaan. Kami ingin memangkas bolak-balik itu tanpa membangun backend, database, atau CRM.</p>
+            <p>Jawabannya ada di bagian kontak beranda kami: kuis estimator tiga pertanyaan yang mengubah pertanyaan samar menjadi brief terstruktur sebelum pengunjung menulis satu kata pun.</p>
+
+            <h2>1. Tiga pertanyaan, bukan tiga puluh</h2>
+            <p>Kuis ini menanyakan persis seperti lima menit pertama discovery call: apa yang sedang dibangun (web, mobile, AI/ML, cloud, security), kira-kira berapa lama dibutuhkan, dan ukuran tim yang dipertimbangkan. Setiap jawaban dipetakan ke jenis proyek yang mengisi otomatis kolom subjek formulir kontak — sehingga pesan yang masuk ke kotak masuk kami sudah terkategorikan.</p>
+
+            <h2>2. Estimasi yang jujur soal dirinya sendiri</h2>
+            <p>Saat selesai, kuis menampilkan kisaran budget indikatif dalam IDR, disesuaikan dengan timeline yang dipilih — proyek ASAP biayanya lebih besar per minggu daripada yang fleksibel, dan kisarannya mengatakannya. Kami sengaja melabelinya "indikatif": ini titik awal percakapan, bukan penawaran. Tombol salin menaruh seluruh rincian — jenis, timeline, tim, kisaran — ke clipboard agar pengunjung bisa menempelkannya ke formulir atau mengirimnya ke rekan.</p>
+
+            <h2>3. Tanpa backend, tanpa keterikatan</h2>
+            <p>Semuanya berjalan di sisi klien. Jawaban disimpan di memori, pesan disusun di browser, dan formulir dikirim lewat Formspree seperti pesan kontak biasa. Tidak ada database kuis untuk diamankan, tidak ada pipeline event analitik untuk dipelihara, dan tidak ada yang harus dimigrasi jika kami mengganti penyedia formulir. Satu-satunya persistensi adalah formulir kontak itu sendiri — yang memang kami inginkan.</p>
+
+            <h2>4. Menghormati waktu pengunjung</h2>
+            <p>Kuis ini opsional — letaknya di atas formulir, bukan di depannya. Pengunjung yang lebih suka langsung menulis bisa mengabaikannya sepenuhnya. Yang memakainya mendapat awal lebih baik: pesan mereka tiba sudah terstruktur, dan balasan kami langsung ke substansi tanpa fase interogasi. Semua orang menghemat satu bolak-balik.</p>
+
+            <blockquote>Kualifikasi yang baik bukan formulir — melainkan percakapan yang dimulai sebelum email pertama.</blockquote>
+
+            <h2>Apa yang akan kami lakukan berbeda</h2>
+            <p>Jika trafik tumbuh cukup untuk membenarkannya, langkah berikutnya adalah menyimpan jawaban parsial di sisi server agar pengunjung yang kembali tidak mulai dari awal. Untuk saat ini, kompromi yang jujur adalah tab yang ditutup akan kehilangan progres — dapat diterima untuk kuis tiga pertanyaan yang selesai di bawah satu menit.</p>
+
+            <h2>Kesimpulan</h2>
+            <p>Anda tidak butuh backend untuk mengkualifikasi lead — Anda hanya perlu gambaran jelas tentang apa yang sebenarnya perlu diketahui. Ajukan tiga pertanyaan yang penting, susun jawabannya ke dalam pesan sendiri, dan biarkan formulir melakukan tugasnya. Coba di <a href="https://yosmelvin.github.io/#contact">bagian kontak</a> kami — estimator adalah hal pertama yang akan Anda lihat.</p>
+            </div>
+        </article>
+        <div class="share">
+            <span data-i18n="share">Share:</span>
+            <a href="https://twitter.com/intent/tweet?url=https://yosmelvin.github.io/posts/project-estimator.html&text=Qualifying%20leads%20without%20a%20backend%3A%20our%20project%20estimator" target="_blank" rel="noopener"><i aria-hidden="true">𝕏</i><span class="sr-only" data-i18n="share_x">Share on X</span></a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://yosmelvin.github.io/posts/project-estimator.html" target="_blank" rel="noopener"><i aria-hidden="true">in</i><span class="sr-only" data-i18n="share_li">Share on LinkedIn</span></a>
+            <a href="https://wa.me/?text=https://yosmelvin.github.io/posts/project-estimator.html" target="_blank" rel="noopener"><i aria-hidden="true">wa</i><span class="sr-only" data-i18n="share_wa">Share on WhatsApp</span></a>
+            <button type="button" class="share-copy" data-i18n="copy_link">Copy link</button>
+        </div>
+        <nav class="pager">
+            <a href="/posts/"><span class="lbl" data-i18n="blog_all">All posts</span>Back to the blog index</a>
+        </nav>
+    </main>
+    <footer>
+        <div class="wrap">© 2026 YMT Solution · <a href="/" data-i18n="blog_back">Back to portfolio</a> · <a href="/posts/" data-i18n="blog_all">All posts</a></div>
+    </footer>
+    <script src="posts.js" defer></script>
+</body>
+</html>

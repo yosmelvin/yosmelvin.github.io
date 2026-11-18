@@ -43,9 +43,10 @@ Live at: https://yosmelvin.github.io
   contact section and while the cookie banner is visible)
 - **Blog** — `posts/` listing page + `_template.html` article
   (Article + BreadcrumbList JSON-LD, auto TOC, reading-progress bar, EN/ID
-  chrome toggle, share row), `rss.xml` feed; two articles published —
-  "Why we self-host everything" and "Sahamai: a stock screener built for
-  the Indonesian market" — both fully bilingual via `data-lang-block`
+  chrome toggle, share row), `rss.xml` feed; three articles published —
+  "Why we self-host everything", "Sahamai: a stock screener built for the
+  Indonesian market", and "Qualifying leads without a backend: our project
+  estimator" — both fully bilingual via `data-lang-block`
   EN/ID pairs (posts.js toggles blocks, scopes TOC + reading time)
 - **Privacy page** — standalone bilingual `privacy.html` covering cookies,
   forms, live chat and analytics; linked from footer + cookie banner
@@ -176,7 +177,7 @@ the theme's legacy devDependencies; nothing is compiled or bundled.
 
 - `img/background/` (~1.4 MB of JPGs) appears unreferenced — candidate for
   removal after confirming no external hotlinks rely on it.
-- Blog articles are hand-authored EN/ID pairs; a third post is the next
+- Blog articles are hand-authored EN/ID pairs; a fourth post is the next
   content priority.
 
 ## Contact
