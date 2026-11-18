@@ -61,8 +61,20 @@
 
     function t(k) { return (dict[lang] && dict[lang][k]) || dict.en[k] || k; }
 
+    // articles may carry parallel EN/ID blocks — only the active one counts
+    function scope() {
+        if (document.querySelector('article [data-lang-block]')) {
+            return document.querySelector('article [data-lang-block="' + lang + '"]')
+                || document.querySelector('article [data-lang-block="en"]');
+        }
+        return document.querySelector('article');
+    }
+
     function apply() {
         docEl.lang = lang;
+        document.querySelectorAll('[data-lang-block]').forEach(function (el) {
+            el.hidden = el.getAttribute('data-lang-block') !== lang;
+        });
         document.querySelectorAll('[data-i18n]').forEach(function (el) {
             el.textContent = t(el.getAttribute('data-i18n'));
         });
@@ -76,7 +88,7 @@
     }
 
     function readingTime() {
-        var art = document.querySelector('article');
+        var art = scope();
         if (!art) return;
         var words = art.textContent.trim().split(/\s+/).length;
         var mins = Math.max(1, Math.round(words / 200));
@@ -86,7 +98,7 @@
 
     // auto TOC from article h2/h3
     function buildToc() {
-        var art = document.querySelector('article');
+        var art = scope();
         var hero = document.querySelector('.hero');
         if (!art || !hero || document.getElementById('toc')) return;
         var heads = art.querySelectorAll('h2, h3');
@@ -96,7 +108,7 @@
         nav.setAttribute('aria-label', t('toc'));
         var list = document.createElement('ul');
         heads.forEach(function(h, i) {
-            if (!h.id) h.id = 'toc-sec-' + (i + 1);
+            if (!h.id) h.id = 'toc-' + lang + '-' + (i + 1);
             var li = document.createElement('li');
             li.className = h.tagName.toLowerCase() === 'h3' ? 'toc-h3' : '';
             var a = document.createElement('a');
@@ -156,6 +168,9 @@
         localStorage.setItem(KEY, lang);
         apply();
         readingTime();
+        var oldToc = document.getElementById('toc');
+        if (oldToc) oldToc.remove();
+        buildToc();
     });
 
     apply();

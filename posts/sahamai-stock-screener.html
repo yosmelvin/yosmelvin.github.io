@@ -113,10 +113,13 @@
     <main class="wrap">
         <div class="hero">
             <div class="meta">25 November 2026 · Product · <span class="rt" id="readingTime"></span></div>
-            <h1>Sahamai: a stock screener built for the Indonesian market</h1>
-            <p class="lede">Screening, watchlists and WhatsApp alerts for the Indonesia Stock Exchange — designed around how Indonesian investors actually work.</p>
+            <div data-lang-block="en"><h1>Sahamai: a stock screener built for the Indonesian market</h1>
+            <p class="lede">Screening, watchlists and WhatsApp alerts for the Indonesia Stock Exchange — designed around how Indonesian investors actually work.</p></div>
+            <div data-lang-block="id" hidden><h1>Sahamai: screener saham untuk pasar Indonesia</h1>
+            <p class="lede">Screener, watchlist, dan notifikasi WhatsApp untuk Bursa Efek Indonesia — dirancang mengikuti cara investor Indonesia bekerja.</p></div>
         </div>
         <article>
+            <div data-lang-block="en">
             <p>Every stock screener promises the same thing: find the winners before the crowd. Most of them are built for markets where brokerage apps are the center of gravity. The Indonesia Stock Exchange is different — retail investors live in WhatsApp groups, follow Telegram channels, and check prices between meetings, not inside a dedicated trading terminal.</p>
             <p><a href="https://sahamai.web.id/" target="_blank" rel="noopener">Sahamai</a> is our answer: a web application that screens BEI-listed stocks, manages watchlists, and pushes timely market alerts straight to WhatsApp — with a Pro tier for investors who want deeper analytics.</p>
 
@@ -140,6 +143,32 @@
             <h2>Takeaway</h2>
             <p>Sahamai taught us that "AI-powered" is meaningless without local context. The winning features weren't the cleverest models — they were the ones that understood lot sizes, spoke WhatsApp, and respected that Indonesian retail investors check their phones, not their terminals. If you're building for a market, build for how that market actually behaves.</p>
             <p>Want to see it in action? <a href="https://sahamai.web.id/" target="_blank" rel="noopener">Try Sahamai</a>, or <a href="https://yosmelvin.github.io/#contact">tell us about your product idea</a>.</p>
+            </div>
+            <div data-lang-block="id" hidden>
+            <p>Setiap screener saham menjanjikan hal yang sama: menemukan pemenang sebelum yang lain. Namun kebanyakan dibangun untuk pasar di mana aplikasi sekuritas menjadi pusat segalanya. Bursa Efek Indonesia berbeda — investor ritel hidup di grup WhatsApp, mengikuti kanal Telegram, dan mengecek harga di sela kesibukan, bukan di dalam terminal trading khusus.</p>
+            <p><a href="https://sahamai.web.id/" target="_blank" rel="noopener">Sahamai</a> adalah jawaban kami: aplikasi web yang menyaring saham tercatat di BEI, mengelola watchlist, dan mengirim notifikasi pasar tepat waktu langsung ke WhatsApp — dengan paket Pro untuk investor yang menginginkan analitik lebih dalam.</p>
+
+            <h2>1. Mulai dari aturan pasar, bukan dari chart</h2>
+            <p>Membangun untuk BEI berarti menghormati kekhasannya: lot 100 lembar, aturan tick-size yang berubah mengikuti band harga, perbedaan pasar reguler dan negosiasi, serta aksi korporasi yang menggerakkan harga karena alasan yang akan salah dibaca screener generik. Filter screener kami dinyatakan dalam istilah yang benar-benar dipakai investor Indonesia — bukan indikator teknis abstrak yang dipindahkan begitu saja dari perangkat pasar AS.</p>
+
+            <h2>2. Notifikasi di tempat pengguna sudah berada</h2>
+            <p>Keputusan produk paling penting adalah kanal pengiriman. Tingkat buka email untuk notifikasi trading ritel buruk; push notification menuntut instalasi aplikasi yang tidak akan dilakukan kebanyakan pengguna. WhatsApp berada di tengah — di sanalah target pengguna kami sudah membahas saham setiap hari. Notifikasi dideduplikasi dan dikirim bertahap agar pagi yang volatil tidak berubah menjadi banjir pesan, dan pelanggan Pro menerima sinyal lebih awal serta lebih kaya.</p>
+
+            <h2>3. Screener yang tetap jujur</h2>
+            <p>Screener hanya berguna jika hasilnya bisa dijelaskan. Setiap hasil penyaringan menampilkan <em>mengapa</em> sebuah saham cocok — filter mana yang aktif, metrik dasarnya apa — alih-alih mencurahkan daftar peringkat yang tidak transparan. Watchlist memperkuat ini: pengguna bisa menyimpan screener, mendapat notifikasi saat saham baru masuk, dan melacak kinerja pilihan lampau. Lingkaran umpan balik itulah yang mengubah alat menjadi kebiasaan.</p>
+
+            <h2>4. Monetisasi tanpa mengunci akses</h2>
+            <p>Sahamai menyediakan tingkat gratis dengan screener inti dan watchlist, serta langganan Pro untuk filter lanjutan, notifikasi lebih awal, dan analitik lebih dalam. Batas yang kami tarik dengan sengaja: apa pun yang membantu pengguna <em>menilai</em> saham itu gratis; apa pun yang memberi mereka <em>keunggulan</em> — kecepatan, kedalaman, prioritas — adalah Pro. Pengguna tidak boleh merasa dihukum karena berstatus ritel.</p>
+
+            <blockquote>Screener bukan bola kristal — ia adalah filter yang menghormati waktu Anda.</blockquote>
+
+            <h2>Catatan engineering</h2>
+            <p>Secara teknis, platform ini mengandalkan disiplin yang sama dengan yang kami terapkan di mana pun: penjadwalan job yang sadar jam bursa untuk pembuatan notifikasi, pengiriman notifikasi idempoten agar retry tidak pernah mengirim ganda, dan lapisan langganan yang meng-gate fitur di level API alih-alih menyembunyikan tombol di UI. Stack-nya Python di backend dengan frontend JavaScript — sengaja dibuat tidak menarik, karena reliabilitas lebih penting daripada hal baru ketika keputusan uang sungguhan bergantung pada hasilnya.</p>
+
+            <h2>Kesimpulan</h2>
+            <p>Sahamai mengajari kami bahwa "berbasis AI" tidak bermakna tanpa konteks lokal. Fitur pemenangnya bukan model tercanggih — melainkan yang memahami lot size, berbahasa WhatsApp, dan menghormati kenyataan bahwa investor ritel Indonesia mengecek ponsel, bukan terminal. Jika Anda membangun untuk sebuah pasar, bangunlah sesuai perilaku pasar itu yang sebenarnya.</p>
+            <p>Ingin melihatnya langsung? <a href="https://sahamai.web.id/" target="_blank" rel="noopener">Coba Sahamai</a>, atau <a href="https://yosmelvin.github.io/#contact">ceritakan ide produk Anda</a>.</p>
+            </div>
         </article>
         <div class="share">
             <span data-i18n="share">Share:</span>

@@ -113,10 +113,13 @@
     <main class="wrap">
         <div class="hero">
             <div class="meta">18 November 2026 · Engineering · <span class="rt" id="readingTime"></span></div>
-            <h1>Why we self-host everything</h1>
-            <p class="lede">Every font file, script, and stylesheet on this site is served from our own origin. Here's why that decision matters more than it looks.</p>
+            <div data-lang-block="en"><h1>Why we self-host everything</h1>
+            <p class="lede">Every font file, script, and stylesheet on this site is served from our own origin. Here's why that decision matters more than it looks.</p></div>
+            <div data-lang-block="id" hidden><h1>Kenapa kami self-host semuanya</h1>
+            <p class="lede">Setiap berkas font, skrip, dan stylesheet di situs ini dilayani dari origin kami sendiri. Inilah mengapa keputusan itu lebih penting dari yang terlihat.</p></div>
         </div>
         <article>
+            <div data-lang-block="en">
             <p>When we rebuilt our portfolio, the easiest path was the usual one: pull Bootstrap, Font Awesome, and a font kit from CDNs and call it a day. We deliberately chose the harder route — self-hosting every dependency — and the reasons go beyond ideology.</p>
 
             <h2>1. Performance you can actually measure</h2>
@@ -140,6 +143,32 @@
             <h2>Takeaway</h2>
             <p>If your site is a business asset, treat its dependencies the same way you'd treat infrastructure: pinned versions, integrity hashes (we use SRI on the few CDN assets we keep), self-hosted critical assets, and a privacy posture your visitors can verify. The performance and trust dividends compound.</p>
             <p>Curious how this applies to your product? <a href="https://yosmelvin.github.io/#contact">Tell us about your project</a> — or browse our <a href="https://yosmelvin.github.io/#portfolio">portfolio</a> to see the work behind the practices.</p>
+            </div>
+            <div data-lang-block="id" hidden>
+            <p>Saat kami membangun ulang portofolio, jalan termudah adalah cara yang biasa: ambil Bootstrap, Font Awesome, dan font kit dari CDN lalu anggap selesai. Kami justru memilih jalur yang lebih sulit — meng-host sendiri setiap dependensi — dan alasannya melampaui sekadar ideologi.</p>
+
+            <h2>1. Performa yang benar-benar terukur</h2>
+            <p>Aset lewat CDN kedengarannya cepat sampai Anda menghitung biaya sebenarnya: pencarian DNS tambahan, handshake TLS ke origin yang tidak Anda kendalikan, dan permintaan render-blocking yang mengantre di belakang latensi pihak ketiga. Dengan melayani font serta CSS/JS vendor dari origin yang sama, browser memakai satu koneksi dan satu sesi TLS untuk semuanya.</p>
+            <p>Pengaturan font kami adalah contoh bagus. Kami meng-host Sora dan Inter sebagai berkas WOFF2 subset dengan <code>font-display: swap</code> dan hanya mem-preload dua berkas yang dicat di atas lipatan. Hasilnya: nol pergeseran layout terkait font dan tidak ada ketergantungan pada CDN font yang sedang down.</p>
+
+            <h2>2. Content Security Policy yang ketat</h2>
+            <p>Self-hosting adalah yang memungkinkan CSP ketat. Ketika skrip berasal dari <code>'self'</code>, kebijakannya bisa benar-benar keras — tanpa allowlist <code>script-src</code> berisi belasan domain CDN, tanpa berharap pihak ketiga tidak dibajak. CSP kami tetap harus mengizinkan beberapa origin untuk Maps dan widget chat yang digate persetujuan, tetapi semua yang first-party terkunci rapat. Kebijakan lengkapnya bisa Anda lihat di source halaman YMT mana pun.</p>
+
+            <h2>3. Privasi adalah fitur, bukan sekadar centang</h2>
+            <p>Setiap skrip pihak ketiga adalah calon pelacak. Widget chat dan analitik kami hanya dimuat <em>setelah</em> persetujuan cookie eksplisit, dan hanya saat browser idle agar tidak pernah merebut CPU dari halaman. Pengunjung yang menolak tetap mendapat situs penuh — hanya tanpa pelacak.</p>
+
+            <h2>4. Ketahanan offline dan jaringan lambat</h2>
+            <p>Service worker kecil menyimpan halaman dan aset kami, sehingga situs tetap bisa dibaca di koneksi yang tidak stabil — hal yang penting karena banyak klien kami bekerja dari wilayah dengan konektivitas tidak konsisten. Aset statis bersifat cache-first; halaman network-first, jadi konten tetap segar sementara aset tetap cepat.</p>
+
+            <blockquote>Self-hosting bukan soal menghindari CDN — melainkan memiliki jalur kritis Anda sendiri.</blockquote>
+
+            <h2>Apa yang tetap kami jadikan eksternal — dan mengapa</h2>
+            <p>Self-hosting segalanya tidak selalu tepat. Kami tetap memakai Google Maps untuk lokasi kantor (lazy-load, tidak bergantung persetujuan tetapi di-gate intersection) dan Formspree untuk formulir kontak, karena membangun ulang layanan itu akan lebih merugikan daripada biaya dependensinya. Aturan yang kami pakai: self-host apa pun yang berada di jalur render kritis; alihdayakan apa pun yang memang sebuah layanan.</p>
+
+            <h2>Kesimpulan</h2>
+            <p>Jika situs Anda adalah aset bisnis, perlakukan dependensinya seperti infrastruktur: versi yang di-pin, integrity hash (kami memakai SRI untuk sedikit aset CDN yang tersisa), aset kritis self-hosted, dan postur privasi yang bisa diverifikasi pengunjung. Dividen performa dan kepercayaan akan terus berbunga.</p>
+            <p>Ingin tahu bagaimana ini diterapkan ke produk Anda? <a href="https://yosmelvin.github.io/#contact">Ceritakan proyek Anda</a> — atau jelajahi <a href="https://yosmelvin.github.io/#portfolio">portofolio</a> kami untuk melihat hasil di balik praktiknya.</p>
+            </div>
         </article>
         <div class="share">
             <span data-i18n="share">Share:</span>
