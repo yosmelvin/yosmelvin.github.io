@@ -99,7 +99,7 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
             if (msg && !msg.value) {
                 msg.value = 'Shared content:\n' + prefill;
                 var subj = document.getElementById('subject');
-                if (subj && subj.options.length) subj.selectedIndex = Math.min(1, subj.options.length - 1);
+                if (subj) { var otherOpt = subj.querySelector('option[value="other"]'); if (otherOpt) subj.value = 'other'; }
             }
         }
     } catch (e) {}
@@ -149,7 +149,7 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
         var btnLabel = btn ? btn.textContent : 'Send Message';
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> Sending…';
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> ' + i18nT('contact_sending', 'Sending…');
         }
 
         var single = function(v) { return String(v || '').replace(/[\r\n]+/g, ' ').trim(); };

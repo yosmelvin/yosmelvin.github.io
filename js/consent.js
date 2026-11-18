@@ -77,9 +77,13 @@
         syncCta();
     }
 
-    function showBanner() {
+    function showBanner(focus) {
         if (banner) banner.hidden = false;
         syncCta();
+        if (focus && acceptBtn) {
+            banner.scrollIntoView({ block: 'nearest' });
+            acceptBtn.focus();
+        }
     }
 
     if (acceptBtn) acceptBtn.addEventListener('click', onAccept);
@@ -88,7 +92,7 @@
         settingsLink.addEventListener('click', function(e) {
             e.preventDefault();
             try { localStorage.removeItem(CONSENT_KEY); } catch (err) {}
-            showBanner();
+            showBanner(true);
         });
     }
 

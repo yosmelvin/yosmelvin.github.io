@@ -89,11 +89,15 @@
                     img.setAttribute('sizes', '(max-width: 767px) 100vw, 400px');
                     img.width = 400; img.height = 210;
                 } else if (m) {
+                    var baseW = m[1];
                     var src2 = document.createElement('source');
-                    src2.setAttribute('srcset', imgPath);
+                    src2.setAttribute('srcset', baseW + '-sm.webp 480w, ' + imgPath + ' 1000w');
+                    src2.setAttribute('sizes', '(max-width: 767px) 100vw, 400px');
                     src2.setAttribute('type', 'image/webp');
                     pic.appendChild(src2);
-                    img.src = m[1] + '.jpg';
+                    img.src = baseW + '.jpg';
+                    img.setAttribute('srcset', baseW + '.jpg 1000w');
+                    img.setAttribute('sizes', '(max-width: 767px) 100vw, 400px');
                     img.width = c.w || 1400; img.height = c.h || 560;
                 } else {
                     img.src = imgPath;
@@ -254,22 +258,6 @@
         renderShortlist();
         syncStars();
 
-        // PWA share_target: prefill the contact message from shared content
-        (function() {
-            var sp = new URLSearchParams(location.search);
-            var shared = (sp.get('share_text') || sp.get('share_title') || '').trim();
-            var sUrl = (sp.get('share_url') || '').trim();
-            if (!shared && !sUrl) return;
-            var msgEl = document.getElementById('message');
-            if (!msgEl) return;
-            var lines = [];
-            if (shared) lines.push(shared);
-            if (sUrl) lines.push(sUrl);
-            var text = lines.join('\n');
-            if (!msgEl.value) msgEl.value = text;
-            else if (msgEl.value.indexOf(text) === -1) msgEl.value = msgEl.value + '\n\n' + text;
-        })();
-
         // Scroll progress bar
         var progress = document.createElement('div');
         progress.className = 'scroll-progress';
@@ -425,11 +413,19 @@
         // FAQ accordion
         document.querySelectorAll('.faq-item').forEach(function(item) {
             var q = item.querySelector('.faq-q');
+            var a = item.querySelector('.faq-a');
+            if (a) a.setAttribute('aria-hidden', 'true');
             q.addEventListener('click', function() {
                 var open = item.classList.toggle('open');
                 q.setAttribute('aria-expanded', open ? 'true' : 'false');
+                if (a) a.setAttribute('aria-hidden', open ? 'false' : 'true');
                 document.querySelectorAll('.faq-item.open').forEach(function(o) {
-                    if (o !== item) { o.classList.remove('open'); o.querySelector('.faq-q').setAttribute('aria-expanded','false'); }
+                    if (o !== item) {
+                        o.classList.remove('open');
+                        o.querySelector('.faq-q').setAttribute('aria-expanded','false');
+                        var oa = o.querySelector('.faq-a');
+                        if (oa) oa.setAttribute('aria-hidden', 'true');
+                    }
                 });
             });
         });
@@ -607,12 +603,13 @@
         (function() {
             var st = null;
             try { st = JSON.parse(sessionStorage.getItem('ymt_pf_state') || 'null'); } catch (e) {}
+            var VALID_FILTERS = { all: 1, ai: 1, web: 1, mobile: 1, fintech: 1, trading: 1 };
             var catParam = new URLSearchParams(location.search).get('cat');
-            if (catParam && document.querySelector('.filter-chip[data-filter="' + catParam + '"]')) {
+            if (catParam && VALID_FILTERS[catParam] && document.querySelector('.filter-chip[data-filter="' + catParam + '"]')) {
                 st = { f: catParam, q: '', s: 'default' };
             }
             if (st) {
-                if (st.f && st.f !== 'all') {
+                if (st.f && st.f !== 'all' && VALID_FILTERS[st.f]) {
                     var chip = document.querySelector('.filter-chip[data-filter="' + st.f + '"]');
                     if (chip) chip.click();
                 }
@@ -796,14 +793,17 @@
                 if (opt) {
                     var group = opt.closest('.est-opts').getAttribute('data-group');
                     answers[group] = opt.getAttribute('data-value');
-                    opt.closest('.est-opts').querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); });
-                    opt.classList.add('sel');
+                    opt.closest('.est-opts').querySelectorAll('.est-opt').forEach(function(o) {
+                        var on = o === opt;
+                        o.classList.toggle('sel', on);
+                        o.setAttribute('aria-checked', on ? 'true' : 'false');
+                    });
                     nextBtn.disabled = false;
                     return;
                 }
                 if (e.target.closest('#estReset')) {
                     answers = {}; step = 0;
-                    est.querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); });
+                    est.querySelectorAll('.est-opt').forEach(function(o) { o.classList.remove('sel'); o.setAttribute('aria-checked', 'false'); });
                     var oldDone = est.querySelector('.est-done');
                     if (oldDone) oldDone.remove();
                     var oldBudget = est.querySelector('.est-budget');

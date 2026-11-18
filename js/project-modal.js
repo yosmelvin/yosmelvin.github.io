@@ -140,7 +140,6 @@
                 var btn = document.createElement('button');
                 btn.type = 'button';
                 btn.className = 'pm-thumb';
-                btn.setAttribute('role', 'listitem');
                 var gimg = document.createElement('img');
                 gimg.loading = 'lazy';
                 gimg.decoding = 'async';
@@ -183,9 +182,7 @@
             var d = document.createElement('button');
             d.type = 'button';
             d.className = 'pm-dot' + (di === i ? ' active' : '');
-            d.setAttribute('role', 'tab');
             d.setAttribute('aria-label', t('pm_dot_aria').replace('{n}', di + 1));
-            d.setAttribute('aria-selected', di === i ? 'true' : 'false');
             d.addEventListener('click', function() { render(di, true); });
             dots.appendChild(d);
         });
@@ -208,7 +205,7 @@
     }
 
     /* ---------- lightbox ---------- */
-    var lbIndex = 0, lbGallery = [];
+    var lbIndex = 0, lbGallery = [], lbTrigger = null;
     var lb = $('pmLightbox');
 
     function openLightbox(i) {
@@ -217,10 +214,14 @@
         showLb();
         lb.hidden = false;
         document.body.style.overflow = 'hidden';
+        lbTrigger = document.activeElement;
+        var lbBtn = $('pmLbClose');
+        if (lbBtn) lbBtn.focus();
     }
 
     function showLb() {
-        var lbImg = $('pmLbImg').classList.remove('img-broken');
+        var lbImg = $('pmLbImg');
+        lbImg.classList.remove('img-broken');
         lbImg.src = lbGallery[lbIndex];
         lbImg.alt = (projects[current] && projects[current].alt) || '';
         lbImg.decoding = 'async';
@@ -237,6 +238,8 @@
     function closeLightbox() {
         lb.hidden = true;
         document.body.style.overflow = '';
+        if (lbTrigger && lbTrigger.focus) lbTrigger.focus();
+        lbTrigger = null;
     }
 
     $('pmLbClose').addEventListener('click', closeLightbox);
@@ -386,6 +389,16 @@
             if (e.key === 'Escape') closeLightbox();
             else if (e.key === 'ArrowLeft') lbGo(-1);
             else if (e.key === 'ArrowRight') lbGo(1);
+            else if (e.key === 'Tab') {
+                var lbs = Array.prototype.filter.call(
+                    lb.querySelectorAll('button:not([disabled])'),
+                    function(n) { return n.offsetParent !== null; }
+                );
+                if (!lbs.length) return;
+                var lfirst = lbs[0], llast = lbs[lbs.length - 1];
+                if (e.shiftKey && document.activeElement === lfirst) { e.preventDefault(); llast.focus(); }
+                else if (!e.shiftKey && document.activeElement === llast) { e.preventDefault(); lfirst.focus(); }
+            }
             return;
         }
         if (!modalShown()) return;

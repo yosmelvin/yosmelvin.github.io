@@ -9,6 +9,7 @@
     <meta name="author" content="YMT Solution">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://yosmelvin.github.io/">
+    <link rel="alternate" type="application/rss+xml" title="YMT Solution Blog" href="https://yosmelvin.github.io/rss.xml">
     <link rel="alternate" hreflang="en" href="https://yosmelvin.github.io/?lang=en">
     <link rel="alternate" hreflang="id" href="https://yosmelvin.github.io/?lang=id">
     <link rel="alternate" hreflang="x-default" href="https://yosmelvin.github.io/">
@@ -214,7 +215,7 @@
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header page-scroll">
                 <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#bs-example-navbar-collapse-1" aria-controls="bs-example-navbar-collapse-1" aria-expanded="false" aria-label="Toggle navigation">
-                    Menu <i class="fa fa-bars" aria-hidden="true"></i>
+                    <span data-i18n="nav_menu">Menu</span> <i class="fa fa-bars" aria-hidden="true"></i>
                 </button>
                 <a class="navbar-brand page-scroll" href="#page-top" aria-label="YMT Solution — back to top">
                     <span class="brand-mark" aria-hidden="true">YMT</span><span class="brand-word">Solution</span>
@@ -224,9 +225,6 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="navbar-nav ms-auto">
-                    <li class="hidden">
-                        <a href="#page-top"></a>
-                    </li>
                     <li>
                         <a class="nav-link page-scroll" href="#services" data-i18n="nav_services">Services</a>
                     </li>
@@ -827,30 +825,30 @@
                         <p class="est-step-label" id="estStepLabel"></p>
                         <div class="est-step" data-step="0">
                             <p class="est-q" data-i18n="est_q1">What are you building?</p>
-                            <div class="est-opts" data-group="type">
-                                <button type="button" class="est-opt" data-value="web" data-i18n="subj_web">Website / Web App</button>
-                                <button type="button" class="est-opt" data-value="mobile" data-i18n="subj_mobile">Mobile App</button>
-                                <button type="button" class="est-opt" data-value="ai" data-i18n="subj_ai">AI / ML Solution</button>
-                                <button type="button" class="est-opt" data-value="cloud" data-i18n="subj_cloud">Cloud / DevOps</button>
-                                <button type="button" class="est-opt" data-value="security" data-i18n="subj_security">Security Solution</button>
+                            <div class="est-opts" role="radiogroup" data-group="type">
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="web" data-i18n="subj_web">Website / Web App</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="mobile" data-i18n="subj_mobile">Mobile App</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="ai" data-i18n="subj_ai">AI / ML Solution</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="cloud" data-i18n="subj_cloud">Cloud / DevOps</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="security" data-i18n="subj_security">Security Solution</button>
                             </div>
                         </div>
                         <div class="est-step" data-step="1" hidden>
                             <p class="est-q" data-i18n="est_q2">Roughly how long do you need it?</p>
-                            <div class="est-opts" data-group="timeline">
-                                <button type="button" class="est-opt" data-value="rush" data-i18n="est_t_rush">ASAP / under 4 weeks</button>
-                                <button type="button" class="est-opt" data-value="month" data-i18n="est_t_month">1–3 months</button>
-                                <button type="button" class="est-opt" data-value="quarter" data-i18n="est_t_quarter">3–6 months</button>
-                                <button type="button" class="est-opt" data-value="flex" data-i18n="est_t_flex">Flexible / ongoing</button>
+                            <div class="est-opts" role="radiogroup" data-group="timeline">
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="rush" data-i18n="est_t_rush">ASAP / under 4 weeks</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="month" data-i18n="est_t_month">1–3 months</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="quarter" data-i18n="est_t_quarter">3–6 months</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="flex" data-i18n="est_t_flex">Flexible / ongoing</button>
                             </div>
                         </div>
                         <div class="est-step" data-step="2" hidden>
                             <p class="est-q" data-i18n="est_q3">Team size you're considering?</p>
-                            <div class="est-opts" data-group="team">
-                                <button type="button" class="est-opt" data-value="solo" data-i18n="est_team_solo">Just me / small team</button>
-                                <button type="button" class="est-opt" data-value="dept" data-i18n="est_team_dept">A department</button>
-                                <button type="button" class="est-opt" data-value="dedicated" data-i18n="est_team_ded">Dedicated team</button>
-                                <button type="button" class="est-opt" data-value="unsure" data-i18n="est_team_unsure">Not sure yet</button>
+                            <div class="est-opts" role="radiogroup" data-group="team">
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="solo" data-i18n="est_team_solo">Just me / small team</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="dept" data-i18n="est_team_dept">A department</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="dedicated" data-i18n="est_team_ded">Dedicated team</button>
+                                <button type="button" class="est-opt" role="radio" aria-checked="false" data-value="unsure" data-i18n="est_team_unsure">Not sure yet</button>
                             </div>
                         </div>
                         <div class="est-actions">
@@ -964,7 +962,7 @@
             <div class="col-lg-4 col-md-4 col-xs-6">
                 <input type="hidden" id="longitude" value="106.774664">
                 <input type="hidden" id="latitude" value="-6.197170">
-                <div id="map" class="map">
+                <div id="map" class="map" role="region" data-i18n-aria="map_aria" aria-label="Office location map">
                 </div>
             </div>
 
@@ -1049,7 +1047,7 @@
                     <button type="button" class="pm-nav pm-prev" id="pmPrev" aria-label="Previous project"><i class="fa fa-chevron-left"></i></button>
                     <button type="button" class="pm-nav pm-next" id="pmNext" aria-label="Next project"><i class="fa fa-chevron-right"></i></button>
                 </div>
-                <div class="pm-gallery" id="pmGallery" hidden role="list" data-i18n-aria="pm_gallery_aria" aria-label="Project screenshots"></div>
+                <div class="pm-gallery" id="pmGallery" hidden role="group" data-i18n-aria="pm_gallery_aria" aria-label="Project screenshots"></div>
 
                 <div class="pm-body" id="pmBodyWrap">
                     <h2 id="pmTitle"></h2>
@@ -1075,7 +1073,7 @@
                         <button type="button" class="pm-share-copy pm-brief" id="pmBriefCopy" data-i18n-aria="pm_brief" aria-label="Copy project brief"><i class="fa fa-file-text-o" aria-hidden="true"></i></button>
                         <button type="button" class="pm-share-copy pm-brief-dl" id="pmBriefDl" data-i18n-aria="pm_brief_dl" aria-label="Download project brief"><i class="fa fa-download" aria-hidden="true"></i></button>
                     </div>
-                    <div class="pm-dots" id="pmDots" role="tablist" data-i18n-aria="pm_dots_nav" aria-label="Project navigation"></div>
+                    <div class="pm-dots" id="pmDots" role="group" data-i18n-aria="pm_dots_nav" aria-label="Project navigation"></div>
                 </div>
 
             </div>

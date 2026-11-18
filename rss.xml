@@ -5,15 +5,15 @@
         <link>https://yosmelvin.github.io/posts/</link>
         <description>Articles and engineering insights from the YMT Solution team.</description>
         <language>en</language>
-        <lastBuildDate>Tue, 17 Nov 2026 00:00:00 +0700</lastBuildDate>
+        <lastBuildDate>Wed, 18 Nov 2026 00:00:00 +0700</lastBuildDate>
         <atom:link href="https://yosmelvin.github.io/rss.xml" rel="self" type="application/rss+xml"/>
-        <!-- Add one <item> per published post:
+        <!-- Add one <item> per published post: -->
         <item>
-            <title>Post title</title>
-            <link>https://yosmelvin.github.io/posts/post-slug.html</link>
-            <guid>https://yosmelvin.github.io/posts/post-slug.html</guid>
-            <pubDate>Wed, 12 Feb 2026 00:00:00 +0700</pubDate>
-            <description>Teaser text</description>
-        </item> -->
+            <title>Why we self-host everything</title>
+            <link>https://yosmelvin.github.io/posts/self-hosting-everything.html</link>
+            <guid>https://yosmelvin.github.io/posts/self-hosting-everything.html</guid>
+            <pubDate>Wed, 18 Nov 2026 00:00:00 +0700</pubDate>
+            <description>Every font, script, and stylesheet on our portfolio is served from our own origin — here's what that buys us.</description>
+        </item>
     </channel>
 </rss>

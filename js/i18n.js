@@ -14,6 +14,7 @@
             nav_about: 'About',
             nav_team: 'Team',
             nav_contact: 'Contact',
+            nav_menu: 'Menu',
 
             hero_lead: 'AI-First Software House',
             hero_heading: "Let's build solutions with AI",
@@ -104,6 +105,7 @@
             contact_whatsapp: 'Chat on WhatsApp',
             contact_or: 'or',
             contact_response: 'We typically reply within 24 hours.',
+            contact_sending: 'Sending…',
 
             skip_link: 'Skip to content',
             cookie_text: 'We use cookies and a live-chat service to improve your experience.',
@@ -214,6 +216,7 @@
             bottom_addr: '<span class="fa fa-building" aria-hidden="true"></span>Jl. Kebon Jeruk Raya Villa Kebon Jeruk Office F1, RT.3/RW.3<br>Jakarta Barat<br>Daerah Khusus Ibukota Jakarta<br>11530',
             bottom_phone: '<span class="fa fa-phone" aria-hidden="true"></span> <a href="tel:+628974142883">+628974142883</a>',
             bottom_whatsapp: 'WhatsApp',
+            map_aria: 'Office location map',
             bottom_email: '<span class="fa fa-envelope" aria-hidden="true"></span>&nbsp;<a href="mailto:ymtsolution@gmail.com">ymtsolution@gmail.com</a>',
 
             footer_copy: 'Copyright © YMT Solution 2026',
@@ -332,6 +335,7 @@
             nav_about: 'Tentang',
             nav_team: 'Tim',
             nav_contact: 'Kontak',
+            nav_menu: 'Menu',
 
             hero_lead: 'Software House Berbasis AI',
             hero_heading: 'Mari wujudkan solusi dengan AI',
@@ -422,6 +426,7 @@
             contact_whatsapp: 'Chat via WhatsApp',
             contact_or: 'atau',
             contact_response: 'Kami biasanya membalas dalam 24 jam.',
+            contact_sending: 'Mengirim…',
 
             skip_link: 'Langsung ke konten',
             cookie_text: 'Kami menggunakan cookie dan layanan live-chat untuk meningkatkan pengalaman Anda.',
@@ -532,6 +537,7 @@
             bottom_addr: '<span class="fa fa-building" aria-hidden="true"></span>Jl. Kebon Jeruk Raya Villa Kebon Jeruk Office F1, RT.3/RW.3<br>Jakarta Barat<br>Daerah Khusus Ibukota Jakarta<br>11530',
             bottom_phone: '<span class="fa fa-phone" aria-hidden="true"></span> <a href="tel:+628974142883">+628974142883</a>',
             bottom_whatsapp: 'WhatsApp',
+            map_aria: 'Peta lokasi kantor',
             bottom_email: '<span class="fa fa-envelope" aria-hidden="true"></span>&nbsp;<a href="mailto:ymtsolution@gmail.com">ymtsolution@gmail.com</a>',
 
             footer_copy: 'Hak Cipta © YMT Solution 2026',
@@ -658,10 +664,57 @@
             if (dict[key] != null) el.textContent = dict[key];
         });
 
-        // allowlist sanitizer: only <br> survives — dicts stay trusted but the
-        // sink can never inject markup even if a translation is ever compromised
+        // allowlist sanitizer: only safe presentational tags (<a>, <span>, <i>, <br>, <strong>, <em>)
+        // and safe link protocols (http/https/mailto/tel) survive — the sink can never inject
+        // markup or javascript: URLs even if a translation is ever compromised
+        var SAFE_TAGS = { A: 1, SPAN: 1, I: 1, BR: 1, STRONG: 1, EM: 1 };
+        var SAFE_ATTRS = { A: { href: 1 }, SPAN: { class: 1, 'aria-hidden': 1 }, I: { class: 1, 'aria-hidden': 1 } };
+        var SAFE_PROTOCOLS = /^(https?:|mailto:|tel:)/i;
         function safeHtml(v) {
-            return String(v).replace(/<(?!\/?br\b)[^>]*>/gi, '');
+            var doc;
+            try {
+                doc = new DOMParser().parseFromString(String(v), 'text/html');
+            } catch (e) {
+                return String(v).replace(/<[^>]*>/g, '');
+            }
+            function cleanChildren(node) {
+                Array.prototype.slice.call(node.childNodes).forEach(function(child) {
+                    if (child.nodeType === 1) {
+                        var tag = child.tagName;
+                        if (SAFE_TAGS[tag]) {
+                            Array.prototype.slice.call(child.attributes).forEach(function(attr) {
+                                var name = attr.name.toLowerCase();
+                                var allowed = SAFE_ATTRS[tag] && SAFE_ATTRS[tag][name];
+                                if (!allowed) { child.removeAttribute(attr.name); return; }
+                                if (name === 'href' && !SAFE_PROTOCOLS.test(attr.value.trim())) {
+                                    child.removeAttribute(attr.name);
+                                }
+                            });
+                            if (tag === 'A' && !child.getAttribute('href')) {
+                                while (child.firstChild) node.insertBefore(child.firstChild, child);
+                                node.removeChild(child);
+                                return;
+                            }
+                            cleanChildren(child);
+                        } else {
+                            // unwrap disallowed tags, keep their text content
+                            while (child.firstChild) node.insertBefore(child.firstChild, child);
+                            node.removeChild(child);
+                        }
+                    }
+                });
+            }
+            // repeat until no disallowed tags remain — unwrapped children's
+            // descendants may themselves need cleaning on the next pass
+            var guard = 0;
+            do {
+                cleanChildren(doc.body);
+                var dirty = false;
+                Array.prototype.forEach.call(doc.body.querySelectorAll('*'), function(n) {
+                    if (!SAFE_TAGS[n.tagName]) dirty = true;
+                });
+            } while (dirty && ++guard < 20);
+            return doc.body.innerHTML;
         }
         document.querySelectorAll('[data-i18n-html]').forEach(function(el) {
             var key = el.getAttribute('data-i18n-html');
