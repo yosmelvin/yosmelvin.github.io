@@ -2,7 +2,11 @@
         var buttons = document.querySelectorAll('.lang-pill button');
         var blocks = document.querySelectorAll('[data-lang-block]');
         var saved = 'en';
-        try { saved = localStorage.getItem('ymt-lang') || 'en'; } catch (e) {}
+        try {
+            var q = new URLSearchParams(location.search).get('lang');
+            if (q === 'en' || q === 'id') saved = q;
+            else saved = localStorage.getItem('ymt-lang') || 'en';
+        } catch (e) {}
         function setLang(l) {
             blocks.forEach(function(b) { b.hidden = b.getAttribute('data-lang-block') !== l; });
             buttons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-lang') === l); });
