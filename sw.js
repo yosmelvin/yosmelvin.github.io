@@ -6,6 +6,7 @@ var PRECACHE = [
     '/privacy.html',
     '/posts/',
     '/posts/posts.js',
+    '/posts/self-hosting-everything.html',
     '/offline.html',
     '/rss.xml',
     '/css/style.css',
