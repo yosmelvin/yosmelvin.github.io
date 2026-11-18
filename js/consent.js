@@ -1,18 +1,31 @@
-/* Cookie consent + consent-gated third-party loaders.
+/* Cookie consent + consent-gated third-party loaders (ES module).
    - Tawk.to chat and analytics only load after the visitor accepts.
    - Choice persists in localStorage; footer "Cookie Settings" reopens the banner.
-   - Analytics is OFF until ANALYTICS_ID is configured below. */
+   - Analytics is OFF until CONFIG.ANALYTICS_PROVIDER + ANALYTICS_ID are set.
+   - Vendor loading is delegated to js/third-party.js (single registry). */
+import { CONFIG } from './config.js';
+import { registerThirdParty, flushConsentGated } from './third-party.js';
+
 (function() {
     'use strict';
 
-    var CONSENT_KEY = 'ymt_consent';
+    var CONSENT_KEY = CONFIG.KEYS.consent;
 
-    // ── Analytics config ──────────────────────────────────────────────
-    // Set ANALYTICS_ID to enable. Supported providers:
-    //   'goatcounter' → https://<ID>.goatcounter.com/count
-    //   'plausible'   → https://plausible.io/js/script.js (needs data-domain)
-    var ANALYTICS_PROVIDER = null; // 'goatcounter' | 'plausible' | null
-    var ANALYTICS_ID = '';
+    // Register consent-gated vendors once — third-party.js owns the <script> injection.
+    registerThirdParty('tawk', { src: CONFIG.TAWK_SRC, consent: true });
+    if (CONFIG.ANALYTICS_PROVIDER === 'goatcounter' && CONFIG.ANALYTICS_ID) {
+        registerThirdParty('analytics', {
+            consent: true,
+            src: 'https://gc.zgo.at/count.js',
+            attrs: { 'data-goatcounter': CONFIG.ANALYTICS_ID }
+        });
+    } else if (CONFIG.ANALYTICS_PROVIDER === 'plausible' && CONFIG.ANALYTICS_ID) {
+        registerThirdParty('analytics', {
+            consent: true,
+            src: 'https://plausible.io/js/script.js',
+            attrs: { 'data-domain': CONFIG.ANALYTICS_ID }
+        });
+    }
 
     var banner = document.getElementById('cookieConsent');
     var acceptBtn = document.getElementById('cookieAccept');
@@ -24,37 +37,8 @@
         try { return localStorage.getItem(CONSENT_KEY) === 'accepted'; } catch (e) { return false; }
     }
 
-    function loadTawk() {
-        if (window.__tawkLoaded) return;
-        window.__tawkLoaded = true;
-        window.Tawk_API = window.Tawk_API || {};
-        window.Tawk_LoadStart = new Date();
-        var s1 = document.createElement('script');
-        var s0 = document.getElementsByTagName('script')[0];
-        s1.async = true;
-        s1.src = 'https://embed.tawk.to/58a99879f42d220ab3f5ea31/default';
-        s1.charset = 'UTF-8';
-        s0.parentNode.insertBefore(s1, s0);
-    }
-
-    function loadAnalytics() {
-        if (!ANALYTICS_ID || !ANALYTICS_PROVIDER || window.__analyticsLoaded) return;
-        window.__analyticsLoaded = true;
-        if (ANALYTICS_PROVIDER === 'goatcounter') {
-            var s = document.createElement('script');
-            s.async = true;
-            s.src = 'https://gc.zgo.at/count.js';
-            s.setAttribute('data-goatcounter', ANALYTICS_ID);
-            document.head.appendChild(s);
-        } else if (ANALYTICS_PROVIDER === 'plausible') {
-            var p = document.createElement('script');
-            p.async = true;
-            p.defer = true;
-            p.src = 'https://plausible.io/js/script.js';
-            p.setAttribute('data-domain', ANALYTICS_ID);
-            document.head.appendChild(p);
-        }
-    }
+    // Exposed for third-party.js's consent check and any future gated vendor.
+    window.YMTConsent = { granted: hasConsent };
 
     function syncCta() {
         // hide the mobile sticky CTA while the cookie banner is up (they overlap)
@@ -65,10 +49,10 @@
         try { localStorage.setItem(CONSENT_KEY, 'accepted'); } catch (e) {}
         banner.hidden = true;
         syncCta();
-        if (loaded) return;
+        if (loaded) { flushConsentGated(); return; }
         loaded = true;
         var idle = window.requestIdleCallback || function(fn) { setTimeout(fn, 1500); };
-        idle(function() { loadTawk(); loadAnalytics(); });
+        idle(flushConsentGated);
     }
 
     function onDecline() {
@@ -139,7 +123,9 @@
                 hint.id = 'iosInstallHint';
                 hint.className = 'ios-install-hint';
                 hint.setAttribute('role', 'note');
-                var en = (document.documentElement.lang || 'en') !== 'id';
+                var i18n = window.YMTI18n;
+                var en = !(i18n && i18n.lang && i18n.lang() === 'id') &&
+                    (document.documentElement.lang || 'en') !== 'id';
                 hint.textContent = en
                     ? 'Tap the Share button in Safari, then "Add to Home Screen".'
                     : 'Ketuk tombol Share di Safari, lalu "Add to Home Screen".';

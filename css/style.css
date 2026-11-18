@@ -3298,3 +3298,79 @@ header .intro-text .intro-heading {
 	font-weight: 600;
 	cursor: pointer;
 }
+
+/* ============ Copy toast (YMTUtils.toast) ============ */
+.ymt-toast {
+	position: fixed;
+	left: 50%;
+	bottom: 24px;
+	transform: translateX(-50%) translateY(8px);
+	z-index: 10070;
+	background: var(--card);
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	padding: 10px 20px;
+	box-shadow: var(--shadow-lg);
+	font-size: 14px;
+	font-weight: 500;
+	color: var(--ink);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .25s ease, transform .25s ease;
+}
+.ymt-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+@media (prefers-reduced-motion: reduce) {
+	.ymt-toast { transition: none; }
+}
+
+/* ============ Contact form error summary ============ */
+.form-error-summary {
+	margin: 0 0 20px;
+	padding: 14px 18px;
+	border: 1px solid #f59e0b;
+	border-left-width: 4px;
+	border-radius: 10px;
+	background: rgba(245, 158, 11, .08);
+	color: var(--ink);
+	font-size: 14px;
+}
+.form-error-summary strong { display: block; margin-bottom: 6px; }
+.form-error-summary ul { margin: 0; padding-left: 20px; }
+.form-error-summary a { color: var(--accent, #6366f1); }
+[data-theme="dark"] .form-error-summary { background: rgba(245, 158, 11, .12); }
+
+/* fields flagged aria-invalid get a visible cue */
+section#contact input[aria-invalid="true"],
+section#contact textarea[aria-invalid="true"],
+section#contact select[aria-invalid="true"] {
+	border-color: #ef4444 !important;
+	box-shadow: 0 0 0 2px rgba(239, 68, 68, .15);
+}
+
+/* ============ Print ============ */
+@media print {
+	.navbar-custom, .scroll-top, .scroll-progress, .palette-overlay,
+	.cookie-consent, .sticky-cta, .pf-star, .pf-clear, #searchClear,
+	.filter-bar, .recent-projects, .portfolio-search, .pf-count,
+	.pf-empty, .ymt-toast, .sw-toast, #readProgress, .copy-email,
+	.pm-prev, .pm-next, .pm-dots, .pm-share, .pm-lightbox { display: none !important; }
+	body { background: #fff !important; color: #000 !important; }
+	section, .portfolio-item, .team-member, .faq-item, .skill-card {
+		break-inside: avoid;
+	}
+	.reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+	img { max-width: 100%; }
+	a { color: #000; text-decoration: underline; }
+}
+
+/* ============ Increased contrast ============ */
+@media (prefers-contrast: more) {
+	:root { --border: rgba(127, 127, 127, .6); }
+	a, button, .portfolio-link { text-decoration-skip-ink: none; }
+	.pm-badge-static, .card-cat, .filter-chip { border-width: 2px; }
+	:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
+}
+@media (forced-colors: active) {
+	.card-cat, .pm-badge-static, .filter-chip, .est-opt { border: 1px solid CanvasText; }
+	.ymt-toast, .sw-toast, .cookie-consent { border: 1px solid CanvasText; }
+}

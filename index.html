@@ -1134,33 +1134,15 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="vendor/bootstrap.bundle.min.js" defer></script>
 
-    <!-- Plugin JavaScript -->
-    
-    <!-- Shared utilities + Contact Form JavaScript -->
-        <script src="js/utils.js" defer></script>
-        <script src="js/contact_me.js" defer></script>
-
-
-    <!-- Theme JavaScript -->
-    
-    <!-- Language Switcher -->
-    <script src="js/i18n.js" defer></script>
-
-    <!-- Project data & modal -->
-    <script src="js/projects.js" defer></script>
-    <script src="js/project-modal.js" defer></script>
-
-    <script src="js/site.js" defer></script>
-    <script src="js/palette.js" defer></script>
-
-    <script src="js/maps-loader.js" defer></script>
-
-    <!-- reCAPTCHA removed: no longer used by the contact form -->
+    <!-- App JavaScript (ES modules — imports resolve the dependency graph;
+         only entry points need script tags) -->
+    <script type="module" src="js/site.js"></script>
+    <script type="module" src="js/palette.js"></script>
+    <script type="module" src="js/contact_me.js"></script>
+    <script type="module" src="js/maps-loader.js"></script>
 
     <!-- Back to Top -->
     <a href="#page-top" class="scroll-top page-scroll" title="Back to top" aria-label="Back to top" data-i18n-aria="scroll_top" data-i18n-title="scroll_top"><i class="fa fa-angle-up fa-2x" aria-hidden="true"></i></a>
-
-    <!-- Floating WhatsApp chat -->
 
     <!-- Command palette (Ctrl+K / Cmd+K) -->
     <div class="palette-overlay" id="paletteOverlay" hidden>
@@ -1189,8 +1171,6 @@
         </div>
     </div>
 
-    <!-- Sticky mobile CTA -->
-
     <!-- Cookie consent -->
     <div id="cookieConsent" class="cookie-consent" role="region" data-i18n-aria="cookie_aria" aria-label="Cookie consent" hidden>
         <p class="cookie-text"><span data-i18n="cookie_text">We use cookies and a live-chat service to improve your experience.</span> <a href="privacy.html" class="cookie-link" data-i18n="cookie_learn">Learn more</a></p>
@@ -1201,7 +1181,7 @@
     </div>
 
     <!-- Analytics + Tawk.to load only after cookie consent (see js/consent.js) -->
-    <script src="js/consent.js" defer></script>
+    <script type="module" src="js/consent.js"></script>
 
 </body>
 

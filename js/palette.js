@@ -1,7 +1,13 @@
-/* YMT Solution — Ctrl+K / Cmd+K command palette.
+/* YMT Solution — Ctrl+K / Cmd+K command palette (ES module).
    Quick-jump to page sections and portfolio projects. */
+import { projects } from './projects.js';
+import { t as i18nT } from './i18n.js';
+import { modal as projectModal } from './project-modal.js';
+
 (function() {
     'use strict';
+
+    function t(key) { return i18nT(key); }
 
     var overlay = document.getElementById('paletteOverlay');
     var input = document.getElementById('paletteInput');
@@ -37,15 +43,11 @@
     var items = [];
     var active = 0;
 
-    function t(key) {
-        return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(key) : key;
-    }
-
     function buildItems() {
         items = SECTIONS.map(function(s) {
             return { type: 'section', id: s.id, icon: s.icon, label: t(s.key), keywords: s.id };
         });
-        (window.YMTProjects || []).forEach(function(p, i) {
+        projects.forEach(function(p, i) {
             var kw = p.title + ' ' + (p.tech || []).join(' ') + ' ' + (p.cat || '');
             items.push({ type: 'project', index: i, icon: 'fa-folder-open', label: p.title, keywords: kw });
         });
@@ -122,7 +124,7 @@
             return;
         }
         if (it.type === 'project') {
-            if (window.YMTModal && YMTModal.open) { YMTModal.open(it.index); return; }
+            if (projectModal && projectModal.open) { projectModal.open(it.index); return; }
             window.location.hash = '#project-' + it.index;
             var card = document.querySelector('[data-project="' + it.index + '"]');
             if (card) card.click();

@@ -1,6 +1,10 @@
-    (function() {
-        var U = window.YMTUtils || {};
-        window.YMTSay = U.announce || function() {};
+import './i18n.js'; // side effect: applies language + exposes window.YMTI18n used below
+import { projects } from './projects.js';
+import { announce, copyText, announceCopy } from './utils.js';
+import { modal } from './project-modal.js';
+
+(function() {
+        window.YMTSay = announce;
         var scrollTopBtn = document.querySelector('.scroll-top');
         var scrollTicking = false;
         window.addEventListener('scroll', function() {
@@ -24,8 +28,8 @@
         var pmQuery = new URLSearchParams(location.search).get('project');
         var pmIdx = pmHash ? parseInt(pmHash[1], 10)
             : (pmQuery !== null && !isNaN(parseInt(pmQuery, 10)) ? parseInt(pmQuery, 10) : -1);
-        if (pmIdx >= 0 && pmIdx < (window.YMTProjects || []).length) {
-            if (window.YMTModal && YMTModal.open) { YMTModal.open(pmIdx); }
+        if (pmIdx >= 0 && pmIdx < (projects).length) {
+            if (modal && modal.open) { modal.open(pmIdx); }
             else if (window.bootstrap && bootstrap.Modal) {
                 bootstrap.Modal.getOrCreateInstance(document.getElementById('projectModal')).show();
             }
@@ -36,7 +40,6 @@
         var RECENT_KEY = 'ymt_recent';
         var recentWrap = document.getElementById('recentProjects');
         var recentChips = document.getElementById('recentChips');
-        var projects = window.YMTProjects || [];
 
         // Render portfolio cards from projects.js — single source of truth
         // (card metadata lives in each project's `card` field)
@@ -151,7 +154,7 @@
                 b.innerHTML = '<i class="fa fa-folder-open" aria-hidden="true"></i><span></span>';
                 b.querySelector('span').textContent = projects[i].title;
                 b.addEventListener('click', function() {
-                    if (window.YMTModal && YMTModal.open) YMTModal.open(i);
+                    if (modal && modal.open) modal.open(i);
                 });
                 recentChips.appendChild(b);
             });
@@ -284,7 +287,7 @@
         emailBtn.addEventListener('click', function() {
             var email = 'ymtsolution@gmail.com';
             function done(ok) {
-                if (U.announceCopy) U.announceCopy(ok);
+                if (announceCopy) announceCopy(ok);
                 if (!ok) return; // don't claim success when the copy failed
                 emailBtn.classList.add('copied');
                 emailBtn.innerHTML = '<i class="fa fa-check" aria-hidden="true"></i>';
@@ -293,7 +296,7 @@
                     emailBtn.innerHTML = '<i class="fa fa-copy" aria-hidden="true"></i>';
                 }, 1600);
             }
-            U.copyText(email).then(done);
+            copyText(email).then(done);
         });
         function mountCopyEmail() {
             var emailP = document.querySelector('[data-i18n-html="bottom_email"]');
@@ -467,15 +470,15 @@
         });
         counts.all = $items.length;
         var activeFilter = 'all';
-        var projects = window.YMTProjects || [];
 
         function itemMatchesSearch(item, q) {
             if (!q) return true;
             var link = item.querySelector('[data-project]');
             var idx = link ? parseInt(link.getAttribute('data-project'), 10) : -1;
             var p = idx >= 0 ? projects[idx] : null;
-            var hay = (item.textContent || '') + ' ' + (p ? (p.title + ' ' + (p.tech || []).join(' ') + ' ' + (p.cat || '')) : '');
-            return hay.toLowerCase().indexOf(q) !== -1;
+            var hay = ((item.textContent || '') + ' ' + (p ? (p.title + ' ' + (p.tech || []).join(' ') + ' ' + (p.cat || '')) : '')).toLowerCase();
+            // tokenized AND-match: every whitespace-separated term must appear
+            return q.split(/\s+/).every(function(term) { return hay.indexOf(term) !== -1; });
         }
 
         function applyFilters() {
@@ -501,12 +504,23 @@
             });
             if (filterStatus) filterStatus.textContent = filterLabel(activeFilter, shown);
             if (emptyState) emptyState.hidden = shown !== 0;
+            syncPfUrl();
+        }
+
+        // Mirror filter/search/sort into the URL (?cat=&q=&sort=) so views are
+        // shareable and survive reload — coexists with ?lang= and ?project=.
+        function syncPfUrl() {
             try {
-                sessionStorage.setItem('ymt_pf_state', JSON.stringify({
-                    f: activeFilter,
-                    q: (document.getElementById('portfolioSearch') || {}).value || '',
-                    s: sortSel ? sortSel.value : 'default'
-                }));
+                var u = new URL(location.href);
+                if (activeFilter && activeFilter !== 'all') u.searchParams.set('cat', activeFilter);
+                else u.searchParams.delete('cat');
+                var q = (document.getElementById('portfolioSearch') || {}).value || '';
+                if (q.trim()) u.searchParams.set('q', q.trim());
+                else u.searchParams.delete('q');
+                var s = sortSel ? sortSel.value : 'default';
+                if (s && s !== 'default') u.searchParams.set('sort', s);
+                else u.searchParams.delete('sort');
+                history.replaceState(null, '', u);
             } catch (e) {}
         }
 
@@ -515,7 +529,6 @@
             emptyState.querySelector('.pf-reset').addEventListener('click', function() {
                 var si = document.getElementById('portfolioSearch');
                 if (si) { si.value = ''; si.dispatchEvent(new Event('input', { bubbles: true })); }
-                try { sessionStorage.removeItem('ymt_pf_state'); } catch (e) {}
                 if (sortSel) sortSel.value = 'default';
                 var allChip = document.querySelector('.filter-chip[data-filter="all"]');
                 if (allChip && !allChip.classList.contains('active')) allChip.click();
@@ -599,28 +612,25 @@
                 applyFilters();
             });
         }
-        // restore persisted filter/search/sort + ?cat= deep link
+        // restore filter/search/sort from the URL (?cat= &q= &sort=) — shareable deep links
         (function() {
-            var st = null;
-            try { st = JSON.parse(sessionStorage.getItem('ymt_pf_state') || 'null'); } catch (e) {}
+            var params = new URLSearchParams(location.search);
             var VALID_FILTERS = { all: 1, ai: 1, web: 1, mobile: 1, fintech: 1, trading: 1 };
-            var catParam = new URLSearchParams(location.search).get('cat');
-            if (catParam && VALID_FILTERS[catParam] && document.querySelector('.filter-chip[data-filter="' + catParam + '"]')) {
-                st = { f: catParam, q: '', s: 'default' };
+            var cat = params.get('cat');
+            var q = params.get('q');
+            var s = params.get('sort');
+            if (q && searchInput) {
+                searchInput.value = q;
+                if (searchClear) searchClear.hidden = false;
             }
-            if (st) {
-                if (st.f && st.f !== 'all' && VALID_FILTERS[st.f]) {
-                    var chip = document.querySelector('.filter-chip[data-filter="' + st.f + '"]');
-                    if (chip) chip.click();
-                }
-                if (st.q && searchInput) {
-                    searchInput.value = st.q;
-                    searchInput.dispatchEvent(new Event('input', { bubbles: true }));
-                }
-                if (st.s && sortSel && st.s !== 'default') {
-                    sortSel.value = st.s;
-                    sortSel.dispatchEvent(new Event('change'));
-                }
+            if (s && sortSel && s !== 'default') {
+                sortSel.value = s;
+                sortSel.dispatchEvent(new Event('change')); // reorders the grid
+            }
+            if (cat && VALID_FILTERS[cat]) {
+                var chip = document.querySelector('.filter-chip[data-filter="' + cat + '"]');
+                if (chip) chip.click();
+                else activeFilter = cat;
             }
         })();
         applyFilters();
@@ -920,7 +930,7 @@
                             span.textContent = i18n2 && i18n2.t ? i18n2.t('est_copied') : 'Copied!';
                             setTimeout(function() { span.textContent = prev; }, 1600);
                         };
-                        U.copyText(text).then(done);
+                        copyText(text).then(done);
                     });
                 }
                 var base = BUDGET_BASE[answers.type], mult = BUDGET_MULT[answers.timeline] || 1;

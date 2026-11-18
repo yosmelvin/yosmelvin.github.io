@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Regenerate the purged vendor stylesheets after upgrading Bootstrap/Font Awesome
 # or when new markup/JS introduces classes the current purge dropped.
-# Requires: npx purgecss (fetched on demand).
+# Requires: purgecss devDependency (npm install). Uses the local binary, no npx fetch.
 #
 # Safelist covers classes injected by Bootstrap JS at runtime
 # (collapse animation, modal backdrop, alert variants, label helpers)
@@ -17,7 +17,7 @@ purge() {
   local args=(--css "$css")
   local f
   for f in "${CONTENT[@]}"; do args+=(--content "$f"); done
-  npx -y purgecss "${args[@]}" "$@" --output "$outdir"
+  ./node_modules/.bin/purgecss "${args[@]}" "$@" --output "$outdir"
 }
 
 purge vendor/bootstrap.min.css /tmp/purge-out-bootstrap \

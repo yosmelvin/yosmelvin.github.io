@@ -1,7 +1,9 @@
-// Contact Form Scripts
-// Submits via Formspree (static-site friendly).
-var FORMSPREE_ENDPOINT = 'https://formspree.io/f/mppdpodr';
-var U = window.YMTUtils || {};
+// Contact Form Scripts (ES module) — submits via Formspree (static-site friendly).
+import { CONFIG } from './config.js';
+import { esc } from './utils.js';
+import { t as i18nT } from './i18n.js';
+
+var FORMSPREE_ENDPOINT = CONFIG.FORMSPREE_ENDPOINT;
 
 // Capture UTM params + referrer once per session for attribution.
 function ymtAttribution() {
@@ -39,11 +41,12 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
 
 (function() {
 
-    var esc = U.esc || function(s) {
-        return String(s).replace(/[&<>"']/g, function(c) {
-            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
-        });
-    };
+    function tt(k, fb) {
+        var v = i18nT(k);
+        return (v === k && fb != null) ? fb : v;
+    }
+
+    var errorBox = null;
 
     function showMessage(type, html) {
         var role = type === 'success' ? 'status' : 'alert';
@@ -106,7 +109,12 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
 
     contactForm.addEventListener('submit', function(e) {
         var formEl = this;
-        if (!formEl.checkValidity()) { formEl.reportValidity(); return; }
+        if (!formEl.checkValidity()) {
+            formEl.reportValidity();
+            showErrorSummary(formEl);
+            return;
+        }
+        if (errorBox) errorBox.hidden = true;
         e.preventDefault();
         var name = document.getElementById('name').value;
         var email = document.getElementById('email').value;
@@ -121,27 +129,23 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
         var lang = (function() {
             try { return localStorage.getItem('ymt-lang') === 'id' ? 'id' : 'en'; } catch (e) { return 'en'; }
         })();
-        var i18nT = function(k, fb) {
-            return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(k) : fb;
-        };
-
         // Honeypot: bots fill hidden fields — pretend success, send nothing.
         var hp = document.getElementById('hp_website');
         if (hp && hp.value) {
             var hpFirst = firstName || '';
-            showMessage('success', "<strong>" + i18nT('cf_thanks', 'Thank you') + " " + hpFirst + "!</strong> " + i18nT('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
+            showMessage('success', "<strong>" + tt('cf_thanks', 'Thank you') + " " + hpFirst + "!</strong> " + tt('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
             formEl.reset();
             clearDraft();
             return;
         }
 
         if (FORMSPREE_ENDPOINT.indexOf('REPLACE_WITH_FORM_ID') !== -1) {
-            showMessage('danger', "<strong>" + i18nT('cf_not_configured', 'Form is not configured yet.') + "</strong>");
+            showMessage('danger', "<strong>" + tt('cf_not_configured', 'Form is not configured yet.') + "</strong>");
             return;
         }
 
         if (navigator.onLine === false) {
-            showMessage('danger', "<strong>" + i18nT('cf_offline', 'You appear to be offline — check your connection and try again.') + "</strong>");
+            showMessage('danger', "<strong>" + tt('cf_offline', 'You appear to be offline — check your connection and try again.') + "</strong>");
             return;
         }
 
@@ -149,7 +153,7 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
         var btnLabel = btn ? btn.textContent : 'Send Message';
         if (btn) {
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> ' + i18nT('contact_sending', 'Sending…');
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin" aria-hidden="true"></i> ' + tt('contact_sending', 'Sending…');
         }
 
         var single = function(v) { return String(v || '').replace(/[\r\n]+/g, ' ').trim(); };
@@ -171,17 +175,67 @@ var YMT_ATTR = ymtAttribution(); // capture on load, before params are lost
             })())
         }).then(function(res) {
             if (!res.ok) throw new Error('bad response');
-            showMessage('success', "<strong>" + i18nT('cf_thanks', 'Thank you') + " " + firstName + "!</strong> " + i18nT('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
+            showMessage('success', "<strong>" + tt('cf_thanks', 'Thank you') + " " + firstName + "!</strong> " + tt('cf_sent', 'Your message has been sent — we\'ll get back to you soon.'));
             formEl.reset();
             clearDraft();
         }).catch(function() {
-            showMessage('danger', "<strong>" + i18nT('cf_sorry', 'Sorry') + " " + firstName + ",</strong> " + i18nT('cf_err_send', 'your message could not be sent. Please try again later or email us directly.'));
+            showMessage('danger', "<strong>" + tt('cf_sorry', 'Sorry') + " " + firstName + ",</strong> " + tt('cf_err_send', 'your message could not be sent. Please try again later or email us directly.'));
         }).finally(function() {
             if (btn) {
                 btn.disabled = false;
                 btn.textContent = btnLabel;
             }
         });
+    });
+
+    // Inline error summary: lists invalid fields, focuses the first one,
+    // and marks fields aria-invalid until the visitor edits them.
+    var LABEL_KEYS = { name: 'lbl_name', email: 'lbl_email', phone: 'lbl_phone', subject: 'lbl_subject', message: 'lbl_message' };
+    function showErrorSummary(formEl) {
+        var invalid = ['name', 'email', 'phone', 'subject', 'message'].filter(function(id) {
+            var el = document.getElementById(id);
+            return el && el.willValidate && !el.checkValidity();
+        });
+        if (!invalid.length) return;
+        if (!errorBox) {
+            errorBox = document.createElement('div');
+            errorBox.id = 'formErrorSummary';
+            errorBox.className = 'form-error-summary';
+            errorBox.setAttribute('role', 'alert');
+            errorBox.tabIndex = -1;
+            var succ = document.getElementById('success');
+            if (succ && succ.parentNode) succ.parentNode.insertBefore(errorBox, succ.nextSibling);
+            else formEl.parentNode.insertBefore(errorBox, formEl);
+        }
+        errorBox.innerHTML = '';
+        var strong = document.createElement('strong');
+        strong.textContent = tt('cf_fix', 'Please fix the following fields:');
+        errorBox.appendChild(strong);
+        var ul = document.createElement('ul');
+        invalid.forEach(function(id) {
+            var f = document.getElementById(id);
+            var li = document.createElement('li');
+            var a = document.createElement('a');
+            a.href = '#' + id;
+            a.textContent = tt(LABEL_KEYS[id], id);
+            a.addEventListener('click', function(ev) {
+                ev.preventDefault();
+                if (f) f.focus();
+            });
+            li.appendChild(a);
+            ul.appendChild(li);
+            if (f) {
+                f.setAttribute('aria-invalid', 'true');
+                f.addEventListener('input', function() { f.removeAttribute('aria-invalid'); }, { once: true });
+            }
+        });
+        errorBox.appendChild(ul);
+        errorBox.hidden = false;
+        var first = document.getElementById(invalid[0]);
+        if (first) first.focus();
+    }
+    contactForm.addEventListener('input', function() {
+        if (errorBox) errorBox.hidden = true;
     });
 
     // hide stale alerts when the visitor starts editing again

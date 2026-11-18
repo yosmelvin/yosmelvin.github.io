@@ -1,10 +1,12 @@
 /* Single reusable project modal — populates #projectModal from
-   window.YMTProjects + the active language dictionary (YMTI18n.t). */
-(function() {
+   ./projects.js + the active language dictionary (./i18n.js t). */
+import { projects } from './projects.js';
+import { t } from './i18n.js';
+import { announceCopy, copyText } from './utils.js';
+
+const modal = (function() {
     'use strict';
 
-    var U = window.YMTUtils || {};
-    var projects = window.YMTProjects || [];
     var current = 0;
     var modalEl = document.getElementById('projectModal');
     function modalApi() {
@@ -18,10 +20,6 @@
     var openIndex = null; // explicit index for programmatic opens (palette) — beats stale hash
     var baseTitle = document.title;
     var preModalHash = ''; // section anchor to restore when the modal closes
-
-    function t(key) {
-        return (window.YMTI18n && YMTI18n.t) ? YMTI18n.t(key) : key;
-    }
 
     function pad(n) {
         return (n < 10 ? '0' : '') + n;
@@ -311,7 +309,7 @@
         var url = this._shareUrl;
         var btn = this;
         function done(ok) {
-            if (U.announceCopy) U.announceCopy(ok);
+            announceCopy(ok);
             if (!ok) return;
             var icon = btn.querySelector('i');
             if (icon) {
@@ -319,7 +317,7 @@
                 setTimeout(function() { icon.className = 'fa fa-link'; }, 1500);
             }
         }
-        U.copyText(url).then(done);
+        copyText(url).then(done);
     });
 
     // copy a plain-text project brief (title + intro + tech + link)
@@ -334,15 +332,14 @@
         var brief = buildBrief(p);
         var btn = this;
         function done(ok) {
-            if (U.announceCopy) U.announceCopy(ok);
+            announceCopy(ok);
             if (!ok) return;
             var icon = btn.querySelector('i');
             if (icon) icon.className = 'fa fa-check';
-            var i18n = window.YMTI18n;
-            btn.setAttribute('aria-label', i18n && i18n.t ? i18n.t('pm_brief_done') : 'Brief copied!');
+            btn.setAttribute('aria-label', t('pm_brief_done'));
             setTimeout(function() { if (icon) icon.className = 'fa fa-copy'; }, 1600);
         }
-        U.copyText(brief).then(done);
+        copyText(brief).then(done);
     });
 
     // download the same brief as a .txt file
@@ -437,6 +434,11 @@
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
 
+    function openProject(i) { openIndex = i; render(i, false); var m = modalApi(); if (m) m.show(); }
+
     // expose for deep-linking / debugging
-    window.YMTModal = { open: function(i) { openIndex = i; render(i, false); var m = modalApi(); if (m) m.show(); } };
+    window.YMTModal = { open: openProject };
+    return { open: openProject };
 })();
+
+export { modal };

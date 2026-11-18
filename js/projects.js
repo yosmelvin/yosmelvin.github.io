@@ -1,6 +1,6 @@
-/* Portfolio project data — consumed by js/project-modal.js.
-   Text content lives in js/i18n.js under the m1_* … m9_* keys. */
-window.YMTProjects = [
+/* Portfolio project data — consumed by project-modal.js / site.js / palette.js.
+   Text content lives in js/i18n-dict.js under the m1_* … m9_* keys (DICT.site). */
+export const projects = [
     {
         title: 'Binusmaya',
         card: { img: 'img/portfolio/BM5-1.jpg', title: 'Binusmaya', alt: 'Binus Maya', cap: 'pf_bm_d' },
@@ -108,3 +108,6 @@ window.YMTProjects = [
         badges: ['vvip'],
     }
 ];
+
+// Back-compat shim for classic scripts.
+window.YMTProjects = projects;

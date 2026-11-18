@@ -1,6 +1,6 @@
 {
   "name": "ymt-solution-portfolio",
-  "title": "YMT Solution — Portfolio",
+  "title": "YMT Solution \u2014 Portfolio",
   "version": "3.3.7+1",
   "homepage": "https://yosmelvin.github.io",
   "author": "YMT Solution",
@@ -8,8 +8,16 @@
     "type": "MIT",
     "url": "https://github.com/yosmelvin/yosmelvin.github.io"
   },
+  "type": "module",
+  "scripts": {
+    "build:sw": "node tools/build-sw.mjs",
+    "build:css": "bash tools/purge-css.sh",
+    "build": "npm run build:sw",
+    "check": "node tools/check.mjs"
+  },
   "devDependencies": {
-    "bootstrap": "^5.3.3"
+    "bootstrap": "^5.3.3",
+    "purgecss": "^7.0.2"
   },
   "repository": {
     "type": "git",
