@@ -5,9 +5,16 @@
         <link>https://yosmelvin.github.io/posts/</link>
         <description>Articles and engineering insights from the YMT Solution team.</description>
         <language>en</language>
-        <lastBuildDate>Wed, 18 Nov 2026 00:00:00 +0700</lastBuildDate>
+        <lastBuildDate>Wed, 25 Nov 2026 00:00:00 +0700</lastBuildDate>
         <atom:link href="https://yosmelvin.github.io/rss.xml" rel="self" type="application/rss+xml"/>
         <!-- Add one <item> per published post: -->
+        <item>
+            <title>Sahamai: a stock screener built for the Indonesian market</title>
+            <link>https://yosmelvin.github.io/posts/sahamai-stock-screener.html</link>
+            <guid>https://yosmelvin.github.io/posts/sahamai-stock-screener.html</guid>
+            <pubDate>Wed, 25 Nov 2026 00:00:00 +0700</pubDate>
+            <description>Screening, watchlists and WhatsApp alerts for the IDX — designed around how Indonesian investors actually work.</description>
+        </item>
         <item>
             <title>Why we self-host everything</title>
             <link>https://yosmelvin.github.io/posts/self-hosting-everything.html</link>

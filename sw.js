@@ -7,6 +7,7 @@ var PRECACHE = [
     '/posts/',
     '/posts/posts.js',
     '/posts/self-hosting-everything.html',
+    '/posts/sahamai-stock-screener.html',
     '/offline.html',
     '/rss.xml',
     '/css/style.css',
