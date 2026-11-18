@@ -170,6 +170,9 @@ the theme's legacy devDependencies; nothing is compiled or bundled.
   `autocomplete="off"`) in addition to Formspree-side spam filtering.
 - Third-party scripts (Tawk.to, analytics, Maps) are consent-gated and
   lazy/idle-loaded; Maps JS is only injected when the footer scrolls into view.
+- Vendor CSS (`vendor/bootstrap.min.css`, `font-awesome.min.css`,
+  `v4-shims.min.css`) is purged with PurgeCSS — regenerate via
+  `tools/purge-css.sh` after dependency or markup changes.
 - `.well-known/security.txt` published for vulnerability reports
   (expires 2027-12-31 — renew before then).
 

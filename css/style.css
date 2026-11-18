@@ -2599,6 +2599,22 @@ html[data-theme="dark"] .pm-badge-live{color:#4ade80}
 	text-decoration: none;
 }
 
+/* Light theme: --accent-2 (#22d3ee) is ~1.8:1 on white — use a deeper cyan for text */
+html:not([data-theme="dark"]) .engage-cta {
+	color: #0e7490;
+	border-bottom-color: rgba(14, 116, 144, .4);
+}
+html:not([data-theme="dark"]) .engage-cta:hover,
+html:not([data-theme="dark"]) .engage-cta:focus-visible {
+	color: var(--ink);
+	border-bottom-color: var(--ink);
+}
+html:not([data-theme="dark"]) #about .timeline .timeline-heading h3 {
+	color: #0e7490;
+	background: rgba(14, 116, 144, .08);
+	border-color: rgba(14, 116, 144, .28);
+}
+
 /* ============ CV button ============ */
 .btn-cv {
 	margin-top: 22px;
