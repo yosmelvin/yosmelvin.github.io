@@ -15,6 +15,9 @@
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at top,#0b1220 0%,#0f172a 55%,#020617 100%);font-family:'Inter',sans-serif;color:#e2e8f0;text-align:center;padding:20px}
+        .lang-pill{position:fixed;top:20px;right:20px;display:inline-flex;border:1px solid rgba(148,163,184,.3);border-radius:999px;overflow:hidden}
+        .lang-btn{background:transparent;border:none;color:#94a3b8;font:600 12px 'Inter',sans-serif;padding:7px 14px;cursor:pointer}
+        .lang-btn.active{background:linear-gradient(135deg,#22d3ee,#0e7490);color:#06121f}
         .code{font-family:'Sora',sans-serif;font-size:clamp(6rem,20vw,11rem);font-weight:700;background:linear-gradient(135deg,#22d3ee,#818cf8);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1}
         h1{font-family:'Sora',sans-serif;font-size:1.6rem;margin:12px 0 8px;color:#f1f5f9}
         p{color:#94a3b8;margin-bottom:32px}
@@ -35,15 +38,20 @@
 </head>
 <body>
     <main>
+    <span class="lang-pill" role="group" aria-label="Language / Bahasa">
+        <button type="button" class="lang-btn" data-lang="en">EN</button>
+        <button type="button" class="lang-btn" data-lang="id">ID</button>
+    </span>
         <div class="code">404</div>
-        <h1>Page not found</h1>
-        <p>The page you're looking for doesn't exist or has been moved.</p>
-        <a href="/">Back to Home</a>
+        <h1 data-i18n="not_found">Page not found</h1>
+        <p data-i18n="missing">The page you're looking for doesn't exist or has been moved.</p>
+        <a href="/" data-i18n="back">Back to Home</a>
         <div class="links">
-            <a href="/#services">Services</a>
-            <a href="/#portfolio">Portfolio</a>
-            <a href="/#contact">Contact</a>
+            <a href="/#services" data-i18n="services">Services</a>
+            <a href="/#portfolio" data-i18n="portfolio">Portfolio</a>
+            <a href="/#contact" data-i18n="contact">Contact</a>
         </div>
     </main>
+    <script src="/js/404-lang.js" defer></script>
 </body>
 </html>

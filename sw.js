@@ -1,5 +1,5 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v15'; // bump on each release to refresh caches
+var CACHE = 'ymt-v16'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
@@ -24,6 +24,7 @@ var PRECACHE = [
     '/js/sw-register.js',
     '/js/maps-loader.js',
     '/js/privacy-lang.js',
+    '/js/404-lang.js',
     '/js/offline-lang.js',
     '/manifest.json',
     '/img/header-bg.webp',
