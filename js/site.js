@@ -787,6 +787,14 @@
                     });
                 }
                 if (backBtn) backBtn.hidden = n === 0;
+                // move focus to the new question so keyboard/SR users aren't stranded
+                if (est.contains(document.activeElement)) {
+                    var q = steps[n].querySelector('.est-q');
+                    if (q) {
+                        q.setAttribute('tabindex', '-1');
+                        q.focus();
+                    }
+                }
                 nextBtn.textContent = n === steps.length - 1
                     ? (i18n ? i18n.t('est_apply') : 'Use this estimate')
                     : (i18n ? i18n.t('est_next') : 'Next →');
@@ -798,17 +806,39 @@
                 return opt ? opt.textContent.trim() : value;
             }
 
+            function pickOpt(opt) {
+                var group = opt.closest('.est-opts').getAttribute('data-group');
+                answers[group] = opt.getAttribute('data-value');
+                opt.closest('.est-opts').querySelectorAll('.est-opt').forEach(function(o) {
+                    var on = o === opt;
+                    o.classList.toggle('sel', on);
+                    o.setAttribute('aria-checked', on ? 'true' : 'false');
+                });
+                nextBtn.disabled = false;
+            }
+
+            // ARIA radio-group pattern: arrows/Home/End move and select within a group
+            est.querySelectorAll('.est-opts').forEach(function(group) {
+                group.addEventListener('keydown', function(e) {
+                    var opts = Array.prototype.slice.call(group.querySelectorAll('.est-opt:not(:disabled)'));
+                    var i = opts.indexOf(document.activeElement);
+                    if (i < 0 || !opts.length) return;
+                    var n = -1;
+                    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') n = (i + 1) % opts.length;
+                    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') n = (i - 1 + opts.length) % opts.length;
+                    else if (e.key === 'Home') n = 0;
+                    else if (e.key === 'End') n = opts.length - 1;
+                    if (n < 0 || n === i) return;
+                    e.preventDefault();
+                    opts[n].focus();
+                    pickOpt(opts[n]);
+                });
+            });
+
             est.addEventListener('click', function(e) {
                 var opt = e.target.closest('.est-opt');
                 if (opt) {
-                    var group = opt.closest('.est-opts').getAttribute('data-group');
-                    answers[group] = opt.getAttribute('data-value');
-                    opt.closest('.est-opts').querySelectorAll('.est-opt').forEach(function(o) {
-                        var on = o === opt;
-                        o.classList.toggle('sel', on);
-                        o.setAttribute('aria-checked', on ? 'true' : 'false');
-                    });
-                    nextBtn.disabled = false;
+                    pickOpt(opt);
                     return;
                 }
                 if (e.target.closest('#estReset')) {
