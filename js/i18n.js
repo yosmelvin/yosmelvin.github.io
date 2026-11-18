@@ -27,7 +27,7 @@
             scroll_aria: 'Scroll to services',
 
             services_title: 'Services',
-            services_sub: 'YMT Solution is an AI-first software house. Since 2013 we\'ve shipped 30+ projects — AI trading platforms, smart assistants and automation that turn data into revenue, plus the web, mobile and cloud systems behind them.',
+            services_sub: 'YMT Solution is an AI-first software house. Since 2012 we\'ve shipped 30+ projects — AI trading platforms, smart assistants and automation that turn data into revenue, plus the web, mobile and cloud systems behind them.',
             svc_ecom: 'E-Commerce',
             svc_ecom_d: 'A credible online store, powered by a proper system.',
             svc_resp: 'Responsive Design',
@@ -348,7 +348,7 @@
             scroll_aria: 'Gulir ke layanan',
 
             services_title: 'Layanan',
-            services_sub: 'YMT Solution adalah software house berbasis AI. Sejak 2013 kami telah merilis 30+ proyek — platform trading berbasis AI, asisten cerdas, dan otomatisasi yang mengubah data menjadi pendapatan, plus sistem web, mobile, dan cloud di baliknya.',
+            services_sub: 'YMT Solution adalah software house berbasis AI. Sejak 2012 kami telah merilis 30+ proyek — platform trading berbasis AI, asisten cerdas, dan otomatisasi yang mengubah data menjadi pendapatan, plus sistem web, mobile, dan cloud di baliknya.',
             svc_ecom: 'E-Commerce',
             svc_ecom_d: 'Toko online yang kredibel, didukung sistem yang handal.',
             svc_resp: 'Desain Responsif',
