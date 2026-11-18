@@ -651,7 +651,7 @@ section h2.section-heading:after {
 	border-radius: 4px;
 }
 
-section h3.section-subheading {
+section .section-subheading {
 	font-family: var(--font-body);
 	font-style: normal;
 	font-weight: 400;
@@ -662,7 +662,7 @@ section h3.section-subheading {
 	line-height: 1.7;
 }
 
-section#contact h3.section-subheading {
+section#contact .section-subheading {
 	color: #94a3b8;
 }
 
@@ -913,7 +913,7 @@ section#contact h3.section-subheading {
 	color: #fff;
 }
 
-#stats h3.section-subheading {
+#stats .section-subheading {
 	color: #94a3b8;
 }
 
