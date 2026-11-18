@@ -24,7 +24,13 @@
             copied: 'Copied',
             copy_failed: 'Copy failed',
             crumb_home: 'Home',
-            crumb_blog: 'Blog'
+            crumb_blog: 'Blog',
+            post1_cat: 'Product',
+            post1_title: 'Sahamai: a stock screener built for the Indonesian market',
+            post1_excerpt: 'Screening, watchlists and WhatsApp alerts for the IDX — designed around how Indonesian investors actually work.',
+            post2_cat: 'Engineering',
+            post2_title: 'Why we self-host everything',
+            post2_excerpt: "Every font, script, and stylesheet on our portfolio is served from our own origin — here's what that buys us."
         },
         id: {
             blog_title: 'Blog',
@@ -46,7 +52,13 @@
             copied: 'Tersalin',
             copy_failed: 'Gagal menyalin',
             crumb_home: 'Beranda',
-            crumb_blog: 'Blog'
+            crumb_blog: 'Blog',
+            post1_cat: 'Produk',
+            post1_title: 'Sahamai: screener saham untuk pasar Indonesia',
+            post1_excerpt: 'Screener, watchlist, dan notifikasi WhatsApp untuk BEI — dirancang mengikuti cara investor Indonesia bekerja.',
+            post2_cat: 'Engineering',
+            post2_title: 'Kenapa kami self-host semuanya',
+            post2_excerpt: 'Setiap font, skrip, dan stylesheet portofolio kami dilayani dari origin sendiri — ini yang kami dapatkan.'
         }
     };
 
