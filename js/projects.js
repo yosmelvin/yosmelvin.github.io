@@ -24,6 +24,7 @@ window.YMTProjects = [
         link: 'https://www.inklo.id',
         badges: ['live'],
         tech: ['PHP','Laravel','React','MySQL'],
+        gallery: ['img/portfolio/inklo-1.jpg', 'img/portfolio/inklo-3.jpg'],
     },
     {
         title: 'Ayo Sekolah Ayo Kuliah',
