@@ -579,8 +579,8 @@ header .intro-text .intro-heading {
 	box-shadow: 0 10px 34px rgba(0, 0, 0, .4);
 }
 
-/* mobile collapse menu */
-@media (max-width: 767px) {
+/* mobile collapse menu (navbar collapses below the lg breakpoint) */
+@media (max-width: 991.98px) {
 	.navbar-custom .navbar-collapse {
 		background: rgba(11, 18, 32, .97);
 		border: 1px solid rgba(255, 255, 255, .08);
@@ -588,6 +588,9 @@ header .intro-text .intro-heading {
 		margin: 12px 0 4px;
 		padding: 10px;
 		box-shadow: 0 18px 44px rgba(0, 0, 0, .45);
+		max-height: calc(100vh - 96px);
+		overflow-y: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 	.navbar-custom .navbar-collapse .nav li a {
 		padding: 13px 18px;
@@ -601,15 +604,29 @@ header .intro-text .intro-heading {
 	.navbar-custom .navbar-collapse .nav li a::after {
 		display: none;
 	}
-	.navbar-custom .lang-toggle {
-		justify-content: center;
-		padding: 4px 18px 12px;
-	}
-	.navbar-custom .theme-toggle-wrap,
-	.navbar-custom li:has(> .theme-toggle) {
+	/* language + theme grouped as a footer utility row */
+	.navbar-custom .nav-util {
 		display: flex;
+		align-items: center;
 		justify-content: center;
-		padding-bottom: 12px;
+		gap: 14px;
+		padding: 14px 6px 6px;
+		margin-top: 8px;
+		border-top: 1px solid rgba(255, 255, 255, .08);
+	}
+	.navbar-custom .lang-toggle {
+		height: 44px;
+		justify-content: center;
+		padding: 0 10px;
+	}
+	.navbar-custom .lang-btn {
+		padding: 8px 16px;
+		min-height: 40px;
+	}
+	.navbar-custom .theme-toggle,
+	.navbar-custom .theme-toggle-wrap {
+		height: 44px;
+		min-width: 44px;
 	}
 }
 
@@ -3373,4 +3390,119 @@ section#contact select[aria-invalid="true"] {
 @media (forced-colors: active) {
 	.card-cat, .pm-badge-static, .filter-chip, .est-opt { border: 1px solid CanvasText; }
 	.ymt-toast, .sw-toast, .cookie-consent { border: 1px solid CanvasText; }
+}
+
+/* ============ Small-device header polish ============ */
+
+/* desktop: keep the combined utility item aligned with the nav row */
+.navbar-custom .nav-util {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+}
+.navbar-custom .nav-util .theme-toggle {
+	margin-left: 0;
+}
+
+@media (max-width: 991.98px) {
+	/* brand left, hamburger right — full-width header row */
+	.navbar-custom .navbar-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+	}
+	/* icon-only hamburger with a 44px hit area; bars morph to an X when open */
+	.navbar-custom .navbar-toggler {
+		min-width: 44px;
+		min-height: 44px;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0 12px;
+	}
+	.navbar-custom .navbar-toggler .nav-menu-label {
+		display: none;
+	}
+	.navbar-custom .navbar-toggler[aria-expanded="true"] .fa-bars::before {
+		content: "\f00d";
+	}
+
+	/* compact brand once the navbar affixes on small screens too */
+	.navbar-custom.affix {
+		padding: 10px 0;
+	}
+	.navbar-custom.affix .brand-mark {
+		width: 30px;
+		height: 30px;
+		font-size: 9.5px;
+		border-radius: 8px;
+	}
+	.navbar-custom.affix .brand-word {
+		font-size: 1.02rem;
+	}
+}
+
+/* hero vertical rhythm on phones — reclaim dead space, keep type readable */
+@media (max-width: 767.98px) {
+	header .intro-text {
+		padding-top: 96px;
+		padding-bottom: 72px;
+	}
+	header .intro-text .intro-heading {
+		font-size: clamp(34px, 10vw, 84px);
+		line-height: 1.08;
+		margin-bottom: 28px;
+	}
+	.hero-actions {
+		gap: 12px;
+	}
+	.hero-trust {
+		margin-top: 26px;
+		gap: 8px 16px;
+	}
+}
+
+/* stacked full-width CTAs — primary first, thumb-friendly on narrow screens */
+@media (max-width: 480px) {
+	.hero-actions {
+		flex-direction: column;
+		align-items: stretch;
+		max-width: 320px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	.hero-actions .btn-xl {
+		padding: 15px 24px;
+	}
+}
+
+/* lift the scroll cue above the sticky mobile CTA instead of hiding behind it */
+@media (max-width: 640px) {
+	.scroll-indicator {
+		bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+	}
+}
+
+/* honour reduced-motion for the staggered hero entrance */
+@media (prefers-reduced-motion: reduce) {
+	header .intro-text > * {
+		animation: none;
+		opacity: 1;
+	}
+}
+
+/* keep the fixed bar clear of the notch / status area on notched devices */
+@supports (padding-top: env(safe-area-inset-top)) {
+	.navbar-custom {
+		padding-top: calc(14px + env(safe-area-inset-top));
+	}
+	@media (min-width: 768px) {
+		.navbar-custom {
+			padding-top: calc(18px + env(safe-area-inset-top));
+		}
+	}
+	.navbar-custom.affix {
+		padding-top: calc(10px + env(safe-area-inset-top));
+	}
 }
