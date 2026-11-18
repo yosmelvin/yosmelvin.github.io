@@ -8,6 +8,21 @@
             var s = document.createElement('script');
             s.src = mapsUrl;
             s.async = true;
+            s.onerror = function() {
+                // Maps blocked/failed — offer a plain link instead of a blank box
+                var lat = document.getElementById('latitude');
+                var lng = document.getElementById('longitude');
+                var q = (lat && lng) ? lat.value + ',' + lng.value : '';
+                var a = document.createElement('a');
+                a.href = 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q || 'YMT Solution Jakarta');
+                a.target = '_blank';
+                a.rel = 'noopener';
+                a.textContent = (document.documentElement.lang === 'id')
+                    ? 'Lihat lokasi kantor di Google Maps'
+                    : 'View office location on Google Maps';
+                mapEl.textContent = '';
+                mapEl.appendChild(a);
+            };
             document.head.appendChild(s);
         }
 
@@ -49,9 +64,9 @@
      */
     var marker = new google.maps.Marker({
         position : latLng,
-        title : 'lokasi',
+        title : 'YMT Solution',
         map : map,
-        draggable : true
+        draggable : false
       });
 
     updateMarkerPosition(latLng);
