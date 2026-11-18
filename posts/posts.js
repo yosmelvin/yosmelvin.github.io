@@ -33,7 +33,10 @@
             post2_excerpt: "Every font, script, and stylesheet on our portfolio is served from our own origin — here's what that buys us.",
             post3_cat: 'Engineering',
             post3_title: 'Qualifying leads without a backend: our project estimator',
-            post3_excerpt: 'How a three-question quiz on a static site turns vague inquiries into structured project briefs.'
+            post3_excerpt: 'How a three-question quiz on a static site turns vague inquiries into structured project briefs.',
+            post1_date: '25 Nov 2026',
+            post2_date: '18 Nov 2026',
+            post3_date: '2 Dec 2026'
         },
         id: {
             blog_title: 'Blog',
@@ -64,7 +67,10 @@
             post2_excerpt: 'Setiap font, skrip, dan stylesheet portofolio kami dilayani dari origin sendiri — ini yang kami dapatkan.',
             post3_cat: 'Engineering',
             post3_title: 'Kualifikasi lead tanpa backend: estimator proyek kami',
-            post3_excerpt: 'Bagaimana kuis tiga pertanyaan di situs statis mengubah pertanyaan samar menjadi brief terstruktur.'
+            post3_excerpt: 'Bagaimana kuis tiga pertanyaan di situs statis mengubah pertanyaan samar menjadi brief terstruktur.',
+            post1_date: '25 Nov 2026',
+            post2_date: '18 Nov 2026',
+            post3_date: '2 Des 2026'
         }
     };
 
