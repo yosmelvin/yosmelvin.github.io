@@ -21,6 +21,19 @@
         { id: 'contact', icon: 'fa-envelope', key: 'nav_contact' }
     ];
 
+    var PAGES = [
+        { url: 'posts/', icon: 'fa-rss', key: 'nav_blog', kw: 'blog articles posts' },
+        { url: 'privacy.html', icon: 'fa-shield', key: 'footer_privacy', kw: 'privacy policy data' },
+        { url: 'posts/self-hosting-everything.html', icon: 'fa-newspaper-o', kw: 'self-hosting fonts performance article' },
+        { url: 'posts/sahamai-stock-screener.html', icon: 'fa-newspaper-o', kw: 'sahamai stock screener IDX article' },
+        { url: 'posts/project-estimator.html', icon: 'fa-newspaper-o', kw: 'estimator leads qualification article' }
+    ];
+    var POST_TITLES = {
+        'posts/self-hosting-everything.html': 'Why we self-host everything',
+        'posts/sahamai-stock-screener.html': 'Sahamai: a stock screener built for the Indonesian market',
+        'posts/project-estimator.html': 'Qualifying leads without a backend: our project estimator'
+    };
+
     var items = [];
     var active = 0;
 
@@ -35,6 +48,13 @@
         (window.YMTProjects || []).forEach(function(p, i) {
             var kw = p.title + ' ' + (p.tech || []).join(' ') + ' ' + (p.cat || '');
             items.push({ type: 'project', index: i, icon: 'fa-folder-open', label: p.title, keywords: kw });
+        });
+        PAGES.forEach(function(pg) {
+            items.push({
+                type: 'link', url: pg.url, icon: pg.icon,
+                label: pg.key ? t(pg.key) : (POST_TITLES[pg.url] || pg.url),
+                keywords: (pg.kw || '') + ' ' + pg.url
+            });
         });
     }
 
@@ -97,6 +117,10 @@
 
     function choose(it) {
         close();
+        if (it.type === 'link') {
+            window.location.href = it.url;
+            return;
+        }
         if (it.type === 'project') {
             if (window.YMTModal && YMTModal.open) { YMTModal.open(it.index); return; }
             window.location.hash = '#project-' + it.index;

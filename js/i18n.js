@@ -221,6 +221,7 @@
 
             footer_copy: 'Copyright © YMT Solution 2026',
             footer_privacy: 'Privacy Policy',
+            nav_blog: 'Blog',
             footer_terms: 'Terms of Use',
             palette_ph: 'Type to search…',
             palette_title: 'Quick navigation',
@@ -542,6 +543,7 @@
 
             footer_copy: 'Hak Cipta © YMT Solution 2026',
             footer_privacy: 'Kebijakan Privasi',
+            nav_blog: 'Blog',
             footer_terms: 'Ketentuan Penggunaan',
             palette_ph: 'Ketik untuk mencari…',
             palette_title: 'Navigasi cepat',
