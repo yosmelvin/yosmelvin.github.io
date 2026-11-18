@@ -36,7 +36,11 @@
             post3_excerpt: 'How a three-question quiz on a static site turns vague inquiries into structured project briefs.',
             post1_date: '25 Nov 2026',
             post2_date: '18 Nov 2026',
-            post3_date: '2 Dec 2026'
+            post3_date: '2 Dec 2026',
+            meta_estimator: '2 December 2026 · Engineering',
+            meta_sahamai: '25 November 2026 · Product',
+            meta_selfhost: '18 November 2026 · Engineering',
+            meta_template: '12 February 2026 · Engineering'
         },
         id: {
             blog_title: 'Blog',
@@ -70,7 +74,11 @@
             post3_excerpt: 'Bagaimana kuis tiga pertanyaan di situs statis mengubah pertanyaan samar menjadi brief terstruktur.',
             post1_date: '25 Nov 2026',
             post2_date: '18 Nov 2026',
-            post3_date: '2 Des 2026'
+            post3_date: '2 Des 2026',
+            meta_estimator: '2 Desember 2026 · Engineering',
+            meta_sahamai: '25 November 2026 · Produk',
+            meta_selfhost: '18 November 2026 · Engineering',
+            meta_template: '12 Februari 2026 · Engineering'
         }
     };
 
