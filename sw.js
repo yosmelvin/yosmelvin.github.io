@@ -1,5 +1,5 @@
 /* Minimal service worker — network-first for pages, cache-first for static assets. */
-var CACHE = 'ymt-v31'; // bump on each release to refresh caches
+var CACHE = 'ymt-v32'; // bump on each release to refresh caches
 var PRECACHE = [
     '/',
     '/index.html',
