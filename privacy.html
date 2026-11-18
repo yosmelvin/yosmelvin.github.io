@@ -6,7 +6,9 @@
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
-    <meta name="color-scheme" content="dark">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#0a0f1e" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f4f6fb" media="(prefers-color-scheme: light)">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
     <title>Privacy Policy — YMT Solution</title>
     <meta name="description" content="How YMT Solution collects, uses and protects your data — cookies, contact forms, live chat and analytics.">
@@ -14,6 +16,7 @@
     <link rel="canonical" href="https://yosmelvin.github.io/privacy.html">
     <link rel="icon" type="image/png" sizes="32x32" href="img/pwa/favicon-32.png">
     <link href="fonts/fonts.css" rel="stylesheet">
+    <script src="js/theme.js"></script>
     <style>
         :root{--bg:#0a0f1e;--card:#111a2e;--border:rgba(148,163,184,.15);--ink:#e2e8f0;--muted:#94a3b8;--accent:#22d3ee;--grad:linear-gradient(135deg,#6366f1,#22d3ee)}
         *{box-sizing:border-box;margin:0}
@@ -37,6 +40,16 @@
         footer{border-top:1px solid var(--border);padding:26px 0;text-align:center;color:var(--muted);font-size:13px}
         footer a{color:var(--accent);text-decoration:underline}
         [hidden]{display:none!important}
+
+[data-theme="light"]{
+  --bg:#f4f6fb;--card:#ffffff;--border:rgba(15,23,42,.12);--ink:#0f172a;--muted:#475569;--accent:#0e7490;
+}
+html[data-theme="light"] header{background:rgba(255,255,255,.85)}
+html[data-theme="light"] .brand{color:var(--ink)}
+html[data-theme="light"] .lang-pill{border-color:rgba(15,23,42,.15)}
+html[data-theme="light"] .lang-pill button{color:#475569}
+html[data-theme="light"] p,html[data-theme="light"] li{color:#334155}
+html[data-theme="light"] a{color:#0e7490}
 
     /* Print: clean document output */
     @media print {
