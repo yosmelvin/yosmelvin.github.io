@@ -41,9 +41,10 @@ Live at: https://yosmelvin.github.io
   worker (`sw.js`, cache `ymt-v6`), install prompt, iOS install hint
 - **Mobile UX** — sticky "Start a project" CTA under 640px (auto-hides at the
   contact section and while the cookie banner is visible)
-- **Blog scaffold** — `posts/` listing page + `_template.html` article
-  (Article + BreadcrumbList JSON-LD, auto reading time, EN/ID chrome toggle),
-  `rss.xml` feed
+- **Blog** — `posts/` listing page + `_template.html` article
+  (Article + BreadcrumbList JSON-LD, auto TOC, reading-progress bar, EN/ID
+  chrome toggle, share row), `rss.xml` feed; first article published:
+  "Why we self-host everything"
 - **Privacy page** — standalone bilingual `privacy.html` covering cookies,
   forms, live chat and analytics; linked from footer + cookie banner
 - **SEO** — `sitemap.xml`, `robots.txt`, canonical, OG/Twitter cards, RSS
@@ -67,8 +68,7 @@ Live at: https://yosmelvin.github.io
 - Frontend: HTML5, CSS3, JavaScript — jQuery 3.7.1 + Bootstrap 3.3.7
   (CDN with SRI) + Font Awesome 4.6.3 (CDN with SRI), agency theme
 - Fonts: Sora + Inter, self-hosted WOFF2 in `fonts/` via `fonts/fonts.css`
-  (used by `privacy.html`, `posts/`, `404.html`; `index.html` currently relies
-  on system fallbacks — see note below)
+  (used by `index.html`, `privacy.html`, `posts/`, `404.html`)
 - Backend services: Formspree (contact), Google Maps embed (lazy-loaded),
   Tawk.to chat (consent-gated, idle-loaded)
 - Hosting: GitHub Pages (static); `_headers` honored by Netlify / Cloudflare
