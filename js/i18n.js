@@ -25,6 +25,7 @@
             hero_trust_partners: 'Partners',
             hero_trust_awards: 'Awards',
             scroll_aria: 'Scroll to services',
+            scroll_top: 'Back to top',
 
             services_title: 'Services',
             services_sub: 'YMT Solution is an AI-first software house. Since 2012 we\'ve shipped 30+ projects — AI trading platforms, smart assistants and automation that turn data into revenue, plus the web, mobile and cloud systems behind them.',
@@ -351,6 +352,7 @@
             hero_trust_partners: 'Mitra',
             hero_trust_awards: 'Penghargaan',
             scroll_aria: 'Gulir ke layanan',
+            scroll_top: 'Kembali ke atas',
 
             services_title: 'Layanan',
             services_sub: 'YMT Solution adalah software house berbasis AI. Sejak 2012 kami telah merilis 30+ proyek — platform trading berbasis AI, asisten cerdas, dan otomatisasi yang mengubah data menjadi pendapatan, plus sistem web, mobile, dan cloud di baliknya.',
@@ -739,6 +741,11 @@
         document.querySelectorAll('[data-i18n-aria]').forEach(function(el) {
             var key = el.getAttribute('data-i18n-aria');
             if (dict[key] != null) el.setAttribute('aria-label', dict[key]);
+        });
+
+        document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+            var key = el.getAttribute('data-i18n-title');
+            if (dict[key] != null) el.setAttribute('title', dict[key]);
         });
 
         document.querySelectorAll('.lang-btn').forEach(function(btn) {
