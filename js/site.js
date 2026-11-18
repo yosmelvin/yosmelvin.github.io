@@ -122,9 +122,9 @@
 
                 var cap = document.createElement('div');
                 cap.className = 'portfolio-caption';
-                var h4 = document.createElement('h4');
-                h4.textContent = c.title || p.title;
-                cap.appendChild(h4);
+                var h3 = document.createElement('h3');
+                h3.textContent = c.title || p.title;
+                cap.appendChild(h3);
                 var capP = document.createElement('p');
                 capP.className = 'text-muted';
                 if (c.cap) {
