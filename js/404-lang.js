@@ -29,7 +29,9 @@
             el.textContent = dict[lang][el.getAttribute('data-i18n')];
         });
         document.querySelectorAll('.lang-btn').forEach(function (b) {
-            b.classList.toggle('active', b.getAttribute('data-lang') === lang);
+            var on = b.getAttribute('data-lang') === lang;
+            b.classList.toggle('active', on);
+            b.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
     }
     document.addEventListener('click', function (e) {

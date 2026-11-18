@@ -9,7 +9,11 @@
         } catch (e) {}
         function setLang(l) {
             blocks.forEach(function(b) { b.hidden = b.getAttribute('data-lang-block') !== l; });
-            buttons.forEach(function(b) { b.classList.toggle('active', b.getAttribute('data-lang') === l); });
+            buttons.forEach(function(b) {
+                var on = b.getAttribute('data-lang') === l;
+                b.classList.toggle('active', on);
+                b.setAttribute('aria-pressed', on ? 'true' : 'false');
+            });
             document.documentElement.lang = l === 'id' ? 'id' : 'en';
             try { localStorage.setItem('ymt-lang', l); } catch (e) {}
         }

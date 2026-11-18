@@ -749,7 +749,9 @@
         });
 
         document.querySelectorAll('.lang-btn').forEach(function(btn) {
-            btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+            var on = btn.getAttribute('data-lang') === lang;
+            btn.classList.toggle('active', on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
         });
 
         try { localStorage.setItem(STORAGE_KEY, lang); } catch (e) {}
