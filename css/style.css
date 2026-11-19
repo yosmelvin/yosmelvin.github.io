@@ -829,9 +829,11 @@ section#contact .section-subheading {
 	left: 0;
 	width: 100%;
 	height: 100%;
+	z-index: 1;
 	opacity: 0;
-	background: linear-gradient(135deg, rgba(11, 18, 32, .55), rgba(99, 102, 241, .45));
-	transition: opacity .4s ease;
+	pointer-events: none;
+	background: linear-gradient(to top, rgba(11, 18, 32, .78) 0%, rgba(11, 18, 32, .28) 48%, rgba(11, 18, 32, 0) 100%);
+	transition: opacity .35s ease;
 }
 
 #portfolio .portfolio-item .portfolio-link:hover .portfolio-hover,
@@ -842,32 +844,50 @@ section#contact .section-subheading {
 #portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content {
 	position: absolute;
 	left: 0;
-	width: 100%;
-	top: 50%;
-	margin-top: -28px;
+	right: 0;
+	bottom: 14px;
+	top: auto;
+	margin-top: 0;
 	display: flex;
 	justify-content: center;
+	padding: 0 14px;
+}
+
+#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-label {
+	display: inline-flex;
 	align-items: center;
-	height: 56px;
-}
-
-#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-content i {
-	width: 56px;
-	height: 56px;
-	line-height: 56px;
-	margin: 0;
-	border-radius: 50%;
+	gap: 8px;
+	padding: 8px 14px;
+	border-radius: 999px;
 	background: rgba(255, 255, 255, .14);
-	border: 1px solid rgba(255, 255, 255, .45);
-	font-size: 22px;
-	backdrop-filter: blur(4px);
-	-webkit-backdrop-filter: blur(4px);
-	transition: transform .35s ease, background .35s ease;
+	border: 1px solid rgba(255, 255, 255, .34);
+	color: #fff;
+	font-family: var(--font-head);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .05em;
+	text-transform: uppercase;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 10px 26px rgba(11, 18, 32, .22);
+	transition: transform .35s ease, background .35s ease, border-color .35s ease;
 }
 
-#portfolio .portfolio-item:hover .portfolio-hover-content i {
-	transform: rotate(90deg) scale(1.08);
-	background: rgba(255, 255, 255, .25);
+#portfolio .portfolio-item .portfolio-link .portfolio-hover .portfolio-hover-label i {
+	font-size: 12px;
+	transition: transform .3s ease;
+}
+
+#portfolio .portfolio-item:hover .portfolio-link .portfolio-hover-label,
+#portfolio .portfolio-item .portfolio-link:focus-visible .portfolio-hover-label {
+	transform: translateY(-2px);
+	background: rgba(255, 255, 255, .22);
+	border-color: rgba(255, 255, 255, .55);
+}
+
+#portfolio .portfolio-item:hover .portfolio-link .portfolio-hover-label i,
+#portfolio .portfolio-item .portfolio-link:focus-visible .portfolio-hover-label i {
+	transform: translateX(3px);
 }
 
 #portfolio .portfolio-item .portfolio-caption {
@@ -1101,8 +1121,18 @@ section#contact .section-subheading {
 }
 
 #about .timeline > li:hover .timeline-image {
-	transform: scale(1.07);
+	transform: translateX(-50%) scale(1.07);
 	box-shadow: 0 0 0 6px rgba(99, 102, 241, .22), 0 14px 34px rgba(99, 102, 241, .35);
+}
+
+@media (min-width: 768px) {
+	#about .timeline > li:not(.timeline-inverted):not(:last-child):hover .timeline-image {
+		transform: translateX(-50%) translateX(6px) scale(1.07);
+	}
+
+	#about .timeline > li.timeline-inverted:not(:last-child):hover .timeline-image {
+		transform: translateX(-50%) translateX(-6px) scale(1.07);
+	}
 }
 
 #about .timeline > li .timeline-image img {
@@ -1511,9 +1541,11 @@ section#contact .form-group select {
 	background-position: calc(100% - 22px) 55%, calc(100% - 16px) 55%;
 	background-size: 6px 6px;
 	background-repeat: no-repeat;
+	padding-left: 46px;
+	cursor: pointer;
 }
 
-.contact-card .field-wrap select { padding-left: 46px; }
+section#contact .contact-card .field-wrap select { padding-left: 46px; }
 
 section#contact .form-group input:focus,
 section#contact .form-group textarea:focus,
@@ -1697,9 +1729,9 @@ section#contact select.form-control option {
 
 @media (max-width: 767px) {
 	.contact-card { padding: 28px 22px; }
-	.section#contact .form-group input,
-	.section#contact .form-group textarea,
-	.contact-card .field-wrap select { padding-left: 44px; }
+	section#contact .form-group input,
+	section#contact .form-group textarea { padding-left: 44px; }
+	section#contact .contact-card .field-wrap select { padding-left: 44px; }
 }
 
 /* ---------- Bottom / footer ---------- */
@@ -2114,25 +2146,31 @@ footer ul.social-buttons li a:hover {
 	z-index: 10;
 	width: 42px;
 	height: 42px;
-	border: none;
+	border: 1px solid rgba(255, 255, 255, .16);
 	border-radius: 50%;
-	background: rgba(255, 255, 255, .92);
-	backdrop-filter: blur(6px);
-	-webkit-backdrop-filter: blur(6px);
-	color: var(--ink);
+	background: rgba(11, 18, 32, .52);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	color: #fff;
 	font-size: 16px;
 	cursor: pointer;
-	box-shadow: 0 8px 22px rgba(0, 0, 0, .25);
+	box-shadow: 0 10px 26px rgba(2, 6, 23, .35), inset 0 1px 0 rgba(255, 255, 255, .12);
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: all .3s ease;
+	transition: background .3s ease, color .3s ease, border-color .3s ease, box-shadow .3s ease, transform .3s ease;
 }
 
 .pm-nav:hover {
 	background: var(--grad);
+	border-color: rgba(255, 255, 255, .28);
 	color: #fff;
 	transform: translateY(-50%) scale(1.08);
+	box-shadow: 0 14px 32px rgba(99, 102, 241, .45);
+}
+
+.pm-nav:active {
+	transform: translateY(-50%) scale(.96);
 }
 
 .pm-nav.pm-prev { left: 14px; }
@@ -2347,6 +2385,8 @@ html.save-data *, html.save-data *::before, html.save-data *::after {
 .skill-card:hover{transform:translateY(-6px);border-color:rgba(34,211,238,.5);box-shadow:0 14px 34px rgba(34,211,238,.15)}
 .skill-card i{font-size:2rem;color:#22d3ee;margin-bottom:10px}
 .skill-card span{display:block;font-size:.9rem;color:var(--ink);font-weight:600}
+.skill-card.skill-static{cursor:default}
+.skill-card.skill-static:hover{transform:none;border-color:var(--border);box-shadow:var(--shadow-sm)}
 
 /* ============ FAQ accordion ============ */
 .faq-item{contain:layout style;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:12px;overflow:hidden;transition:border-color .3s;box-shadow:var(--shadow-sm)}
@@ -2383,7 +2423,8 @@ html.save-data *, html.save-data *::before, html.save-data *::after {
 /* ============ Modal tech chips ============ */
 .pm-tech{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0}
 .pm-tech-label{font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-text);margin-right:4px}
-.pm-chip-tech{background:var(--chip-bg);border:1px solid rgba(129,140,248,.3);color:var(--chip-text);font-size:.78rem;padding:4px 12px}
+.pm-chip-tech{display:inline-flex;align-items:center;gap:6px;background:var(--chip-bg);border:1px solid rgba(129,140,248,.3);color:var(--chip-text);font-size:.78rem;padding:4px 12px}
+.pm-chip-tech i{color:var(--accent-text);font-size:.85em}
 
 /* ============ WhatsApp button ============ */
 .btn-whatsapp{display:inline-flex;align-items:center;gap:10px;margin-left:14px;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;box-shadow:0 6px 20px rgba(37,211,102,.35);vertical-align:middle}
@@ -2858,6 +2899,11 @@ img.img-broken { visibility: hidden; }
 		border-radius: 16px;
 		border-width: 2px;
 		box-shadow: 0 12px 30px rgba(99, 102, 241, .4);
+		transform: none;
+	}
+
+	#about .timeline > li:last-child:hover .timeline-image {
+		transform: scale(1.07);
 	}
 
 	#about .timeline > li:last-child .timeline-image h3 {

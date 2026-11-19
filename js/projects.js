@@ -1,5 +1,5 @@
 /* Portfolio project data — consumed by project-modal.js / site.js / palette.js.
-   Text content lives in js/i18n-dict.js under the m1_* … m9_* keys (DICT.site). */
+   Text content lives in js/i18n-dict.js under the m1_* … m11_* keys (DICT.site). */
 export const projects = [
     {
         title: 'Binusmaya',
@@ -72,7 +72,7 @@ export const projects = [
     },
     {
         title: 'Ospay Indonesia',
-        card: { img: 'img/portfolio/osppay-1.jpg', title: 'Ospay Indonesia', alt: 'Ospay Indonesia', cap: 'pf_osppay_d', isNew: true },
+        card: { img: 'img/portfolio/osppay-1.jpg', title: 'Ospay Indonesia', alt: 'Ospay Indonesia', cap: 'pf_osppay_d' },
         cat: 'fintech',
         img: 'img/portfolio/osppay-1.jpg',
         alt: 'Ospay Indonesia',
@@ -103,9 +103,31 @@ export const projects = [
         keys: { intro: 'm8_intro', body: 'm8_body' },
         meta: { date: 'm8_date', client: 'm8_client', cat: 'm8_cat' },
         link: null,
-        tech: ['Python','Go','AI / ML'],
+        tech: ['Python','Django','Django REST Framework','Django Channels','SQLite','MongoDB','TimescaleDB','Redis','Gunicorn','Docker','Nginx','SvelteKit','JavaScript','TypeScript','NumPy','pandas','WebSocket','pytest','fast-check','AI / ML'],
         exclusive: true,
         badges: ['vvip'],
+    },
+    {
+        title: 'Cross-Exchange Spot Arbitrage Engine',
+        card: { img: 'img/portfolio/cross-exchange-arbitrage.jpg', title: 'Cross-Exchange Arbitrage', alt: 'Cross-Exchange Spot Arbitrage Engine dashboard', cap: 'pf_arb_d' },
+        cat: 'trading',
+        img: 'img/portfolio/cross-exchange-arbitrage.jpg',
+        alt: 'Cross-Exchange Spot Arbitrage Engine',
+        keys: { intro: 'm10_intro', body: 'm10_body' },
+        meta: { date: 'm10_date', client: 'm10_client', cat: 'm10_cat' },
+        link: null,
+        tech: ['Python','FastAPI','Pydantic','httpx','WebSocket','SQLAlchemy','PostgreSQL','Redis','Docker','Nginx','Prometheus','Grafana','pytest'],
+    },
+    {
+        title: 'DeFi Protocol',
+        card: { img: 'img/portfolio/defi-protocol.jpg', title: 'DeFi Protocol', alt: 'DeFi protocol smart contracts dashboard', cap: 'pf_defi_d' },
+        cat: 'defi',
+        img: 'img/portfolio/defi-protocol.jpg',
+        alt: 'DeFi Protocol',
+        keys: { intro: 'm11_intro', body: 'm11_body' },
+        meta: { date: 'm11_date', client: 'm11_client', cat: 'm11_cat' },
+        link: null,
+        tech: ['Solidity','OpenZeppelin','Hardhat','Ethers','TypeScript','React','Vite','wagmi / viem','TanStack Query','Vitest','Docker','Ignition'],
     }
 ];
 

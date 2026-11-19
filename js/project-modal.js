@@ -32,6 +32,77 @@ const modal = (function() {
         return s;
     }
 
+    var TECH_ICONS = {
+        'PHP': 'fa-code',
+        'Laravel': 'fa-fire',
+        'Lumen': 'fa-bolt',
+        'MySQL': 'fa-database',
+        'JavaScript': 'fa-code',
+        'React': 'fa-cube',
+        'Android': 'fa-android',
+        'Kotlin': 'fa-diamond',
+        'Jetpack Compose': 'fa-mobile',
+        'Nuxt.js': 'fa-sitemap',
+        'Vue.js': 'fa-cube',
+        'TypeScript': 'fa-code',
+        'Python': 'fa-terminal',
+        'Django': 'fa-gears',
+        'Django REST Framework': 'fa-cogs',
+        'Django Channels': 'fa-tasks',
+        'SQLite': 'fa-database',
+        'MongoDB': 'fa-leaf',
+        'TimescaleDB': 'fa-line-chart',
+        'Redis': 'fa-bolt',
+        'Gunicorn': 'fa-server',
+        'Docker': 'fa-cube',
+        'Nginx': 'fa-bullseye',
+        'SvelteKit': 'fa-bolt',
+        'NumPy': 'fa-bar-chart',
+        'pandas': 'fa-line-chart',
+        'WebSocket': 'fa-comments',
+        'pytest': 'fa-check-circle',
+        'fast-check': 'fa-check',
+        'AI / ML': 'fa-magic',
+        'FastAPI': 'fa-rocket',
+        'Pydantic': 'fa-check-circle',
+        'httpx': 'fa-exchange',
+        'SQLAlchemy': 'fa-cogs',
+        'Ent': 'fa-cubes',
+        'PostgreSQL': 'fa-database',
+        'Prometheus': 'fa-area-chart',
+        'Grafana': 'fa-line-chart',
+        'Solidity': 'fa-cube',
+        'OpenZeppelin': 'fa-shield',
+        'Hardhat': 'fa-wrench',
+        'Ethers': 'fa-link',
+        'Vite': 'fa-bolt',
+        'wagmi / viem': 'fa-exchange',
+        'TanStack Query': 'fa-database',
+        'Vitest': 'fa-bullseye',
+        'Ignition': 'fa-rocket',
+        'REST API': 'fa-exchange',
+        'Payment Gateway': 'fa-shopping-cart',
+        'CI/CD': 'fa-refresh',
+        'VPS': 'fa-server',
+        'Terraform': 'fa-wrench'
+    };
+
+    function techChip(label) {
+        var s = document.createElement('span');
+        s.className = 'pm-chip pm-chip-tech';
+        var icon = TECH_ICONS[label];
+        if (icon) {
+            var i = document.createElement('i');
+            i.className = 'fa ' + icon;
+            i.setAttribute('aria-hidden', 'true');
+            s.appendChild(i);
+            s.appendChild(document.createTextNode(label));
+        } else {
+            s.textContent = label;
+        }
+        return s;
+    }
+
     function render(i, animate) {
         var p = projects[i];
         if (!p) return;
@@ -122,7 +193,7 @@ const modal = (function() {
         if (p.tech && p.tech.length) {
             tech.appendChild(chip('pm-tech-label', t('pm_tech')));
             p.tech.forEach(function(tk) {
-                tech.appendChild(chip('pm-chip pm-chip-tech', tk));
+                tech.appendChild(techChip(tk));
             });
             tech.hidden = false;
         } else {

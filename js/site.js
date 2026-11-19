@@ -57,18 +57,24 @@ import { modal } from './project-modal.js';
                 var a = document.createElement('a');
                 a.href = '#projectModal';
                 a.className = 'portfolio-link';
+                a.setAttribute('aria-label', c.title || p.title);
                 a.setAttribute('data-bs-toggle', 'modal');
                 a.setAttribute('data-bs-target', '#projectModal');
                 a.setAttribute('data-project', i);
 
                 var hov = document.createElement('div');
                 hov.className = 'portfolio-hover';
+                hov.setAttribute('aria-hidden', 'true');
                 var hcont = document.createElement('div');
                 hcont.className = 'portfolio-hover-content';
+                var lbl = document.createElement('span');
+                lbl.className = 'portfolio-hover-label';
+                lbl.textContent = tt('pf_view_project');
                 var ic = document.createElement('i');
-                ic.className = 'fa fa-plus fa-3x';
+                ic.className = 'fa fa-arrow-right';
                 ic.setAttribute('aria-hidden', 'true');
-                hcont.appendChild(ic);
+                lbl.appendChild(ic);
+                hcont.appendChild(lbl);
                 hov.appendChild(hcont);
                 a.appendChild(hov);
 
@@ -615,7 +621,7 @@ import { modal } from './project-modal.js';
         // restore filter/search/sort from the URL (?cat= &q= &sort=) — shareable deep links
         (function() {
             var params = new URLSearchParams(location.search);
-            var VALID_FILTERS = { all: 1, ai: 1, web: 1, mobile: 1, fintech: 1, trading: 1 };
+            var VALID_FILTERS = { all: 1, ai: 1, web: 1, mobile: 1, fintech: 1, trading: 1, defi: 1 };
             var cat = params.get('cat');
             var q = params.get('q');
             var s = params.get('sort');
@@ -636,11 +642,23 @@ import { modal } from './project-modal.js';
         applyFilters();
         document.addEventListener('ymt:langchange', applyFilters);
 
-        // Skills → portfolio cross-link: click a tech card to filter projects by it
+        // Skills → portfolio cross-link: only cards whose label exactly matches a
+        // project tech entry become filters; other capabilities stay static.
+        var normTech = function(s) {
+            return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim();
+        };
+        var projectTech = {};
+        projects.forEach(function(p) {
+            (p.tech || []).forEach(function(t) { projectTech[normTech(t)] = true; });
+        });
         document.querySelectorAll('.skill-card').forEach(function(card) {
             var labelEl = card.querySelector('span');
             var label = labelEl ? labelEl.textContent.trim() : '';
             if (!label) return;
+            if (!projectTech[normTech(label)]) {
+                card.classList.add('skill-static');
+                return;
+            }
             card.setAttribute('role', 'button');
             card.setAttribute('tabindex', '0');
             var i18n = window.YMTI18n;
