@@ -38,7 +38,7 @@
         document.documentElement.setAttribute('data-theme', eff);
         // set content on ALL theme-color metas — the media-query pair can't
         // express a manual override of the OS preference
-        var color = eff === 'dark' ? '#0a0f1e' : '#f6f7fb';
+        var color = eff === 'dark' ? '#0b1220' : '#f2f5f9';
         document.querySelectorAll('meta[name="theme-color"]').forEach(function(m) {
             m.setAttribute('content', color);
         });

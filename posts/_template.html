@@ -11,8 +11,8 @@
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="color-scheme" content="light dark">
-    <meta name="theme-color" content="#0a0f1e" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#f4f6fb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#f2f5f9" media="(prefers-color-scheme: light)">
     <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
     <title>POST TITLE — YMT Solution Blog</title>
     <meta name="description" content="One-sentence meta description for SEO (150 chars).">
@@ -53,16 +53,16 @@
     }
     </script>
     <style>
-        :root{--bg:#0a0f1e;--card:#111a2e;--border:rgba(148,163,184,.15);--ink:#e2e8f0;--muted:#94a3b8;--accent:#22d3ee;--grad:linear-gradient(135deg,#6366f1,#22d3ee)}
+        :root{--bg:#0b1220;--card:#111a2e;--border:rgba(148,163,184,.15);--ink:#e2e8f0;--muted:#94a3b8;--accent:#a5b4fc;--grad:linear-gradient(135deg,#6366f1,#a5b4fc)}
         *{box-sizing:border-box;margin:0}
         body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);line-height:1.8}
-        header{padding:22px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(10,15,30,.85);backdrop-filter:blur(12px);z-index:10}
+        header{padding:22px 0;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(11,18,32,.85);backdrop-filter:blur(12px);z-index:10}
         .wrap{max-width:760px;margin:0 auto;padding:0 20px}
         .brand{display:inline-flex;align-items:center;gap:10px;font-family:'Sora',sans-serif;font-weight:800;color:#fff;text-decoration:none;font-size:1.1rem}
-        .brand .mk{width:32px;height:32px;border-radius:9px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+        .brand .mk{width:32px;height:32px;border-radius:9px;background:var(--grad);display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#0a1b33}
         .lang-toggle{display:inline-flex;gap:2px;border:1px solid var(--border);border-radius:999px;padding:3px;background:rgba(255,255,255,.03)}
         .lang-btn{border:none;background:transparent;color:var(--muted);font:600 12px 'Inter',sans-serif;padding:5px 12px;border-radius:999px;cursor:pointer}
-        .lang-btn.active{background:var(--grad);color:#fff}
+        .lang-btn.active{background:var(--grad);color:#0a1b33}
         .meta .rt{opacity:.75}
         .hero{padding:56px 0 30px}
         .meta{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
@@ -74,7 +74,7 @@
         article p{margin-bottom:18px;color:#c3cede}
         article ul,article ol{margin:0 0 18px 22px;color:#c3cede}
         article li{margin-bottom:6px}
-        article code{background:rgba(34,211,238,.12);color:#67e8f9;padding:2px 7px;border-radius:6px;font-size:.9em}
+        article code{background:rgba(99,102,241,.12);color:#a5b4fc;padding:2px 7px;border-radius:6px;font-size:.9em}
         article pre{background:#0d1526;border:1px solid var(--border);border-radius:12px;padding:18px;overflow-x:auto;margin-bottom:18px}
         article pre code{background:none;padding:0;color:#c3cede}
         article blockquote{border-left:3px solid var(--accent);padding:6px 0 6px 18px;color:var(--muted);margin:0 0 18px;font-style:italic}
@@ -94,23 +94,23 @@
         @media(max-width:760px){#toc{display:none}}
         .pager{display:flex;justify-content:space-between;gap:16px;margin:30px 0 60px}
         .pager a{flex:1;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;text-decoration:none;color:var(--ink);font-size:14px;transition:border-color .3s}
-        .pager a:hover{border-color:rgba(34,211,238,.5)}
+        .pager a:hover{border-color:rgba(99,102,241,.5)}
         .pager .lbl{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px}
         footer{border-top:1px solid var(--border);padding:26px 0;text-align:center;color:var(--muted);font-size:13px}
         footer a{color:var(--accent);text-decoration:underline}
 
 [data-theme="light"]{
-  --bg:#f4f6fb;--card:#ffffff;--border:rgba(15,23,42,.12);--ink:#0f172a;--muted:#475569;--accent:#0e7490;
+  --bg:#f2f5f9;--card:#ffffff;--border:rgba(15,23,42,.12);--ink:#101828;--muted:#475569;--accent:#4f46e5;
 }
 html[data-theme="light"] body{background:var(--bg)}
 html[data-theme="light"] header{background:rgba(255,255,255,.85)}
 html[data-theme="light"] .lang-toggle{background:rgba(15,23,42,.04)}
 html[data-theme="light"] .lang-btn{color:#475569}
-html[data-theme="light"] .post-thumb{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(14,116,144,.1))}
+html[data-theme="light"] .post-thumb{background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(79,70,229,.1))}
 html[data-theme="light"] article p{color:#334155}
 html[data-theme="light"] article ul,html[data-theme="light"] article ol{color:#334155}
-html[data-theme="light"] article code{background:rgba(14,116,144,.1);color:#155e75}
-html[data-theme="light"] article pre{background:#eef2f7;border-color:rgba(15,23,42,.1)}
+html[data-theme="light"] article code{background:rgba(79,70,229,.1);color:#4338ca}
+html[data-theme="light"] article pre{background:#eef2f9;border-color:rgba(15,23,42,.1)}
 html[data-theme="light"] article pre code{color:#334155}
 html[data-theme="light"] .pager a{background:#fff}
 html[data-theme="light"] #toc{background:rgba(15,23,42,.02)}

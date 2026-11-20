@@ -120,7 +120,7 @@ function progressBar() {
     var bar = document.createElement('div');
     bar.id = 'readProgress';
     bar.setAttribute('aria-hidden', 'true');
-    bar.style.cssText = 'position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;background:linear-gradient(90deg,#22d3ee,#6366f1)';
+    bar.style.cssText = 'position:fixed;top:0;left:0;height:3px;width:0;z-index:9999;background:linear-gradient(90deg,#a5b4fc,#6366f1)';
     document.body.appendChild(bar);
     function upd() {
         var h = document.documentElement;

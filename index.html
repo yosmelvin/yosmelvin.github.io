@@ -44,7 +44,7 @@
     <!-- PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b1220" media="(prefers-color-scheme: dark)">
-    <meta name="theme-color" content="#f6f7fb" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#f2f5f9" media="(prefers-color-scheme: light)">
     <link rel="apple-touch-icon" href="img/pwa/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/pwa/favicon-32.png">
 
@@ -205,14 +205,14 @@
     
     <!-- Critical CSS: paint hero + nav before the full stylesheets arrive -->
     <style>
-      :root{--bg:#f6f7fb;--ink:#0b1220;--font-head:"Sora","Helvetica Neue",Helvetica,Arial,sans-serif;--font-body:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif}
-      html[data-theme="dark"]{--bg:#0a0f1e;--ink:#f1f5f9}
+      :root{--bg:#f2f5f9;--ink:#101828;--font-head:"Sora","Helvetica Neue",Helvetica,Arial,sans-serif;--font-body:"Inter","Helvetica Neue",Helvetica,Arial,sans-serif}
+      html[data-theme="dark"]{--bg:#0b1220;--ink:#e8edf5}
       body{margin:0;font-family:var(--font-body);background:var(--bg);color:var(--ink)}
-      .overlay{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse 60% 50% at 15% 20%,rgba(99,102,241,.35),transparent 60%),radial-gradient(ellipse 50% 40% at 85% 75%,rgba(34,211,238,.25),transparent 60%),linear-gradient(rgba(11,18,32,.72),rgba(11,18,32,.78)),url('img/header-bg.webp') center/cover no-repeat}
+      .overlay{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;overflow:hidden;background:radial-gradient(ellipse 55% 45% at 82% 8%,rgba(99,102,241,.20),transparent 62%),radial-gradient(ellipse 40% 35% at 8% 92%,rgba(34,211,238,.10),transparent 60%),linear-gradient(rgba(11,18,32,.78),rgba(11,18,32,.84)),url('img/header-bg.webp') center/cover no-repeat}
       .navbar-custom{background:rgba(11,18,32,.82);border-bottom:1px solid rgba(255,255,255,.08);padding:14px 0}
       .navbar-brand{font-family:var(--font-head);font-weight:700;color:#fff}
-      header .intro-text{padding:96px 0 72px;position:relative;z-index:2}
-      header .intro-text .intro-heading{font-family:var(--font-head);font-weight:800;font-size:clamp(42px,7vw,84px);line-height:1.05;letter-spacing:-.03em;color:#fff;margin:0 0 40px}
+      header .intro-text{padding:96px 0 90px;position:relative;z-index:2;text-align:left;max-width:780px}
+      header .intro-text .intro-heading{font-family:var(--font-head);font-weight:800;font-size:clamp(40px,6.4vw,76px);line-height:1.06;letter-spacing:-.035em;color:#eef3ff;margin:0 0 36px;max-width:15ch}
       @media(min-width:768px){header .intro-text{padding:200px 0 160px}}
     </style>
 
@@ -227,7 +227,7 @@
 
     <noscript>
         <div style="position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:#0b1220;color:#e2e8f0;font-family:Inter,sans-serif;text-align:center;padding:24px">
-            <p style="max-width:34em">This portfolio is interactive and needs JavaScript to render projects, filters and the contact form.<br><span style="opacity:.75">Portofolio ini interaktif dan memerlukan JavaScript untuk menampilkan proyek, filter, dan formulir kontak.</span><br><br>Email: <a href="mailto:ymtsolution@gmail.com" style="color:#67e8f9">ymtsolution@gmail.com</a></p>
+            <p style="max-width:34em">This portfolio is interactive and needs JavaScript to render projects, filters and the contact form.<br><span style="opacity:.75">Portofolio ini interaktif dan memerlukan JavaScript untuk menampilkan proyek, filter, dan formulir kontak.</span><br><br>Email: <a href="mailto:ymtsolution@gmail.com" style="color:#a5b4fc">ymtsolution@gmail.com</a></p>
         </div>
     </noscript>
 
@@ -304,6 +304,12 @@
                     <span class="hero-trust-sep" aria-hidden="true"></span>
                     <span class="hero-trust-item" role="listitem"><strong>200+</strong><span data-i18n="hero_trust_awards">Awards</span></span>
                 </div>
+            </div>
+        </div>
+        <div class="hero-ticker" aria-hidden="true">
+            <div class="ticker-track">
+                <span class="ticker-group" data-i18n-html="hero_ticker"></span>
+                <span class="ticker-group" data-i18n-html="hero_ticker"></span>
             </div>
         </div>
         <a href="#services" class="scroll-indicator page-scroll" aria-label="Scroll to services" data-i18n-aria="scroll_aria"><i class="fa fa-chevron-down"></i></a>
